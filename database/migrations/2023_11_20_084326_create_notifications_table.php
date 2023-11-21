@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->string('content');
+            $table->dateTime('time_send');
             $table->integer('sender_id');
             $table->integer('receiver_id');
             $table->timestamps();
