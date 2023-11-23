@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\atendanceController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,6 +21,7 @@ Route::post('login',[UserAuthController::class,'login']);
 
 //Route::apiResource('employees',EmployeeController::class)->middleware('auth:api');
 
+Route::apiResource('atendances',atendanceController::class)->middleware('auth:api');
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
