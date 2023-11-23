@@ -24,8 +24,10 @@ Route::post('login',[UserAuthController::class,'login']);
 //Route::apiResource('employees',EmployeeController::class)->middleware('auth:api');
 
 Route::apiResource('atendances',atendanceController::class)->middleware('auth:api');
+
+Route::get('/event',[eventController::class,'index']);
+
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::get('/event',[eventController::class,'index']);
