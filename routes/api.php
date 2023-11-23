@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\atendanceController;
+use App\Http\Controllers\eventController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,3 +27,5 @@ Route::apiResource('atendances',atendanceController::class)->middleware('auth:ap
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/event',[eventController::class,'index']);
