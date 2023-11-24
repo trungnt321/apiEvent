@@ -6,7 +6,7 @@ use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\atendanceController;
 use App\Http\Controllers\eventController;
-
+use App\Http\Controllers\notificationController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,7 +24,7 @@ Route::post('login',[UserAuthController::class,'login']);
 //Route::apiResource('employees',EmployeeController::class)->middleware('auth:api');
 
 Route::apiResource('atendances',atendanceController::class)->middleware('auth:api');
-
+Route::post('sendMail',[notificationController::class,'store']);
 Route::get('/event',[eventController::class,'index']);
 
 

@@ -20,7 +20,7 @@ class notificationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
