@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\atendance;
 use App\Http\Resources\AtendanceResources;
 use Illuminate\Validation\Rule;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
