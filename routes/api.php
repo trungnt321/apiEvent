@@ -27,7 +27,7 @@ Route::post('login',[UserAuthController::class,'login']);
 Route::apiResource('atendances',atendanceController::class)->middleware('auth:api');
 //Test api in swagger donn't need token
 Route::apiResource('participants',participantsController::class)->middleware('auth:api');
-
+Route::apiResource('event',eventController::class)->middleware('auth:api');
 
 
 
