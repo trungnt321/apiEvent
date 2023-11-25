@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Address;
 
 class EmailApi extends Mailable
 {
@@ -23,25 +24,11 @@ class EmailApi extends Mailable
         $this->data = $data;
     }
 
-    /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
+    public function build()
     {
-        return new Envelope(
-            subject: 'Email Api',
-        );
-    }
-
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
-    {
-        return new Content(
-            view: 'mail.test-email',
-            with: ['name' => $this->name],
-        );
+        $data = $this->data; // Lấy dữ liệu từ biến $data
+        return $this->subject($data['title'])
+        ->html($data['message']);
     }
 
     /**

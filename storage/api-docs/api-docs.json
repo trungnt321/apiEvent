@@ -400,6 +400,82 @@
                 }
             }
         },
+        "/api/notification": {
+            "post": {
+                "tags": [
+                    "notification"
+                ],
+                "summary": "Send Email",
+                "description": "Send Email to Users",
+                "operationId": "notification",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Thư nhắc nhở sự kiện"
+                                    },
+                                    "message": {
+                                        "type": "string",
+                                        "example": "<h1 style='color:red;'>This is a Heading</h1>"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "example@example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email sent successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Validation error or internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "object",
+                                            "example": "not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/participants": {
             "get": {
                 "tags": [
