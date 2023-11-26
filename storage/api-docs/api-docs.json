@@ -400,31 +400,45 @@
                 }
             }
         },
-        "/api/notification": {
+        "/api/event": {
             "post": {
                 "tags": [
-                    "notification"
+                    "Event"
                 ],
-                "summary": "Send Email",
-                "description": "Send Email to Users",
-                "operationId": "notification",
+                "summary": "Store a new event record",
+                "description": "Store a new event record with the provided data.",
+                "operationId": "storeEvent",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "title": {
+                                    "name": {
                                         "type": "string",
-                                        "example": "Thư nhắc nhở sự kiện"
+                                        "example": "2"
                                     },
-                                    "message": {
+                                    "location": {
                                         "type": "string",
-                                        "example": "<h1 style='color:red;'>This is a Heading</h1>"
+                                        "example": "2"
                                     },
-                                    "email": {
+                                    "contact": {
                                         "type": "string",
-                                        "example": "example@example.com"
+                                        "example": "2"
+                                    },
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "start_time": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2023-11-23 11:20:22"
+                                    },
+                                    "end_time": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2023-11-23 11:20:22"
                                     }
                                 },
                                 "type": "object"
@@ -445,8 +459,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Email sent successfully"
-                                        }
+                                            "example": "Tạo mới thành công!!"
                                     },
                                     "type": "object"
                                 }
@@ -465,7 +478,92 @@
                                         },
                                         "message": {
                                             "type": "object",
-                                            "example": "not found"
+                                            "example": {
+                                                "user_id": [
+                                                    "Không để trống ID người dùng"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/event/{id}": {
+            "put": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Update Event",
+                "description": "Update a specific event.",
+                "operationId": "updateEvent",
+                "parameters": [
+                    {
+                        "name": "event",
+                        "in": "path",
+                        "description": "event model",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "2"
+                                    },
+                                    "location": {
+                                        "type": "string",
+                                        "example": "2"
+                                    },
+                                    "contact": {
+                                        "type": "string",
+                                        "example": "2"
+                                    },
+                                    "status": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "start_time": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2023-11-23 11:20:22"
+                                    },
+                                    "end_time": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2023-11-23 11:20:22"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
                                         }
                                     },
                                     "type": "object"

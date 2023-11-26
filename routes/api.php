@@ -31,6 +31,8 @@ Route::get('getdata',[notificationController::class,'index']);
 Route::get('/event',[eventController::class,'index']);
 //Test api in swagger donn't need token
 Route::apiResource('participants',participantsController::class)->middleware('auth:api');
+Route::apiResource('event',eventController::class)->middleware('auth:api');
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
