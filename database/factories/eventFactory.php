@@ -7,7 +7,7 @@ use Illuminate\Support\Carbon;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>
  */
-class EventFactory extends Factory
+class eventFactory extends Factory
 {
     /**
      * Define the model's default state.

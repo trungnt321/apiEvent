@@ -8,7 +8,7 @@ use App\Http\Controllers\atendanceController;
 use App\Http\Controllers\eventController;
 use App\Http\Controllers\notificationController;
 use App\Http\Controllers\participantsController;
-
+use App\Http\Controllers\feedbackController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -26,8 +26,11 @@ Route::post('login',[UserAuthController::class,'login']);
 //Route::apiResource('employees',EmployeeController::class)->middleware('auth:api');
 
 Route::apiResource('atendances',atendanceController::class)->middleware('auth:api');
-Route::post('sendMail',[notificationController::class,'store']);
-Route::get('getdata',[notificationController::class,'index']);
+Route::apiResource('feedback',feedbackController::class)->middleware('auth:api');
+Route::post('notification/send',[notificationController::class,'store'])->middleware('auth:api');
+Route::get('notification',[notificationController::class,'index'])->middleware('auth:api');
+
+
 Route::get('/event',[eventController::class,'index']);
 //Test api in swagger donn't need token
 Route::apiResource('participants',participantsController::class)->middleware('auth:api');
