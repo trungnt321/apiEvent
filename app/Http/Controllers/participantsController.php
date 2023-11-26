@@ -337,7 +337,7 @@ class participantsController extends Controller
                 return response([
                     "status" => "Conflict",
                     "message" => "Nhân viên không thể chỉnh sửa quản lí được",
-                ], 409);
+                ], 422);
             }else{
                 //Đây là 2 trường hợp còn lại là 0,1 : nhân viên, sinh viên
                 $canUpdate = true;
@@ -347,7 +347,7 @@ class participantsController extends Controller
             return response([
                 "status" => "Conflict",
                 "message" => "Sinh viên không có quyền chỉnh sửa bất cứ cái gì",
-            ], 409);
+            ], 422);
         }
         if($canUpdate == true){
             $user->update($request->all());
