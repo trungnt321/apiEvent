@@ -460,7 +460,6 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Tạo mới thành công!!"
-                                        }
                                     },
                                     "type": "object"
                                 }

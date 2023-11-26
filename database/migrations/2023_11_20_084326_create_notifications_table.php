@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('content');
             $table->dateTime('time_send');
-            $table->integer('sender_id');
+            $table->dateTime('sent_at');
             $table->integer('receiver_id');
             $table->timestamps();
         });
