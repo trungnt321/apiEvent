@@ -122,9 +122,7 @@ class atendanceController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'event_id' => [
-                    'required'
-                ],
+                'event_id' => 'required',
                 'user_id' => [
                     'required',
                     Rule::exists('users', 'id')->where(function ($query) {
