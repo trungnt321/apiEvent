@@ -44,4 +44,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    public function receivedNotifications()
+    {
+        return $this->hasMany(notification::class, 'receiver_id')->latest();
+    }
 }

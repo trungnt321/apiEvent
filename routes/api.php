@@ -27,7 +27,8 @@ Route::post('login',[UserAuthController::class,'login']);
 
 Route::apiResource('atendances',atendanceController::class)->middleware('auth:api');
 Route::apiResource('feedback',feedbackController::class)->middleware('auth:api');
-Route::post('notification/send',[notificationController::class,'store'])->middleware('auth:api');
+Route::post('notification/send',[notificationController::class,'create'])->middleware('auth:api');
+Route::get('notification/test',[notificationController::class,'test'])->middleware('auth:api');
 Route::apiResource('notification',notificationController::class)->middleware('auth:api');
 
 

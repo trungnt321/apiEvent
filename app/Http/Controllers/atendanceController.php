@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\atendance;
-use App\Http\Resources\AtendanceResources;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class atendanceController extends Controller
 {
@@ -22,41 +22,30 @@ class atendanceController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="success"),
-     * @OA\Property(
-     *     property="payload",
-     *     type="array",
-     *     @OA\Items(
-     *         type="object",
-     *         @OA\Property(
-     *             property="id",
-     *             type="string",
-     *             example="1"
-     *         ),
-     *         @OA\Property(
-     *             property="user_id",
-     *             type="integer",
-     *             example=1
+     *             @OA\Property(property="message", type="string", example="Get One Record Successfully"),
+     *             @OA\Property(property="statusCode", type="integer", example=200),
+     *             @OA\Property(
+     *                 property="metadata",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="string", example="1"),
+     *                     @OA\Property(property="user_id", type="integer", example=1),
+     *                     @OA\Property(property="event_id", type="integer", example=2),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-11-23 11:20:22"),
+     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-11-23 11:20:22")
+     *                 )
+     *             )
      *         )
-     * ,
-     *         @OA\Property(
-     *             property="event_id",
-     *             type="integer",
-     *             example=2
-     *         )  ,
-     *      @OA\Property(
-     *     property="created_at",
-     *     type="string",
-     *     format="date-time",
-     *     example="2023-11-23 11:20:22"
-     * ),
-     * @OA\Property(
-     *     property="updated_at",
-     *     type="string",
-     *     format="date-time",
-     *     example="2023-11-23 11:20:22"
-     * )
-     *     )
-     * )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Record not exists",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
@@ -65,7 +54,8 @@ class atendanceController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Internal server error")
+     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
      * )
@@ -74,15 +64,23 @@ class atendanceController extends Controller
     {
         try {
             $atendance = atendance::all();
-            return response([
-                "status" => "success",
-                "payload" => AtendanceResources::collection($atendance)
-            ], 200);
-        }catch(\Exception $e) {
-            return response([
-                "status" => "error",
-                "message" => $e->getMessage()
-            ], 200);
+            return response()->json([
+                'metadata' => $atendance,
+                'message' => 'Get All records Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'status' => 'error',
+                'statusCode' => $e instanceof HttpException
+                    ? $e->getStatusCode()
+                    : Response::HTTP_INTERNAL_SERVER_ERROR // Internal Server Error by default
+            ], $e instanceof HttpException
+                ? $e->getStatusCode()
+                : Response::HTTP_INTERNAL_SERVER_ERROR);
+
         }
     }
 
@@ -105,7 +103,20 @@ class atendanceController extends Controller
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="Tạo mới thành công!!"),
+     *             @OA\Property(property="message", type="string", example="Create Record Successfully"),
+     *             @OA\Property(property="statusCode", type="int", example=200),
+     *     @OA\Property(
+     *                 property="metadata",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="string", example="1"),
+     *                     @OA\Property(property="user_id", type="integer", example=1),
+     *                     @OA\Property(property="event_id", type="integer", example=2),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-11-23 11:20:22"),
+     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-11-23 11:20:22")
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -113,7 +124,9 @@ class atendanceController extends Controller
      *         description="Validation error or internal server error",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="object", example={"user_id": {"Không để trống ID người dùng"}}),
+     *             @OA\Property(property="message", type="object", example={"user_id": {"User ID is required"}}),
+     *             @OA\Property(property="statusCode", type="int", example=500),
+
      *         )
      *     ),
      * )
@@ -134,204 +147,258 @@ class atendanceController extends Controller
 //                    }),
                 ],
             ], [
-                'event_id.required' => 'Không để trống ID sự kiện',
-                'user_id.required' => 'Không để trống ID người dùng',
-                'user_id.exists' => 'Chức vụ không hợp lệ.'
+                'event_id.required' => 'Event ID is required.',
+                'user_id.required' => 'User ID is required.',
+                'user_id.exists' => 'Invalid user role.'
             ]);
 
-            if($validator->fails()){
-                return response(['status' => 'error', 'message' => $validator->errors()], 500);
+            if ($validator->fails()) {
+//                return response(['status' => 'error', 'message' => $validator->errors()], 500);
+                return response([
+                    "status" => "error",
+                    "message" => $validator->errors(),
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
-            atendance::create($request->all());
-            return response([   "status" => "success",'message' =>'Tạo mới thành công!!'], 200);
-        } catch (\Exception $e){
-            return response([
-                "status" => "error",
-                "message" => $e->getMessage()
-            ], 500);
+            $atendance = atendance::create($request->all());
+            return response()->json([
+                'metadata' => $atendance,
+                'message' => 'Create Record Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'status' => 'error',
+                'statusCode' => $e instanceof HttpException
+                    ? $e->getStatusCode()
+                    : 500 // Internal Server Error by default
+            ], $e instanceof HttpException
+                ? $e->getStatusCode()
+                : 500);
         }
     }
 
 
-
     /**
      * @OA\Get(
-     *      path="/api/attendances/{id}",
-     *      operationId="getAttendanceById",
-     *      tags={"Attendances"},
-     *      summary="Get attendance by ID",
-     *      description="Get a specific attendance by its ID.",
-     *      @OA\Parameter(
-     *          name="id",
-     *          description="Attendance ID",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(type="integer")
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="success"),
-     *@OA\Property(
-     *     property="payload",
-     *     type="object",
-     *     @OA\Property(
-     *         property="id",
-     *         type="string",
-     *         example="1"
+     *     path="/api/atendances/{id}",
+     *     summary="Get a specific attendance record by ID",
+     *     tags={"Attendances"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID of the attendance record",
+     *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\Property(
-     *         property="user_id",
-     *         type="integer",
-     *         example=1
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Get One Record Successfully"),
+     *             @OA\Property(
+     *                 property="metadata",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="user_id", type="integer", example=1),
+     *                 @OA\Property(property="event_id", type="integer", example=2),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2023-11-23 11:20:22"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2023-11-23 11:20:22")
+     *             )
+     *         )
      *     ),
-     *     @OA\Property(
-     *         property="event_id",
-     *         type="integer",
-     *         example=2
+     *     @OA\Response(
+     *         response=404,
+     *         description="Record not exists",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
+     *         )
      *     ),
-     *     @OA\Property(
-     *         property="created_at",
-     *         type="string",
-     *         format="date-time",
-     *         example="2023-11-23 11:20:22"
-     *     ),
-     *     @OA\Property(
-     *         property="updated_at",
-     *         type="string",
-     *         format="date-time",
-     *         example="2023-11-23 11:20:22"
-     *     ),
-     * )
-     *          ),
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Attendance not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="error"),
-     *              @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
-     *          ),
-     *      ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
+     *         )
+     *     )
      * )
      */
     public function show($id)
     {
         try {
             $attendance = Atendance::findOrFail($id);
-            return response([
-                "status" => "success",
-                "payload" => new AtendanceResources($attendance),
-            ], 200);
+            return response()->json([
+                'metadata' => $attendance,
+                'message' => 'Get One Record Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ], Response::HTTP_OK);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response([
                 "status" => "error",
-                "message" => "Bản ghi không tồn tại",
-            ], 404);
+                "message" => "Record not exists",
+                'statusCode' => Response::HTTP_NOT_FOUND
+            ], Response::HTTP_NOT_FOUND);
         }
     }
 
     /**
      * @OA\Put(
-     *      path="/api/attendances/{id}",
-     *      operationId="updateAttendance",
-     *      tags={"Attendances"},
-     *      summary="Update attendance",
-     *      description="Update a specific attendance.",
-     *      @OA\Parameter(
-     *          name="atendance",
-     *          description="Attendance model",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(type="integer")
-     *      ),
-     *      @OA\RequestBody(
-     *          required=true,
-     *             @OA\JsonContent(
+     *     path="/api/atendances/{atendance}",
+     *     summary="Update an attendance record",
+     *     tags={"Attendances"},
+     *     @OA\Parameter(
+     *         name="atendance",
+     *         in="path",
+     *         required=true,
+     *         description="Attendance record model",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
      *             @OA\Property(property="event_id", type="integer", example="1"),
-     *             @OA\Property(property="user_id", type="integer", example="2"),
+     *             @OA\Property(property="user_id", type="integer", example="2")
      *         )
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="success"),
-     *          ),
-     *      ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Update One Record Successfully"),
+     *             @OA\Property(
+     *                 property="metadata",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="user_id", type="integer", example=1),
+     *                 @OA\Property(property="event_id", type="integer", example=2),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2023-11-23 11:20:22"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2023-11-23 11:20:22")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Record not exists",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
+     *         )
+     *     )
      * )
      */
+
     public function update(Request $request, atendance $atendance)
     {
-        $atendance->update($request->all());
-        return response([
-            "status" => "success",
-            "payload" => new AtendanceResources($atendance)
-        ], 200);
+        try {
+            $atendance->update($request->all());
+            return response()->json([
+                'metadata' => $atendance,
+                'message' => 'Update One Record Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ], Response::HTTP_OK);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response([
+                "status" => "error",
+                "message" => "Record not exists",
+                'statusCode' => Response::HTTP_NOT_FOUND
+            ], Response::HTTP_NOT_FOUND);
+        }
+
     }
 
     /**
      * @OA\Delete(
-     *      path="/api/attendances/{id}",
-     *      operationId="deleteAttendance",
-     *      tags={"Attendances"},
-     *      summary="Delete attendance",
-     *      description="Delete a specific attendance.",
-     *      @OA\Parameter(
-     *          name="atendance",
-     *          description="Attendance model",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(type="integer")
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="success"),
-     *              @OA\Property(property="message", type="string", example="Bản ghi đã được xóa thành công"),
-     *          ),
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Attendance not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="error"),
-     *              @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
-     *          ),
-     *      ),
-     *      @OA\Response(
-     *          response=500,
-     *          description="Internal Server Error",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="error"),
-     *              @OA\Property(property="message", type="string", example="Internal Server Error"),
-     *          ),
-     *      ),
+     *     path="/api/atendances/{atendance}",
+     *     summary="Delete an attendance record",
+     *     tags={"Attendances"},
+     *     @OA\Parameter(
+     *         name="atendance",
+     *         in="path",
+     *         required=true,
+     *         description="Attendance record model",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Delete One Record Successfully"),
+     *             @OA\Property(property="statusCode", type="integer", example=200)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Record not exists",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
+     *         )
+     *     )
      * )
      */
     public function destroy(atendance $atendance)
     {
         try {
             if (!$atendance) {
-                return response([
-                    "status" => "error",
-                    "message" => "Bản ghi không tồn tại",
+                return response()->json([
+                    'message' => 'Record not exists',
+                    'status' => 'error',
+                    'statusCode' => Response::HTTP_NOT_FOUND
                 ], Response::HTTP_NOT_FOUND);
             }
 
             $atendance->delete();
-
-            return response([
-                "status" => "success",
-                "message" => "Bản ghi đã được xóa thành công",
+            return response()->json([
+                'message' => 'Delete One Record Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             return response([
                 "status" => "error",
                 "message" => $e->getMessage(),
+                'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
