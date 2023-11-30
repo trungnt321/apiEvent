@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
             $table->string('content');
             $table->dateTime('time_send');
-            $table->dateTime('sent_at');
+            $table->dateTime('sent_at')->nullable();
             $table->integer('receiver_id');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
         });
     }
 

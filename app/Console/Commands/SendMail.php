@@ -43,7 +43,7 @@ class SendMail extends Command
         if ($emails->count() > 0) {
         foreach ($emails as $email) {
             $data = [
-                'title' => 'Sản phẩm test',
+                'title' => $email->title,
                 'message' =>$email->content,
             ];
             // Gửi email tới người nhận $recipient
