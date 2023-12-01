@@ -14,9 +14,9 @@ class eventController extends Controller
 {
 /**
      * @OA\Get(
-     *     path="/api/events",
+     *     path="/api/event",
      *     summary="Get all events records",
-     *     tags={"Events"},
+     *     tags={"Event"},
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
@@ -175,9 +175,9 @@ class eventController extends Controller
 
     /**
      * @OA\Get(
-     *      path="/api/events/{id}",
+     *      path="/api/event/{id}",
      *      operationId="getEventsById",
-     *      tags={"Events"},
+     *      tags={"Event"},
      *      summary="Get events by ID",
      *      description="Get a specific events by its ID.",
      *      @OA\Parameter(
@@ -345,9 +345,9 @@ class eventController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/events/{id}",
+     *     path="/api/event/{id}",
      *     summary="Delete an events record",
-     *     tags={"Events"},
+     *     tags={"Event"},
      *     @OA\Parameter(
      *         name="events",
      *         in="path",
