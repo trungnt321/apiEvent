@@ -2258,17 +2258,21 @@
                                             "type": "array",
                                             "items": {
                                                 "properties": {
-                                                    "id": {
+                                                    "name": {
                                                         "type": "string",
-                                                        "example": "1"
+                                                        "example": "Phuc La"
                                                     },
-                                                    "user_id": {
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "phucminhbeos@gmail.com"
+                                                    },
+                                                    "phone": {
+                                                        "type": "string",
+                                                        "example": "0866058725"
+                                                    },
+                                                    "role": {
                                                         "type": "integer",
                                                         "example": 1
-                                                    },
-                                                    "event_id": {
-                                                        "type": "integer",
-                                                        "example": 2
                                                     },
                                                     "created_at": {
                                                         "type": "string",
@@ -2548,6 +2552,98 @@
                                         "status": {
                                             "type": "string",
                                             "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Participants"
+                ],
+                "summary": "Delete an participants record",
+                "operationId": "ec6365c5f315ce8381da73eafdc5ccb3",
+                "parameters": [
+                    {
+                        "name": "participants",
+                        "in": "path",
+                        "description": "Participants record model",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Delete One Record Successfully"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Record not exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Record not exists"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
                                         }
                                     },
                                     "type": "object"

@@ -7,15 +7,69 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Http\Resources\EventResources;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class eventController extends Controller
 {
-    /**
-     * Display a listing of the resource.
+/**
+     * @OA\Get(
+     *     path="/api/events",
+     *     summary="Get all events records",
+     *     tags={"Events"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success"),
+     * @OA\Property(
+     *     property="payload",
+     *     type="array",
+     *     @OA\Items(
+     *         type="object",
+     *             @OA\Property(property="name", type="string", example="Event Name"),
+     *  @OA\Property(property="location", type="string", example="Ha Noi"),
+     * @OA\Property(property="contact", type="string", example="0986567467"),
+     *      @OA\Property(property="user_id", type="integer", example=2),
+     * @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     * @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *     )
+     * )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Internal server error")
+     *         )
+     *     )
+     * )
      */
     public function index()
     {
-        //
+        try {
+            $event = event::all();
+            return response()->json([
+                'metadata' => $event,
+                'message' => 'Get All Records Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ],Response::HTTP_OK);
+        }catch(\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'status'=>'error',
+                'statusCode'=>$e instanceof HttpException
+                    ? $e->getStatusCode()
+                    : Response::HTTP_INTERNAL_SERVER_ERROR
+            ],  $e instanceof HttpException
+                ? $e->getStatusCode()
+                : Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -28,9 +82,9 @@ class eventController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="name", type="string", example="2"),
-     *  @OA\Property(property="location", type="string", example="2"),
-     * @OA\Property(property="contact", type="string", example="2"),
+     *             @OA\Property(property="name", type="string", example="Event Name"),
+     *  @OA\Property(property="location", type="string", example="Hai Phong"),
+     * @OA\Property(property="contact", type="string", example="0983467584"),
      *      @OA\Property(property="user_id", type="integer", example=2),
      * @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      * @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
@@ -83,36 +137,105 @@ class eventController extends Controller
             'end_time.after'=>'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu'
         ]);
         if($validate->fails()){
-            return response(['status' => 'error', 'message' => $validate->errors()], 422);
+            return response([
+                "status" => "error",
+                "message" => $validate->errors(),
+                'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         $logUserRole = auth()->user()->role;
         if($logUserRole == 1 || $logUserRole == 2){
             //Only staff and admin can make event
             try{
-                event::create($request->all());
-                return response([
-                    "status" => "success",
-                    "message" => 'Thêm mới bản ghi thành công'
-                ], 200);
+                $event = event::create($request->all());
+                return response()->json([
+                    'metadata' => $event,
+                    'message' => 'Create Record Successfully',
+                    'status' => 'success',
+                    'statusCode' => Response::HTTP_OK
+                ], Response::HTTP_OK);
             }catch(\Exception $e){
-                return response([
-                    "status" => "error",
-                    "message" => $e->getMessage()
-                ], 500);
+                return response()->json([
+                    'message' => $e->getMessage(),
+                    'status' => 'error',
+                    'statusCode' => $e instanceof HttpException
+                        ? $e->getStatusCode()
+                        : 500 // Internal Server Error by default
+                ], $e instanceof HttpException
+                    ? $e->getStatusCode()
+                    : 500);
             }           
         }
         return response([
-            'status' => 'error', 
-            'message' => 'Chỉ nhân viên và quản lí mới có thể thêm mơi sự kiện']
-        ,500);
+            "status" => "error",
+            "message" => "Only Employees and managers are allowed to add new records",
+            "statusCode" => Response::HTTP_CONFLICT
+        ], Response::HTTP_CONFLICT);
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *      path="/api/events/{id}",
+     *      operationId="getEventsById",
+     *      tags={"Events"},
+     *      summary="Get events by ID",
+     *      description="Get a specific events by its ID.",
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="Events ID",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="status", type="string", example="success"),
+     *@OA\Property(
+     *     property="payload",
+     *     type="object",
+     *     @OA\Property(
+     *         property="id",
+     *         type="string",
+     *         example="1"
+     *     ),
+     *     @OA\Property(property="name", type="string", example="Event Name"),
+     *  @OA\Property(property="location", type="string", example="Hai Phong"),
+     * @OA\Property(property="contact", type="string", example="0983467584"),
+     *      @OA\Property(property="user_id", type="integer", example=2),
+     * @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     * @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     * )
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Participants not found",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="status", type="string", example="error"),
+     *              @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
+     *          ),
+     *      ),
+     * )
      */
     public function show($id)
     {
-        //Get details of the resource
+        try {
+            $event = event::findOrFail($id);
+            return response()->json([
+                'metadata' => $event,
+                'message' => 'Get One Record Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ], Response::HTTP_OK);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response([
+                "status" => "error",
+                "message" => "Record not exists",
+                'statusCode' => Response::HTTP_NOT_FOUND
+            ], Response::HTTP_NOT_FOUND);
+        }
         
     }
 
@@ -133,10 +256,10 @@ class eventController extends Controller
      *      @OA\RequestBody(
      *          required=true,
      *             @OA\JsonContent(
-     *             @OA\Property(property="name", type="string", example="2"),
-     *  @OA\Property(property="location", type="string", example="2"),
-     * @OA\Property(property="contact", type="string", example="2"),
-     * @OA\Property(property="status", type="integer", example=2),
+     *             @OA\Property(property="name", type="string", example="Event Name"),
+     *  @OA\Property(property="location", type="string", example="Hai Phong"),
+     * @OA\Property(property="contact", type="string", example="0983118678"),
+     * @OA\Property(property="status", type="integer", example=0),
      *      @OA\Property(property="user_id", type="integer", example=2),
      * @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      * @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
@@ -185,7 +308,11 @@ class eventController extends Controller
             'end_time.after'=>'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu'
         ]);
         if($validate->fails()){
-            return response(['status' => 'error', 'message' => $validate->errors()], 422);
+            return response([
+                "status" => "error",
+                "message" => $validate->errors(),
+                'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         $logUserRole = auth()->user()->role;
@@ -194,31 +321,95 @@ class eventController extends Controller
             $event = event::findOrFail($id);
             try{
                 $event->update($request->all());
-                return response([
-                    'status' => 'success', 
-                    'message' => 'Chỉnh sửa thành công'
-                    ]
-                ,500);
+                return response()->json([
+                    'metadata' => $event,
+                    'message' => 'Update One Record Successfully',
+                        'status' => 'success',
+                        'statusCode' => Response::HTTP_OK
+                    ], Response::HTTP_OK);
             }catch(\Exception $e){
                 return response([
-                    'status' => 'error', 
-                    'message' => $e->getMessage()
-                    ]
-                ,500);
+                    "status" => "error",
+                    "message" => $e->getMessage(),
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
         return response([
-            'status' => 'error', 
-            'message' => 'Chỉ nhân viên và quản lí mới có thể sửa  sự kiện']
-        ,500);
+            "status" => "error",
+            "message" => "Only Employees and managers are allowed to edit records",
+            "statusCode" => Response::HTTP_CONFLICT
+        ], Response::HTTP_CONFLICT);
 
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/events/{id}",
+     *     summary="Delete an events record",
+     *     tags={"Events"},
+     *     @OA\Parameter(
+     *         name="events",
+     *         in="path",
+     *         required=true,
+     *         description="events record model",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Delete One Record Successfully"),
+     *             @OA\Property(property="statusCode", type="integer", example=200)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Record not exists",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
+     *         )
+     *     )
+     * )
      */
-    public function destroy(event $event)
+    public function destroy($id)
     {
-        //
+        try{
+            $event = event::findOrFail($id);
+            if(!$event){
+                return response()->json([
+                    'message' => 'Record not exists',
+                    'status' => 'error',
+                    'statusCode' => Response::HTTP_NOT_FOUND
+                ], Response::HTTP_NOT_FOUND);
+            }
+            $event->delete();
+            return response()->json([
+                'message' => 'Delete One Record Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ], Response::HTTP_OK);
+        }catch(\Exception $e){
+            return response([
+                "status" => "error",
+                "message" => $e->getMessage(),
+                'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

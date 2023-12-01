@@ -7,9 +7,7 @@ use Illuminate\Http\Request;
 
 class resourceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         //
@@ -26,7 +24,7 @@ class resourceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(resource $resource)
+    public function show()
     {
         //
     }
