@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class participantsController extends Controller
 {
@@ -27,34 +28,12 @@ class participantsController extends Controller
      *     type="array",
      *     @OA\Items(
      *         type="object",
-     *         @OA\Property(
-     *             property="id",
-     *             type="string",
-     *             example="1"
-     *         ),
-     *         @OA\Property(
-     *             property="user_id",
-     *             type="integer",
-     *             example=1
-     *         )
-     * ,
-     *         @OA\Property(
-     *             property="event_id",
-     *             type="integer",
-     *             example=2
-     *         )  ,
-     *      @OA\Property(
-     *     property="created_at",
-     *     type="string",
-     *     format="date-time",
-     *     example="2023-11-23 11:20:22"
-     * ),
-     * @OA\Property(
-     *     property="updated_at",
-     *     type="string",
-     *     format="date-time",
-     *     example="2023-11-23 11:20:22"
-     * )
+     *          @OA\Property(property="name",type="string",example="Phuc La"),
+     *     @OA\Property(property="email",type="string",example="phucminhbeos@gmail.com"),
+     *     @OA\Property(property="phone",type="string",example="0866058725"),   
+     *     @OA\Property(property="role",type="integer",example=1),  
+     *     @OA\Property(property="created_at",type="string",format="date-time",example="2023-11-23 11:20:22"),
+     *     @OA\Property(property="updated_at",type="string",format="date-time",example="2023-11-23 11:20:22"),
      *     )
      * )
      *         )
@@ -74,15 +53,22 @@ class participantsController extends Controller
     {
         try {
             $users = User::all();
-            return response([
-                "status" => "success",
-                "payload" => ParticipantsResources::collection($users)
-            ], 200);
+            return response()->json([
+                'metadata' => $users,
+                'message' => 'Get All Records Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ],Response::HTTP_OK);
         }catch(\Exception $e) {
-            return response([
-                "status" => "error",
-                "message" => $e->getMessage()
-            ], 200);
+            return response()->json([
+                'message' => $e->getMessage(),
+                'status'=>'error',
+                'statusCode'=>$e instanceof HttpException
+                    ? $e->getStatusCode()
+                    : Response::HTTP_INTERNAL_SERVER_ERROR
+            ],  $e instanceof HttpException
+                ? $e->getStatusCode()
+                : Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     /**
@@ -153,16 +139,30 @@ class participantsController extends Controller
             ]);
 
             if($validator->fails()){
-                return response(['status' => 'error', 'message' => $validator->errors()], 500);
+                return response([
+                    "status" => "error",
+                    "message" => $validator->errors(),
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
-            User::create($request->all());
-            return response([   "status" => "success",'message' =>'Tạo mới thành công!!'], 200);
+            $user = User::create($request->all());
+            return response()->json([
+                'metadata' => $user,
+                'message' => 'Create Record Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ], Response::HTTP_OK);
         } catch (\Exception $e){
-            return response([
-                "status" => "error",
-                "message" => $e->getMessage()
-            ], 500);
+            return response()->json([
+                'message' => $e->getMessage(),
+                'status' => 'error',
+                'statusCode' => $e instanceof HttpException
+                    ? $e->getStatusCode()
+                    : 500 // Internal Server Error by default
+            ], $e instanceof HttpException
+                ? $e->getStatusCode()
+                : 500);
         }
     }
 
@@ -193,38 +193,12 @@ class participantsController extends Controller
      *         type="string",
      *         example="1"
      *     ),
-     *     @OA\Property(
-     *         property="name",
-     *         type="string",
-     *         example="1"
-     *     ),
-     *     @OA\Property(
-     *         property="email",
-     *         type="string",
-     *         example="2"
-     *     ),
-     *     @OA\Property(
-     *         property="phone",
-     *         type="string",
-     *         example="2"
-     *     ),   
-     *     @OA\Property(
-     *         property="role",
-     *         type="integer",
-     *         example=2
-     *     ),  
-     *     @OA\Property(
-     *         property="created_at",
-     *         type="string",
-     *         format="date-time",
-     *         example="2023-11-23 11:20:22"
-     *     ),
-     *     @OA\Property(
-     *         property="updated_at",
-     *         type="string",
-     *         format="date-time",
-     *         example="2023-11-23 11:20:22"
-     *     ),
+     *     @OA\Property(property="name",type="string",example="1"),
+     *     @OA\Property(property="email",type="string",example="2"),
+     *     @OA\Property(property="phone",type="string",example="2"),   
+     *     @OA\Property(property="role",type="integer",example=2),  
+     *     @OA\Property(property="created_at",type="string",format="date-time",example="2023-11-23 11:20:22"),
+     *     @OA\Property(property="updated_at",type="string",format="date-time",example="2023-11-23 11:20:22"),
      * )
      *          ),
      *      ),
@@ -242,15 +216,18 @@ class participantsController extends Controller
     {
         try {
             $users = User::findOrFail($id);
-            return response([
-                "status" => "success",
-                "payload" => new ParticipantsResources($users),
-            ], 200);
+            return response()->json([
+                'metadata' => $users,
+                'message' => 'Get One Record Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ], Response::HTTP_OK);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response([
                 "status" => "error",
-                "message" => "Bản ghi không tồn tại",
-            ], 404);
+                "message" => "Record not exists",
+                'statusCode' => Response::HTTP_NOT_FOUND
+            ], Response::HTTP_NOT_FOUND);
         }
     }
 
@@ -292,7 +269,11 @@ class participantsController extends Controller
         if(auth()->check()){
             $logUserRole = auth()->user()->role;
         }else{
-            return response(['status' => 'error', 'message' => 'Chưa đăng nhập nên không thể vào chỉnh sửa'], 500);
+            return response([
+                'status' => 'error',
+                'message' => 'Not logged in yet',
+                'statusCode' => Response::HTTP_UNAUTHORIZED
+            ],Response::HTTP_UNAUTHORIZED);
         }
         
         $roleUpdate = $request->input('role');
@@ -326,7 +307,11 @@ class participantsController extends Controller
 
         //Nếu nó sai từ validate request thì nó dừng luôn
         if($validator->fails()){
-            return response(['status' => 'error', 'message' => $validator->errors()], 422);
+            return response([
+                "status" => "error",
+                "message" => $validator->errors(),
+                'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         //Check role của từng người 
@@ -335,9 +320,10 @@ class participantsController extends Controller
         }else if($logUserRole == 1){
             if($roleUpdate == 2){
                 return response([
-                    "status" => "Conflict",
-                    "message" => "Nhân viên không thể chỉnh sửa quản lí được",
-                ], 422);
+                    "status" => "error",
+                    "message" => "Employees cannot edit manager information",
+                    "statusCode" => Response::HTTP_CONFLICT
+                ], Response::HTTP_CONFLICT);
             }else{
                 //Đây là 2 trường hợp còn lại là 0,1 : nhân viên, sinh viên
                 $canUpdate = true;
@@ -345,16 +331,88 @@ class participantsController extends Controller
         }else{
             //Trường hợp còn lại là sinh viên thì không cho chỉnh sửa bất cứ cải gì
             return response([
-                "status" => "Conflict",
-                "message" => "Sinh viên không có quyền chỉnh sửa bất cứ cái gì",
-            ], 422);
+                "status" => "error",
+                "message" => "Students cannot edit anything",
+                "statusCode" => Response::HTTP_CONFLICT
+            ], Response::HTTP_CONFLICT);
         }
         if($canUpdate == true){
             $user->update($request->all());
         }
-        return response([
-            "status" => "success",
-            "payload" => new ParticipantsResources($user)
-        ], 200);
+        return response()->json([
+            'metadata' => $user,
+            'message' => 'Update One Record Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ], Response::HTTP_OK);
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/api/participants/{id}",
+     *     summary="Delete an participants record",
+     *     tags={"Participants"},
+     *     @OA\Parameter(
+     *         name="participants",
+     *         in="path",
+     *         required=true,
+     *         description="Participants record model",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Delete One Record Successfully"),
+     *             @OA\Property(property="statusCode", type="integer", example=200)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Record not exists",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
+     *         )
+     *     )
+     * )
+     */
+    public function destroy($id){
+        try{
+            $user = User::findOrFail($id);
+            if(!$user){
+                return response()->json([
+                    'message' => 'Record not exists',
+                    'status' => 'error',
+                    'statusCode' => Response::HTTP_NOT_FOUND
+                ], Response::HTTP_NOT_FOUND);
+            }
+            $user->delete();
+            return response()->json([
+                'message' => 'Delete One Record Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ], Response::HTTP_OK);
+        }catch(\Exception $e){
+            return response([
+                "status" => "error",
+                "message" => $e->getMessage(),
+                'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }   
     }
 }
