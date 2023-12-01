@@ -9,6 +9,8 @@ use App\Http\Controllers\eventController;
 use App\Http\Controllers\notificationController;
 use App\Http\Controllers\participantsController;
 use App\Http\Controllers\feedbackController;
+use App\Http\Controllers\resourceController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -36,7 +38,8 @@ Route::get('/event',[eventController::class,'index']);
 //Test api in swagger donn't need token
 Route::apiResource('participants',participantsController::class)->middleware('auth:api');
 Route::apiResource('event',eventController::class)->middleware('auth:api');
-
+Route::get('resourceByEventID/{event_id}',[resourceController::class,'GetRecordByEventId'])->middleware('auth:api');
+Route::apiResource('resource',resourceController::class)->middleware('auth:api');;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

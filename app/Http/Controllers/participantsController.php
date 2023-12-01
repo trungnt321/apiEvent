@@ -239,7 +239,7 @@ class participantsController extends Controller
      *      summary="Update Participants",
      *      description="Update a specific participants.",
      *      @OA\Parameter(
-     *          name="participants",
+     *          name="id",
      *          description="participants model",
      *          required=true,
      *          in="path",
