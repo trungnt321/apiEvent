@@ -23,19 +23,30 @@ class participantsController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="success"),
-     * @OA\Property(
-     *     property="payload",
-     *     type="array",
-     *     @OA\Items(
-     *         type="object",
-     *          @OA\Property(property="name",type="string",example="Phuc La"),
-     *     @OA\Property(property="email",type="string",example="phucminhbeos@gmail.com"),
-     *     @OA\Property(property="phone",type="string",example="0866058725"),   
-     *     @OA\Property(property="role",type="integer",example=1),  
-     *     @OA\Property(property="created_at",type="string",format="date-time",example="2023-11-23 11:20:22"),
-     *     @OA\Property(property="updated_at",type="string",format="date-time",example="2023-11-23 11:20:22"),
-     *     )
-     * )
+     *             @OA\Property(property="message", type="string", example="Get All Record Successfully"),
+     *             @OA\Property(property="statusCode", type="integer", example=200),
+     *             @OA\Property(
+     *                 property="metadata",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="name", type="string", example="Phuc La"),
+     *                     @OA\Property(property="email", type="string", example="phuclaf@gmail.com"),
+     *                     @OA\Property(property="password", type="string", example="123456"),
+     *                     @OA\Property(property="phone", type="string", example="0983118272"),
+     *                     @OA\Property(property="role", type="integer", example=1),
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Record not exists",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
@@ -44,7 +55,8 @@ class participantsController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Internal server error")
+     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
      * )
@@ -81,19 +93,32 @@ class participantsController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="name", type="string", example="1"),
-     *             @OA\Property(property="email", type="string", example="2"),
-     *              @OA\Property(property="password", type="string", example="2"),
-     *          @OA\Property(property="phone", type="string", example="2"),
-     *          @OA\Property(property="role", type="integer", example=1),
+     *              @OA\Property(property="name", type="string", example="Phuc La"),
+     *                     @OA\Property(property="email", type="string", example="phuclaf@gmail.com"),
+     *                     @OA\Property(property="password", type="string", example="123456"),
+     *                     @OA\Property(property="phone", type="string", example="0983118272"),
+     *                     @OA\Property(property="role", type="integer", example=1),
      *         )
      *     ),
-     *     @OA\Response(
+     *    @OA\Response(
      *         response=200,
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="Tạo mới thành công!!"),
+     *             @OA\Property(property="message", type="string", example="Create Record Successfully"),
+     *             @OA\Property(property="statusCode", type="int", example=200),
+     *     @OA\Property(
+     *                 property="metadata",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="name", type="string", example="Phuc La"),
+     *                     @OA\Property(property="email", type="string", example="phuclaf@gmail.com"),
+     *                     @OA\Property(property="password", type="string", example="123456"),
+     *                     @OA\Property(property="phone", type="string", example="0983118272"),
+     *                     @OA\Property(property="role", type="integer", example=1),
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -101,7 +126,9 @@ class participantsController extends Controller
      *         description="Validation error or internal server error",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="object", example={"user_id": {"Không đúng định dạng"}}),
+     *             @OA\Property(property="message", type="object", example={"user_id": {"User ID is required"}}),
+     *             @OA\Property(property="statusCode", type="int", example=500),
+
      *         )
      *     ),
      * )
@@ -145,8 +172,9 @@ class participantsController extends Controller
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-
-            $user = User::create($request->all());
+            $data = $validator->validated();
+            $data['password'] = bcrypt($request->password);
+            $user = User::create($data);
             return response()->json([
                 'metadata' => $user,
                 'message' => 'Create Record Successfully',
@@ -166,52 +194,57 @@ class participantsController extends Controller
         }
     }
 
-        /**
-     * @OA\Get(
-     *      path="/api/participants/{id}",
-     *      operationId="getParticipantsById",
-     *      tags={"Participants"},
-     *      summary="Get participants by ID",
-     *      description="Get a specific participants by its ID.",
-     *      @OA\Parameter(
-     *          name="id",
-     *          description="Participants ID",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(type="integer")
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="success"),
-     *@OA\Property(
-     *     property="payload",
-     *     type="object",
-     *     @OA\Property(
-     *         property="id",
-     *         type="string",
-     *         example="1"
-     *     ),
-     *     @OA\Property(property="name",type="string",example="1"),
-     *     @OA\Property(property="email",type="string",example="2"),
-     *     @OA\Property(property="phone",type="string",example="2"),   
-     *     @OA\Property(property="role",type="integer",example=2),  
-     *     @OA\Property(property="created_at",type="string",format="date-time",example="2023-11-23 11:20:22"),
-     *     @OA\Property(property="updated_at",type="string",format="date-time",example="2023-11-23 11:20:22"),
-     * )
-     *          ),
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Participants not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="error"),
-     *              @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
-     *          ),
-     *      ),
-     * )
-     */
+/**
+ * @OA\Get(
+ *      path="/api/participants/{id}",
+ *      operationId="getParticipantsById",
+ *      tags={"Participants"},
+ *      summary="Get participants by ID",
+ *      description="Get specific participant details by their ID.",
+ *      @OA\Parameter(
+ *          name="id",
+ *          description="Participant ID",
+ *          required=true,
+ *          in="path",
+ *          @OA\Schema(type="integer")
+ *      ),
+ *      @OA\Response(
+ *         response=200,
+ *         description="Successful operation",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="success"),
+ *             @OA\Property(property="message", type="string", example="Get Record Successfully"),
+ *             @OA\Property(
+ *                 property="metadata",
+ *                 type="object",
+ *                         @OA\Property(property="name", type="string", example="Phuc La"),
+     *                     @OA\Property(property="email", type="string", example="phuclaf@gmail.com"),
+     *                     @OA\Property(property="password", type="string", example="123456"),
+     *                     @OA\Property(property="phone", type="string", example="0983118272"),
+     *                     @OA\Property(property="role", type="integer", example=1),
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Record not found",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Record not found"),
+ *             @OA\Property(property="statusCode", type="integer", example=404)
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Server error",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Server error"),
+ *             @OA\Property(property="statusCode", type="integer", example=500)
+ *         )
+ *     )
+ * )
+ */
     public function show($id)
     {
         try {
@@ -248,19 +281,50 @@ class participantsController extends Controller
      *      @OA\RequestBody(
      *          required=true,
      *             @OA\JsonContent(
-     *             @OA\Property(property="name", type="string", example="2"),
-     *  @OA\Property(property="email", type="string", example="2"),
-     * @OA\Property(property="phone", type="string", example="2"),
-     * @OA\Property(property="role", type="integer", example=2),
+     *             @OA\Property(property="name", type="string", example="Phuc La"),
+     *  @OA\Property(property="email", type="string", example="phucla@gmail.com"),
+     * @OA\Property(property="phone", type="string", example="0982221151"),
+     * @OA\Property(property="role", type="integer", example=1),
      *         )
      *      ),
      *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="success"),
-     *          ),
-     *      ),
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Update One Record Successfully"),
+     *             @OA\Property(
+     *                 property="metadata",
+     *                 type="object",
+     *                  @OA\Property(property="id", type="string", example="1"),
+     *                     @OA\Property(property="name", type="string", example="Phuc La"),
+     *                      @OA\Property(property="email", type="string", example="phucla@gmail.com"),
+     *                      @OA\Property(property="phone", type="string", example="0982221151"),
+     *                      @OA\Property(property="role", type="integer", example=1),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Record not exists",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
+     *         )
+     *     )
      * )
      */
     public function update(Request $request,$id)
