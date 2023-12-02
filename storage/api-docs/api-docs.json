@@ -893,7 +893,15 @@
                                             "type": "string",
                                             "example": "success"
                                         },
-                                        "payload": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Get One Record Successfully"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "metadata": {
                                             "type": "array",
                                             "items": {
                                                 "properties": {
@@ -933,6 +941,30 @@
                             }
                         }
                     },
+                    "404": {
+                        "description": "Record not exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Record not exists"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Server error",
                         "content": {
@@ -945,7 +977,11 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Internal server error"
+                                            "example": "Server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
                                         }
                                     },
                                     "type": "object"
@@ -1013,7 +1049,45 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Tạo mới thành công!!"
+                                            "example": "Create Record Successfully"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "metadata": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Event Name"
+                                                    },
+                                                    "location": {
+                                                        "type": "string",
+                                                        "example": "Ha Noi"
+                                                    },
+                                                    "contact": {
+                                                        "type": "string",
+                                                        "example": "0986567467"
+                                                    },
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "start_time": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-23 11:20:22"
+                                                    },
+                                                    "end_time": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-23 11:20:22"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
                                         }
                                     },
                                     "type": "object"
@@ -1021,8 +1095,8 @@
                             }
                         }
                     },
-                    "500": {
-                        "description": "Validation error or internal server error",
+                    "422": {
+                        "description": "Validation error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1032,12 +1106,36 @@
                                             "example": "error"
                                         },
                                         "message": {
-                                            "type": "object",
-                                            "example": {
-                                                "user_id": [
-                                                    "Không để trống ID người dùng"
-                                                ]
-                                            }
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 422
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
                                         }
                                     },
                                     "type": "object"
@@ -1264,23 +1362,23 @@
                                             "type": "string",
                                             "example": "success"
                                         },
-                                        "payload": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Get One Record Successfully"
+                                        },
+                                        "metadata": {
                                             "properties": {
-                                                "id": {
-                                                    "type": "string",
-                                                    "example": "1"
-                                                },
                                                 "name": {
                                                     "type": "string",
                                                     "example": "Event Name"
                                                 },
                                                 "location": {
                                                     "type": "string",
-                                                    "example": "Hai Phong"
+                                                    "example": "Ha Noi"
                                                 },
                                                 "contact": {
                                                     "type": "string",
-                                                    "example": "0983467584"
+                                                    "example": "0986567467"
                                                 },
                                                 "user_id": {
                                                     "type": "integer",
@@ -1306,7 +1404,7 @@
                         }
                     },
                     "404": {
-                        "description": "Participants not found",
+                        "description": "Record not exists",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1317,7 +1415,35 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Bản ghi không tồn tại"
+                                            "example": "Record not exists"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
                                         }
                                     },
                                     "type": "object"
@@ -1336,9 +1462,9 @@
                 "operationId": "updateEvent",
                 "parameters": [
                     {
-                        "name": "event",
+                        "name": "id",
                         "in": "path",
-                        "description": "event model",
+                        "description": "Event ID",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -1397,6 +1523,93 @@
                                         "status": {
                                             "type": "string",
                                             "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Update One Record Successfully"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "metadata": {
+                                            "properties": {
+                                                "location": {
+                                                    "type": "string",
+                                                    "example": "Hai Phong"
+                                                },
+                                                "contact": {
+                                                    "type": "string",
+                                                    "example": "0983118678"
+                                                },
+                                                "status": {
+                                                    "type": "integer",
+                                                    "example": 0
+                                                },
+                                                "user_id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "start_time": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-11-23 11:20:22"
+                                                },
+                                                "end_time": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-11-23 11:20:22"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Record not exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Record not exists"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
                                         }
                                     },
                                     "type": "object"
@@ -2784,7 +2997,15 @@
                                             "type": "string",
                                             "example": "success"
                                         },
-                                        "payload": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Get All Record Successfully"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "metadata": {
                                             "type": "array",
                                             "items": {
                                                 "properties": {
@@ -2794,29 +3015,47 @@
                                                     },
                                                     "email": {
                                                         "type": "string",
-                                                        "example": "phucminhbeos@gmail.com"
+                                                        "example": "phuclaf@gmail.com"
+                                                    },
+                                                    "password": {
+                                                        "type": "string",
+                                                        "example": "123456"
                                                     },
                                                     "phone": {
                                                         "type": "string",
-                                                        "example": "0866058725"
+                                                        "example": "0983118272"
                                                     },
                                                     "role": {
                                                         "type": "integer",
                                                         "example": 1
-                                                    },
-                                                    "created_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2023-11-23 11:20:22"
-                                                    },
-                                                    "updated_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2023-11-23 11:20:22"
                                                     }
                                                 },
                                                 "type": "object"
                                             }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Record not exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Record not exists"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
                                         }
                                     },
                                     "type": "object"
@@ -2836,7 +3075,11 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Internal server error"
+                                            "example": "Server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
                                         }
                                     },
                                     "type": "object"
@@ -2861,19 +3104,19 @@
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "example": "1"
+                                        "example": "Phuc La"
                                     },
                                     "email": {
                                         "type": "string",
-                                        "example": "2"
+                                        "example": "phuclaf@gmail.com"
                                     },
                                     "password": {
                                         "type": "string",
-                                        "example": "2"
+                                        "example": "123456"
                                     },
                                     "phone": {
                                         "type": "string",
-                                        "example": "2"
+                                        "example": "0983118272"
                                     },
                                     "role": {
                                         "type": "integer",
@@ -2898,7 +3141,39 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Tạo mới thành công!!"
+                                            "example": "Create Record Successfully"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "metadata": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Phuc La"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "phuclaf@gmail.com"
+                                                    },
+                                                    "password": {
+                                                        "type": "string",
+                                                        "example": "123456"
+                                                    },
+                                                    "phone": {
+                                                        "type": "string",
+                                                        "example": "0983118272"
+                                                    },
+                                                    "role": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
                                         }
                                     },
                                     "type": "object"
@@ -2920,9 +3195,13 @@
                                             "type": "object",
                                             "example": {
                                                 "user_id": [
-                                                    "Không đúng định dạng"
+                                                    "User ID is required"
                                                 ]
                                             }
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
                                         }
                                     },
                                     "type": "object"
@@ -2939,13 +3218,13 @@
                     "Participants"
                 ],
                 "summary": "Get participants by ID",
-                "description": "Get a specific participants by its ID.",
+                "description": "Get specific participant details by their ID.",
                 "operationId": "getParticipantsById",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Participants ID",
+                        "description": "Participant ID",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -2963,37 +3242,31 @@
                                             "type": "string",
                                             "example": "success"
                                         },
-                                        "payload": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Get Record Successfully"
+                                        },
+                                        "metadata": {
                                             "properties": {
-                                                "id": {
-                                                    "type": "string",
-                                                    "example": "1"
-                                                },
                                                 "name": {
                                                     "type": "string",
-                                                    "example": "1"
+                                                    "example": "Phuc La"
                                                 },
                                                 "email": {
                                                     "type": "string",
-                                                    "example": "2"
+                                                    "example": "phuclaf@gmail.com"
+                                                },
+                                                "password": {
+                                                    "type": "string",
+                                                    "example": "123456"
                                                 },
                                                 "phone": {
                                                     "type": "string",
-                                                    "example": "2"
+                                                    "example": "0983118272"
                                                 },
                                                 "role": {
                                                     "type": "integer",
-                                                    "example": 2
-                                                },
-                                                "created_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2023-11-23 11:20:22"
-                                                },
-                                                "updated_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2023-11-23 11:20:22"
+                                                    "example": 1
                                                 }
                                             },
                                             "type": "object"
@@ -3005,7 +3278,7 @@
                         }
                     },
                     "404": {
-                        "description": "Participants not found",
+                        "description": "Record not found",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3016,7 +3289,35 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Bản ghi không tồn tại"
+                                            "example": "Record not found"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
                                         }
                                     },
                                     "type": "object"
@@ -3052,19 +3353,19 @@
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "example": "2"
+                                        "example": "Phuc La"
                                     },
                                     "email": {
                                         "type": "string",
-                                        "example": "2"
+                                        "example": "phucla@gmail.com"
                                     },
                                     "phone": {
                                         "type": "string",
-                                        "example": "2"
+                                        "example": "0982221151"
                                     },
                                     "role": {
                                         "type": "integer",
-                                        "example": 2
+                                        "example": 1
                                     }
                                 },
                                 "type": "object"
@@ -3082,6 +3383,83 @@
                                         "status": {
                                             "type": "string",
                                             "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Update One Record Successfully"
+                                        },
+                                        "metadata": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "1"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Phuc La"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "phucla@gmail.com"
+                                                },
+                                                "phone": {
+                                                    "type": "string",
+                                                    "example": "0982221151"
+                                                },
+                                                "role": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Record not exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Record not exists"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
                                         }
                                     },
                                     "type": "object"
@@ -3202,35 +3580,57 @@
                                             "type": "string",
                                             "example": "success"
                                         },
-                                        "payload": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Get One Record Successfully"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "metadata": {
                                             "type": "array",
                                             "items": {
                                                 "properties": {
                                                     "name": {
                                                         "type": "string",
-                                                        "example": "Event Image"
+                                                        "example": "Anh su kien"
                                                     },
                                                     "url": {
                                                         "type": "string",
-                                                        "example": "http://127.0.0.1:8000/Upload/cross.png"
+                                                        "format": "binary"
                                                     },
                                                     "event_id": {
                                                         "type": "interger",
                                                         "example": 1
-                                                    },
-                                                    "created_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2023-11-23 11:20:22"
-                                                    },
-                                                    "updated_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2023-11-23 11:20:22"
                                                     }
                                                 },
                                                 "type": "object"
                                             }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Record not exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Record not exists"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
                                         }
                                     },
                                     "type": "object"
@@ -3250,7 +3650,11 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Internal server error"
+                                            "example": "Server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
                                         }
                                     },
                                     "type": "object"
@@ -3304,7 +3708,31 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Tạo mới thành công!!"
+                                            "example": "Create Record Successfully"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "metadata": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "error"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Server error"
+                                                    },
+                                                    "statusCode": {
+                                                        "type": "integer",
+                                                        "example": 500
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
                                         }
                                     },
                                     "type": "object"
@@ -3326,9 +3754,13 @@
                                             "type": "object",
                                             "example": {
                                                 "user_id": [
-                                                    "Không đúng định dạng"
+                                                    "User ID is required"
                                                 ]
                                             }
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
                                         }
                                     },
                                     "type": "object"
@@ -3369,33 +3801,23 @@
                                             "type": "string",
                                             "example": "success"
                                         },
-                                        "payload": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Get One Record Successfully"
+                                        },
+                                        "metadata": {
                                             "properties": {
-                                                "id": {
+                                                "name": {
                                                     "type": "string",
                                                     "example": "1"
                                                 },
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "Event Image"
-                                                },
                                                 "url": {
                                                     "type": "string",
-                                                    "example": "http://127.0.0.1:8000/Upload/cross.png"
+                                                    "format": "binary"
                                                 },
                                                 "event_id": {
                                                     "type": "interger",
                                                     "example": 1
-                                                },
-                                                "created_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2023-11-23 11:20:22"
-                                                },
-                                                "updated_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2023-11-23 11:20:22"
                                                 }
                                             },
                                             "type": "object"
@@ -3407,7 +3829,7 @@
                         }
                     },
                     "404": {
-                        "description": "Participants not found",
+                        "description": "Record not exists",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3418,7 +3840,35 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Bản ghi không tồn tại"
+                                            "example": "Record not exists"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
                                         }
                                     },
                                     "type": "object"
@@ -3452,17 +3902,13 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "anh 1"
-                                    },
-                                    "url": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    },
                                     "event_id": {
-                                        "type": "interger",
-                                        "example": 1
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": "2"
                                     }
                                 },
                                 "type": "object"
@@ -3480,6 +3926,75 @@
                                         "status": {
                                             "type": "string",
                                             "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Update One Record Successfully"
+                                        },
+                                        "metadata": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Anh su kien"
+                                                },
+                                                "url": {
+                                                    "type": "string",
+                                                    "format": "binary"
+                                                },
+                                                "event_id": {
+                                                    "type": "interger",
+                                                    "example": 1
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Record not exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Record not exists"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
                                         }
                                     },
                                     "type": "object"
@@ -3612,36 +4127,33 @@
                                             "type": "string",
                                             "example": "success"
                                         },
-                                        "payload": {
-                                            "properties": {
-                                                "id": {
-                                                    "type": "string",
-                                                    "example": "1"
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Get One Record Successfully"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "metadata": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Anh su kien"
+                                                    },
+                                                    "url": {
+                                                        "type": "string",
+                                                        "format": "binary"
+                                                    },
+                                                    "event_id": {
+                                                        "type": "interger",
+                                                        "example": 1
+                                                    }
                                                 },
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "Event Image"
-                                                },
-                                                "url": {
-                                                    "type": "string",
-                                                    "example": "http://127.0.0.1:8000/Upload/cross.png"
-                                                },
-                                                "event_id": {
-                                                    "type": "interger",
-                                                    "example": 1
-                                                },
-                                                "created_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2023-11-23 11:20:22"
-                                                },
-                                                "updated_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2023-11-23 11:20:22"
-                                                }
-                                            },
-                                            "type": "object"
+                                                "type": "object"
+                                            }
                                         }
                                     },
                                     "type": "object"
@@ -3650,7 +4162,7 @@
                         }
                     },
                     "404": {
-                        "description": "Participants not found",
+                        "description": "Record not exists",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3661,7 +4173,35 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Bản ghi không tồn tại"
+                                            "example": "Record not exists"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
                                         }
                                     },
                                     "type": "object"

@@ -22,29 +22,40 @@ class eventController extends Controller
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="status", type="string", example="success"),
-     * @OA\Property(
-     *     property="payload",
-     *     type="array",
-     *     @OA\Items(
-     *         type="object",
-     *             @OA\Property(property="name", type="string", example="Event Name"),
-     *  @OA\Property(property="location", type="string", example="Ha Noi"),
-     * @OA\Property(property="contact", type="string", example="0986567467"),
-     *      @OA\Property(property="user_id", type="integer", example=2),
-     * @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
-     * @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
-     *     )
-     * )
+     *              @OA\Property(property="status", type="string", example="success"),
+     *              @OA\Property(property="message", type="string", example="Get One Record Successfully"),
+     *              @OA\Property(property="statusCode", type="integer", example=200),
+     *              @OA\Property(property="metadata",type="array",
+     *                  @OA\Items(
+     *                      type="object",
+     *                       @OA\Property(property="name", type="string", example="Event Name"),
+     *                       @OA\Property(property="location", type="string", example="Ha Noi"),
+     *                       @OA\Property(property="contact", type="string", example="0986567467"),
+     *                       @OA\Property(property="user_id", type="integer", example=2),
+     *                       @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                       @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                  )
+     *              )
      *         )
      *     ),
      *     @OA\Response(
+     *         response=404,
+     *         description="Record not exists",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
+     *         )
+     *     ),
+    *      @OA\Response(
      *         response=500,
      *         description="Server error",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Internal server error")
+     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
      * )
@@ -72,42 +83,63 @@ class eventController extends Controller
         }
     }
 
-    /**
-     * @OA\Post(
-     *     path="/api/event",
-     *     tags={"Event"},
-     *     summary="Store a new event record",
-     *     description="Store a new event record with the provided data.",
-     *     operationId="storeEvent",
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="name", type="string", example="Event Name"),
-     *  @OA\Property(property="location", type="string", example="Hai Phong"),
-     * @OA\Property(property="contact", type="string", example="0983467584"),
-     *      @OA\Property(property="user_id", type="integer", example=2),
-     * @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
-     * @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Successful operation",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="Tạo mới thành công!!"),
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Validation error or internal server error",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="object", example={"user_id": {"Không để trống ID người dùng"}}),
-     *         )
-     *     ),
-     * )
-     */
+/**
+ * @OA\Post(
+ *     path="/api/event",
+ *     tags={"Event"},
+ *     summary="Store a new event record",
+ *     description="Store a new event record with the provided data.",
+ *     operationId="storeEvent",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             @OA\Property(property="name", type="string", example="Event Name"),
+ *             @OA\Property(property="location", type="string", example="Hai Phong"),
+ *             @OA\Property(property="contact", type="string", example="0983467584"),
+ *             @OA\Property(property="user_id", type="integer", example=2),
+ *             @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+ *             @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Successful operation",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="success"),
+ *             @OA\Property(property="message", type="string", example="Create Record Successfully"),
+ *             @OA\Property(property="statusCode", type="int", example=200),
+ *             @OA\Property(property="metadata", type="array",
+ *                  @OA\Items(type="object",
+ *                           @OA\Property(property="name", type="string", example="Event Name"),
+ *                           @OA\Property(property="location", type="string", example="Ha Noi"),
+ *                           @OA\Property(property="contact", type="string", example="0986567467"),
+ *                           @OA\Property(property="user_id", type="integer", example=2),
+ *                           @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+ *                           @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+ *                  )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Validation error",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Validation error"),
+ *             @OA\Property(property="statusCode", type="int", example=422),
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Internal server error",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Internal server error"),
+ *             @OA\Property(property="statusCode", type="int", example=500),
+ *         )
+ *     )
+ * )
+ */
     public function store(Request $request)
     {
         //Check valiadate
@@ -188,35 +220,44 @@ class eventController extends Controller
      *          @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="success"),
-     *@OA\Property(
-     *     property="payload",
-     *     type="object",
-     *     @OA\Property(
-     *         property="id",
-     *         type="string",
-     *         example="1"
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Get One Record Successfully"),
+     *             @OA\Property(
+     *                 property="metadata",
+     *                 type="object",
+     *                 @OA\Property(property="name", type="string", example="Event Name"),
+ *                           @OA\Property(property="location", type="string", example="Ha Noi"),
+ *                           @OA\Property(property="contact", type="string", example="0986567467"),
+ *                           @OA\Property(property="user_id", type="integer", example=2),
+ *                           @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+ *                           @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *             )
+     *         )
      *     ),
-     *     @OA\Property(property="name", type="string", example="Event Name"),
-     *  @OA\Property(property="location", type="string", example="Hai Phong"),
-     * @OA\Property(property="contact", type="string", example="0983467584"),
-     *      @OA\Property(property="user_id", type="integer", example=2),
-     * @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
-     * @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
-     * )
-     *          ),
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Participants not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="error"),
-     *              @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
-     *          ),
-     *      ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Record not exists",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
+     *         )
+     *     )
      * )
      */
     public function show($id)
@@ -239,41 +280,77 @@ class eventController extends Controller
         
     }
 
+    public function eventStatistics($id){
+
+    }
+
    /**
-     * @OA\Put(
-     *      path="/api/event/{id}",
-     *      operationId="updateEvent",
-     *      tags={"Event"},
-     *      summary="Update Event",
-     *      description="Update a specific event.",
-     *      @OA\Parameter(
-     *          name="event",
-     *          description="event model",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(type="integer")
-     *      ),
-     *      @OA\RequestBody(
-     *          required=true,
-     *             @OA\JsonContent(
-     *             @OA\Property(property="name", type="string", example="Event Name"),
-     *  @OA\Property(property="location", type="string", example="Hai Phong"),
-     * @OA\Property(property="contact", type="string", example="0983118678"),
-     * @OA\Property(property="status", type="integer", example=0),
-     *      @OA\Property(property="user_id", type="integer", example=2),
-     * @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
-     * @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
-     *         )
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="success"),
-     *          ),
-     *      ),
-     * )
-     */
+     * /**
+ * @OA\Put(
+ *     path="/api/event/{id}",
+ *     operationId="updateEvent",
+ *     tags={"Event"},
+ *     summary="Update Event",
+ *     description="Update a specific event.",
+ *     @OA\Parameter(
+ *         name="id",
+ *         description="Event ID",
+ *         required=true,
+ *         in="path",
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             @OA\Property(property="name", type="string", example="Event Name"),
+ *             @OA\Property(property="location", type="string", example="Hai Phong"),
+ *             @OA\Property(property="contact", type="string", example="0983118678"),
+ *             @OA\Property(property="status", type="integer", example=0),
+ *             @OA\Property(property="user_id", type="integer", example=2),
+ *             @OA\Property(property="start_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
+ *             @OA\Property(property="end_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Successful operation",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="success"),
+ *             @OA\Property(property="message", type="string", example="Update One Record Successfully"),
+ *             @OA\Property(property="statusCode", type="integer", example=200),
+ *             @OA\Property(property="metadata", type="object",
+ *                 @OA\Property(property="location", type="string", example="Hai Phong"),
+ *                 @OA\Property(property="contact", type="string", example="0983118678"),
+ *                 @OA\Property(property="status", type="integer", example=0),
+ *                 @OA\Property(property="user_id", type="integer", example=2),
+ *                 @OA\Property(property="start_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
+ *                 @OA\Property(property="end_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Record not exists",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Record not exists"),
+ *             @OA\Property(property="statusCode", type="integer", example=404)
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Server error",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Server error"),
+ *             @OA\Property(property="statusCode", type="integer", example=500)
+ *         )
+ *     )
+ * )
+ */
     public function update(Request $request, $id)
     {
         //Check validate
@@ -355,7 +432,7 @@ class eventController extends Controller
      *         description="events record model",
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\Response(
+     *      @OA\Response(
      *         response=200,
      *         description="Successful operation",
      *         @OA\JsonContent(

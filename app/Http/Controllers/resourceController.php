@@ -26,18 +26,28 @@ class resourceController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="success"),
-     * @OA\Property(
-     *     property="payload",
-     *     type="array",
-     *     @OA\Items(
-     *         type="object",
-     *          @OA\Property(property="name",type="string",example="Event Image"),
-     *     @OA\Property(property="url",type="string",example="http://127.0.0.1:8000/Upload/cross.png"),
-     *     @OA\Property(property="event_id",type="interger",example=1), 
-     *     @OA\Property(property="created_at",type="string",format="date-time",example="2023-11-23 11:20:22"),
-     *     @OA\Property(property="updated_at",type="string",format="date-time",example="2023-11-23 11:20:22"),
-     *     )
-     * )
+     *             @OA\Property(property="message", type="string", example="Get One Record Successfully"),
+     *             @OA\Property(property="statusCode", type="integer", example=200),
+     *             @OA\Property(
+     *                 property="metadata",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                      @OA\Property(property="name", type="string", example="Anh su kien"),
+     *                      @OA\Property(property="url", type="string", format="binary"),
+     *                      @OA\Property(property="event_id", type="interger", example=1),
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Record not exists",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
@@ -46,7 +56,8 @@ class resourceController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Internal server error")
+     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
      * )
@@ -98,7 +109,18 @@ class resourceController extends Controller
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="Tạo mới thành công!!"),
+     *             @OA\Property(property="message", type="string", example="Create Record Successfully"),
+     *             @OA\Property(property="statusCode", type="int", example=200),
+     *              @OA\Property(
+     *                 property="metadata",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="status", type="string", example="error"),
+     *                     @OA\Property(property="message", type="string", example="Server error"),
+     *                     @OA\Property(property="statusCode", type="integer", example=500)
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -106,7 +128,9 @@ class resourceController extends Controller
      *         description="Validation error or internal server error",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="object", example={"user_id": {"Không đúng định dạng"}}),
+     *             @OA\Property(property="message", type="object", example={"user_id": {"User ID is required"}}),
+     *             @OA\Property(property="statusCode", type="int", example=500),
+
      *         )
      *     ),
      * )
@@ -183,34 +207,41 @@ class resourceController extends Controller
      *          @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="success"),
-     *@OA\Property(
-     *     property="payload",
-     *     type="object",
-     *     @OA\Property(
-     *         property="id",
-     *         type="string",
-     *         example="1"
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Get One Record Successfully"),
+     *             @OA\Property(
+     *                 property="metadata",
+     *                 type="object",
+     *                  @OA\Property(property="name", type="string", example="1"),
+     *                  @OA\Property(property="url", type="string", format="binary"),
+     *                  @OA\Property(property="event_id", type="interger", example=1),
+     *             )
+     *         )
      *     ),
-     *         *          @OA\Property(property="name",type="string",example="Event Image"),
-     *     @OA\Property(property="url",type="string",example="http://127.0.0.1:8000/Upload/cross.png"),
-     *     @OA\Property(property="event_id",type="interger",example=1), 
-     *     @OA\Property(property="created_at",type="string",format="date-time",example="2023-11-23 11:20:22"),
-     *     @OA\Property(property="updated_at",type="string",format="date-time",example="2023-11-23 11:20:22"),
-     * )
-     *          ),
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Participants not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="error"),
-     *              @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
-     *          ),
-     *      ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Record not exists",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
+     *         )
+     *     )
      * )
      */
     public function show($id)
@@ -257,34 +288,45 @@ class resourceController extends Controller
      *          @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="success"),
-     *@OA\Property(
-     *     property="payload",
-     *     type="object",
-     *     @OA\Property(
-     *         property="id",
-     *         type="string",
-     *         example="1"
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Get One Record Successfully"),
+     *             @OA\Property(property="statusCode", type="integer", example=200),
+     *             @OA\Property(
+     *                 property="metadata",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                      @OA\Property(property="name", type="string", example="Anh su kien"),
+     *                      @OA\Property(property="url", type="string", format="binary"),
+     *                      @OA\Property(property="event_id", type="interger", example=1),
+     *                 )
+     *             )
+     *         )
      *     ),
-     *         *          @OA\Property(property="name",type="string",example="Event Image"),
-     *     @OA\Property(property="url",type="string",example="http://127.0.0.1:8000/Upload/cross.png"),
-     *     @OA\Property(property="event_id",type="interger",example=1), 
-     *     @OA\Property(property="created_at",type="string",format="date-time",example="2023-11-23 11:20:22"),
-     *     @OA\Property(property="updated_at",type="string",format="date-time",example="2023-11-23 11:20:22"),
-     * )
-     *          ),
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Participants not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="error"),
-     *              @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
-     *          ),
-     *      ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Record not exists",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
+     *         )
+     *     )
      * )
      */
     public function GetRecordByEventId($event_id){
@@ -326,20 +368,48 @@ class resourceController extends Controller
      *         @OA\Schema(type="integer")
      *     ),
      *      @OA\RequestBody(
-     *          required=true,
-    *               @OA\JsonContent(
-     *             @OA\Property(property="name", type="string", example="anh 1"),
-     *             @OA\Property(property="url", type="string", format="binary"),
-     *              @OA\Property(property="event_id", type="interger", example=1),
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="event_id", type="integer", example="1"),
+     *             @OA\Property(property="user_id", type="integer", example="2")
      *         )
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="status", type="string", example="success"),
-     *          ),
-     *      ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Update One Record Successfully"),
+     *             @OA\Property(
+     *                 property="metadata",
+     *                 type="object",
+     *                 @OA\Property(property="name", type="string", example="Anh su kien"),
+     *                 @OA\Property(property="url", type="string", format="binary"),
+     *                 @OA\Property(property="event_id", type="interger", example=1),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Record not exists",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
+     *         )
+     *     )
      * )
      */
     public function update(Request $request, $id)
