@@ -13,8 +13,8 @@ class atendanceController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/atendances",
-     *     summary="Get all attendance records",
+     *     path="/api/atendances/join/{id}",
+     *     summary="Get all attendance records with event",
      *     tags={"Attendances"},
      *     @OA\Response(
      *         response=200,
@@ -60,10 +60,10 @@ class atendanceController extends Controller
      *     )
      * )
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $atendance = atendance::all();
+            $atendance = atendance::where('event_id',$request->id)->get();
             return response()->json([
                 'metadata' => $atendance,
                 'message' => 'Get All records Successfully',

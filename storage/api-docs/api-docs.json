@@ -221,13 +221,13 @@
                 }
             }
         },
-        "/api/atendances": {
+        "/api/atendances/join/{id}": {
             "get": {
                 "tags": [
                     "Attendances"
                 ],
-                "summary": "Get all attendance records",
-                "operationId": "60e35a273bca85e16b752f12b08c1738",
+                "summary": "Get all attendance records with event",
+                "operationId": "26abbb26674aa21867b017247202ad5f",
                 "responses": {
                     "200": {
                         "description": "Successful operation",
