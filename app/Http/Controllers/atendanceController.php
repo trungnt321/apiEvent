@@ -136,16 +136,7 @@ class atendanceController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'event_id' => 'required',
-                'user_id' => [
-                    'required',
-                    Rule::exists('users', 'id')->where(function ($query) {
-                        $query->whereIn('role', [1, 2]);
-                    })
-//                    Rule::unique('atendance')->where(function ($query) use ($request) {
-//                        return $query->where('event_id', $request->event_id)
-//                            ->where('user_id', $request->user_id);
-//                    }),
-                ],
+                'user_id' => 'required|exists:users,id'
             ], [
                 'event_id.required' => 'Event ID is required.',
                 'user_id.required' => 'User ID is required.',
