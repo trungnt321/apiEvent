@@ -9,6 +9,8 @@ use Illuminate\Validation\Rule;
 use App\Http\Resources\EventResources;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Support\Facades\DB;
+
 
 class eventController extends Controller
 {
@@ -81,6 +83,84 @@ class eventController extends Controller
                 ? $e->getStatusCode()
                 : Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+ * @OA\Get(
+ *     path="/api/searchEvent/{name}",
+ *     summary="Get event information by name",
+ *     tags={"Event"},
+ *     @OA\Parameter(
+ *         name="name",
+ *         in="path",
+ *         required=true,
+ *         description="Name of the event to retrieve",
+ *         @OA\Schema(type="string")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Successful operation",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="success"),
+ *             @OA\Property(property="message", type="string", example="EVent information retrieved successfully"),
+ *             @OA\Property(property="statusCode", type="integer", example=200),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                       @OA\Property(property="name", type="string", example="Event Name"),
+ *                       @OA\Property(property="location", type="string", example="Ha Noi"),
+ *                       @OA\Property(property="contact", type="string", example="0986567467"),
+ *                       @OA\Property(property="user_id", type="integer", example=2),
+ *                       @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+ *                       @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Event not found",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="User not found"),
+ *             @OA\Property(property="statusCode", type="integer", example=404)
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Server error",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Internal server error"),
+ *             @OA\Property(property="statusCode", type="integer", example=500)
+ *         )
+ *     )
+ * )
+ */
+    public function searchEvent($name){
+        try{
+            $events = DB::table('events')->where('name','like',"%{$name}%")->get();
+            return response()->json([
+                'metadata' => $events,
+                'message' => 'Get All Records Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ],Response::HTTP_OK); 
+        }catch(\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'status'=>'error',
+                'statusCode'=>$e instanceof HttpException
+                    ? $e->getStatusCode()
+                    : Response::HTTP_INTERNAL_SERVER_ERROR
+            ],  $e instanceof HttpException
+                ? $e->getStatusCode()
+                : Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        
+
     }
 
 /**

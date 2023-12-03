@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Support\Facades\DB;
 
 class participantsController extends Controller
 {
@@ -71,6 +72,92 @@ class participantsController extends Controller
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
             ],Response::HTTP_OK);
+        }catch(\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'status'=>'error',
+                'statusCode'=>$e instanceof HttpException
+                    ? $e->getStatusCode()
+                    : Response::HTTP_INTERNAL_SERVER_ERROR
+            ],  $e instanceof HttpException
+                ? $e->getStatusCode()
+                : Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+/**
+ * @OA\Get(
+ *     path="/api/searchUser/{email}/{phone}",
+ *     summary="Get user information by email and phone",
+ *     tags={"Participants"},
+ *     @OA\Parameter(
+ *         name="email",
+ *         in="path",
+ *         required=true,
+ *         description="Email of the participant to retrieve",
+ *         @OA\Schema(type="string")
+ *     ),
+ *     @OA\Parameter(
+ *         name="phone",
+ *         in="path",
+ *         required=true,
+ *         description="Phone of the participant to retrieve",
+ *         @OA\Schema(type="string")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Successful operation",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="success"),
+ *             @OA\Property(property="message", type="string", example="User information retrieved successfully"),
+ *             @OA\Property(property="statusCode", type="integer", example=200),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(property="name", type="string", example="Phuc La"),
+ *                 @OA\Property(property="email", type="string", example="phuclaf@gmail.com"),
+ *                 @OA\Property(property="password", type="string", example="123456"),
+ *                 @OA\Property(property="phone", type="string", example="0983118272"),
+ *                 @OA\Property(property="role", type="integer", example=1),
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="User not found",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="User not found"),
+ *             @OA\Property(property="statusCode", type="integer", example=404)
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Server error",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Internal server error"),
+ *             @OA\Property(property="statusCode", type="integer", example=500)
+ *         )
+ *     )
+ * )
+ */
+    public function getUserByEmail($email,$phone){
+        try{
+            $users = DB::table('users')
+            ->where(function($query) use ($email, $phone) {
+                $query->where('email', 'like', "%{$email}%")
+                    ->orWhere('phone', 'like', "%{$phone}%");
+            })
+            ->get();
+            return response()->json([
+                'metadata' => $users,
+                'message' => 'Get All Records Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ],Response::HTTP_OK); 
         }catch(\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
