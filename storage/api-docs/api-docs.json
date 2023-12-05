@@ -18,7 +18,8 @@
                 "tags": [
                     "Authentication"
                 ],
-                "summary": "Register a new user",
+                "summary": "Đăng ký người dùng mới",
+                "description": "\n     *      - Endpoint này cho phép đăng ký người dùng mới vào hệ thống.\n     *      - Trả về thông tin của người dùng đã đăng ký.\n     *      - Role được sử dụng là nhân viên và sinh viên",
                 "operationId": "ab15e8b534800db0828c4efe3a6099fa",
                 "requestBody": {
                     "required": true,
@@ -54,7 +55,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
+                        "description": "Thành công",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -71,7 +72,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Register users Successfully"
+                                            "example": "Đăng ký người dùng thành công"
                                         },
                                         "status": {
                                             "type": "string",
@@ -88,7 +89,7 @@
                         }
                     },
                     "500": {
-                        "description": "Internal server error",
+                        "description": "Lỗi máy chủ nội bộ",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -101,10 +102,10 @@
                                             "type": "object",
                                             "example": {
                                                 "name": [
-                                                    "name cannot be empty"
+                                                    "tên không thể để trống"
                                                 ],
                                                 "email": [
-                                                    "email cannot be empty"
+                                                    "email không thể để trống"
                                                 ]
                                             }
                                         },
@@ -126,7 +127,8 @@
                 "tags": [
                     "Authentication"
                 ],
-                "summary": "Login user",
+                "summary": "Đăng nhập người dùng",
+                "description": "\n     *      - Endpoint này cho phép người dùng đăng nhập vào hệ thống.\n     *      - Trả về thông tin của người dùng đã đăng nhập, bao gồm cả token đăng nhập.\n     *      - Role được sử dụng là cả ba role nhân viên ,quản lí ,sinh viên",
                 "operationId": "306b0884672cb3eed691231729c47fbb",
                 "requestBody": {
                     "required": true,
@@ -150,25 +152,43 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
+                        "description": "Thành công",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "metadata": {
-                                            "type": "object",
-                                            "example": {
-                                                "id": 1,
-                                                "name": "John Doe",
-                                                "email": "john.doe@example.com",
-                                                "phone": "123456789",
-                                                "role": "user",
-                                                "token": "api-token"
-                                            }
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "John Doe"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "john.doe@example.com"
+                                                },
+                                                "phone": {
+                                                    "type": "string",
+                                                    "example": "123456789"
+                                                },
+                                                "role": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "api-token"
+                                                }
+                                            },
+                                            "type": "object"
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Login users Successfully"
+                                            "example": "Đăng nhập người dùng thành công"
                                         },
                                         "status": {
                                             "type": "string",
@@ -185,7 +205,7 @@
                         }
                     },
                     "500": {
-                        "description": "Internal server error",
+                        "description": "Lỗi máy chủ nội bộ",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -196,7 +216,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Incorrect Details. Please try again"
+                                            "example": "Thông tin đăng nhập không chính xác. Vui lòng thử lại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -221,13 +241,14 @@
                 }
             }
         },
-        "/api/atendances/join/{id}": {
+        "/api/atendances/join/{id_event}/{id_user}": {
             "get": {
                 "tags": [
                     "Attendances"
                 ],
-                "summary": "Lấy tất cả các bản ghi",
-                "operationId": "26abbb26674aa21867b017247202ad5f",
+                "summary": "Lấy tất cả các bản ghi theo id sự kiện",
+                "description": "\n     *      - id_event là id sự kiện\n     *      - id_user là id người thực hiện lấy\n     *      - Endpoint trả về thôn tìn người dùng tham gia sự kiện.\n     *      - Trả về thông tin của người dùng đã tham gia sự kiện.\n     *      - Role được sử dụng là role nhân viên ,quản lí ",
+                "operationId": "2ae0c3a5ddc429cdf3e4115b2d673da3",
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -241,7 +262,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Get One Record Successfully"
+                                            "example": "Lấy thành công nhân viên tham gia sự kiện"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -262,6 +283,41 @@
                                                     "event_id": {
                                                         "type": "integer",
                                                         "example": 2
+                                                    },
+                                                    "user": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "John Doe"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "john.doe@example.com"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string",
+                                                                "example": "123456789"
+                                                            },
+                                                            "role": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-23 11:20:22"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-23 11:20:22"
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     },
                                                     "created_at": {
                                                         "type": "string",
@@ -339,8 +395,8 @@
                 "tags": [
                     "Attendances"
                 ],
-                "summary": "Store a new attendance record",
-                "description": "Tạo mới một bản ghi dựa vào dữ liệu được cung cấp",
+                "summary": "Thêm người dùng vào sự kiện có sẵn",
+                "description": "\n     *      - Endpoint trả về danh sách dữ liệu dữ liệu người dùng của sự kiện đó\n     *      - Role được sử dụng là role nhân viên ,quản lí ,sinh viên\n     *     - event_id là id sự kiện tham gia\n     *     - user_id là id của người dùng tham gia sự kiện",
                 "operationId": "storeAttendance",
                 "requestBody": {
                     "required": true,
@@ -386,7 +442,7 @@
                                             "items": {
                                                 "properties": {
                                                     "id": {
-                                                        "type": "string",
+                                                        "type": "integer",
                                                         "example": "1"
                                                     },
                                                     "user_id": {
@@ -396,6 +452,41 @@
                                                     "event_id": {
                                                         "type": "integer",
                                                         "example": 2
+                                                    },
+                                                    "user": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "John Doe"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "john.doe@example.com"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string",
+                                                                "example": "123456789"
+                                                            },
+                                                            "role": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-23 11:20:22"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-23 11:20:22"
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     },
                                                     "created_at": {
                                                         "type": "string",
@@ -448,12 +539,213 @@
                 }
             }
         },
+        "/api/attendances/add": {
+            "post": {
+                "tags": [
+                    "Attendances"
+                ],
+                "summary": "Thêm sinh viên vào sự kiện bằng email khi sinh viên đã đăng nhập ",
+                "description": "\n     *          - Endpoint này cho phép quản lí và nhân viên thêm sinh viên vào sự kiện bằng email\n     *          - Trả về data của sinh viên sau khi được thêm mới bằng email\n     *          - event_id là id sự kiện tham gia\n     *          - email là email của người muốn thêm (Lưu ý : phải có trong hệ thống)\n     *          - create_by là id của người thêm\n     *          ",
+                "operationId": "4bd4a6df582ecb01db1eb6216f94b1c8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "event_id": {
+                                        "description": "Id của sự kiện.",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "email": {
+                                        "description": "Email của sinh viên.",
+                                        "type": "string",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "create_by": {
+                                        "description": "Id người tạo",
+                                        "type": "integer",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "metadata": {
+                                            "properties": {
+                                                "user_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "event_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "user": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "John Doe"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "john.doe@example.com"
+                                                        },
+                                                        "phone": {
+                                                            "type": "string",
+                                                            "example": "123456789"
+                                                        },
+                                                        "role": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-11-23 11:20:22"
+                                                        },
+                                                        "updated_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-11-23 11:20:22"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-12-05 12:34:56"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-12-05 12:34:56"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tạo mới bản ghi thành công"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "object",
+                                            "example": {
+                                                "event_id": [
+                                                    "Id sự kiện không để trống."
+                                                ],
+                                                "email": [
+                                                    "Email không để trống."
+                                                ]
+                                            }
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 400
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Id sự kiện không tồn tại."
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi hệ thống",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lỗi hệ thống"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/atendances/{id}": {
             "get": {
                 "tags": [
                     "Attendances"
                 ],
-                "summary": "Get a specific attendance record by ID",
+                "summary": "Lấy ra thông tin người tham gia sự kiện",
+                "description": "\n     *          - Endpoint này lấy ra 1 bản ghi của sự kiện\n     *          - id là id của atendances\n     *          ",
                 "operationId": "a48c7c55e5322d537132fd481b53fa3b",
                 "parameters": [
                     {
@@ -494,6 +786,41 @@
                                                 "event_id": {
                                                     "type": "integer",
                                                     "example": 2
+                                                },
+                                                "user": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "John Doe"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "john.doe@example.com"
+                                                        },
+                                                        "phone": {
+                                                            "type": "string",
+                                                            "example": "123456789"
+                                                        },
+                                                        "role": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-11-23 11:20:22"
+                                                        },
+                                                        "updated_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-11-23 11:20:22"
+                                                        }
+                                                    },
+                                                    "type": "object"
                                                 },
                                                 "created_at": {
                                                     "type": "string",
@@ -571,6 +898,7 @@
                     "Attendances"
                 ],
                 "summary": "Update an attendance record",
+                "description": "\n     *          - Endpoint này cho phép quản lí và nhân viên cập nhật thông tin người tham gia sự kiện\n     *          - Trả về data của tất cả người dùng thuộc sự kiện đó\n     *          - event_id là id sự kiện tham gia\n     *          - email là email của người muốn thêm (Lưu ý : phải có trong hệ thống)\n     *          - update_by là id của người cập nhật (Lưu ý : phải có trong hệ thống)\n     *          ",
                 "operationId": "3c4f46246f8127c13487023166336683",
                 "parameters": [
                     {
@@ -594,6 +922,10 @@
                                         "example": "1"
                                     },
                                     "user_id": {
+                                        "type": "integer",
+                                        "example": "2"
+                                    },
+                                    "update_by": {
                                         "type": "integer",
                                         "example": "2"
                                     }
@@ -700,13 +1032,16 @@
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/atendances/{id}/{id_user}": {
             "delete": {
                 "tags": [
                     "Attendances"
                 ],
-                "summary": "Delete an attendance record",
-                "operationId": "026ec373d8419072ac9d59ed31ccafd3",
+                "summary": "Xóa 1 người dùng đã tham gia sự kiện",
+                "description": "\n     *          - Endpoint này sẽ xóa 1 sinh viên đang tham gia sự kiện đi\n     *          - Role được sử dụng là role Quản lí\n     *          - Xóa thành công sẽ trả lại data là các sinh viên còn lại sự kiện đó\n     *          - id là id của bản ghi tham gia\n     *          - id_user là id của người thực hiện xóa\n     *          ",
+                "operationId": "eb01c45ea0454cb2779192b8056e108c",
                 "parameters": [
                     {
                         "name": "atendance",
@@ -731,11 +1066,76 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Delete One Record Successfully"
+                                            "example": "Xóa bản ghi thành công"
                                         },
                                         "statusCode": {
                                             "type": "integer",
                                             "example": 200
+                                        },
+                                        "metadata": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "1"
+                                                    },
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "event_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "user": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "John Doe"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "john.doe@example.com"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string",
+                                                                "example": "123456789"
+                                                            },
+                                                            "role": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-23 11:20:22"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-23 11:20:22"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-23 11:20:22"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-23 11:20:22"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
                                         }
                                     },
                                     "type": "object"
@@ -1575,13 +1975,14 @@
                 }
             }
         },
-        "/api/feedback": {
+        "/api/feedback/{id_event}": {
             "get": {
                 "tags": [
                     "feedback"
                 ],
-                "summary": "Get all feedback records",
-                "operationId": "f3fc0793a3c56e31074677bca6ba16aa",
+                "summary": "Lấy ra tất cả phản hồi từ người dùng gửi đến theo sự kiện",
+                "description": "\n     *      - Endpoint này cho phép lấy ra thông tin phản hồi theo sự kiện.\n     *      - Trả về thông tin của các user được cài đặt.\n     *      - Role được sử dụng quản quản lí, nhân viên, sinh viên\n     *      - id_event là id sự kiện ",
+                "operationId": "9d2f400cbd177f419d6d94af06142ae4",
                 "responses": {
                     "200": {
                         "description": "Dữ liệu trả về thành công",
@@ -1595,7 +1996,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Get All records Successfully"
+                                            "example": "Lấy tất cả phản hồi thành công"
                                         },
                                         "metadata": {
                                             "type": "array",
@@ -1605,17 +2006,17 @@
                                                         "type": "integer",
                                                         "example": "1"
                                                     },
-                                                    "event_id": {
-                                                        "type": "integer",
-                                                        "example": "2"
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "hậu đặng vippro max"
                                                     },
                                                     "user_id": {
                                                         "type": "integer",
-                                                        "example": "3"
+                                                        "example": "1"
                                                     },
-                                                    "content": {
-                                                        "type": "string",
-                                                        "example": "Feedback content"
+                                                    "event_id": {
+                                                        "type": "integer",
+                                                        "example": "2"
                                                     },
                                                     "created_at": {
                                                         "type": "string",
@@ -1626,6 +2027,41 @@
                                                         "type": "string",
                                                         "format": "date-time",
                                                         "example": "2023-11-28 17:02:29"
+                                                    },
+                                                    "user": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Kurtis Legros IV"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "haudvph20519@fpt.edu.vn"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string",
+                                                                "example": "+1 (564) 267-3494"
+                                                            },
+                                                            "role": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     }
                                                 },
                                                 "type": "object"
@@ -1662,13 +2098,15 @@
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/feedback": {
             "post": {
                 "tags": [
                     "feedback"
                 ],
-                "summary": "Store a new feedback record",
-                "description": "Tạo mới bản ghi dựa vào dữ liệu được cung cấp",
+                "summary": "Tạo 1 phản hồi mới",
+                "description": "\n     *      - Endpoint này cho phép thêm phản hồi vào sự kiện.\n     *      - Trả về thông tin các phản hồi của sự kiện đó.\n     *      - Role được sử dụng quản quản lí,nhân viên,sinh viên\n     *      - id_event là id sự kiện\n     *      - user_id là id của người dùng\n     *      - content là nội dung phản hồi của người dùng đó",
                 "operationId": "storeFeedback",
                 "requestBody": {
                     "required": true,
@@ -1707,19 +2145,11 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Create Record Successfully"
+                                            "example": "Thêm phản hồi thành công"
                                         },
                                         "metadata": {
                                             "properties": {
                                                 "id": {
-                                                    "type": "integer",
-                                                    "example": "1"
-                                                },
-                                                "event_id": {
-                                                    "type": "integer",
-                                                    "example": "2"
-                                                },
-                                                "user_id": {
                                                     "type": "integer",
                                                     "example": "3"
                                                 },
@@ -1727,15 +2157,63 @@
                                                     "type": "string",
                                                     "example": "Feedback content"
                                                 },
+                                                "user_id": {
+                                                    "type": "integer",
+                                                    "example": "2"
+                                                },
+                                                "event_id": {
+                                                    "type": "integer",
+                                                    "example": "1"
+                                                },
                                                 "created_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2023-11-28 17:02:29"
+                                                    "example": "2023-12-05T12:36:46.000000Z"
                                                 },
                                                 "updated_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2023-11-28 17:02:29"
+                                                    "example": "2023-12-05T12:36:46.000000Z"
+                                                },
+                                                "user": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": "2"
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Tony Herman"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "mohr.delphine@example.com"
+                                                        },
+                                                        "email_verified_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-12-02T08:55:45.000000Z"
+                                                        },
+                                                        "phone": {
+                                                            "type": "string",
+                                                            "example": "+1-458-920-6456"
+                                                        },
+                                                        "role": {
+                                                            "type": "integer",
+                                                            "example": "1"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-12-02T08:55:45.000000Z"
+                                                        },
+                                                        "updated_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-12-02T08:55:45.000000Z"
+                                                        }
+                                                    },
+                                                    "type": "object"
                                                 }
                                             },
                                             "type": "object"
@@ -1782,13 +2260,14 @@
                 ]
             }
         },
-        "/api/feedback/{id}": {
+        "/api/feedback/show/{id}": {
             "get": {
                 "tags": [
                     "feedback"
                 ],
-                "summary": "Get a feedback record by ID",
-                "operationId": "d8929523ab5fcf97ee49426674bdd103",
+                "summary": "Lấy ra phản hồi của user đó",
+                "description": "\n     *      - Endpoint này cho phép thêm phản hồi vào sự kiện.\n     *      - Trả về thông tin các phản hồi của sự kiện đó.\n     *      - Role được sử dụng quản quản lí, nhân viên, sinh viên\n     *      - id là của feedback đó",
+                "operationId": "af9fda8a564f18a7557fc9c640724c95",
                 "parameters": [
                     {
                         "name": "id",
@@ -1819,19 +2298,19 @@
                                             "properties": {
                                                 "id": {
                                                     "type": "integer",
+                                                    "example": "2"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "thảo ngớ"
+                                                },
+                                                "user_id": {
+                                                    "type": "integer",
                                                     "example": "1"
                                                 },
                                                 "event_id": {
                                                     "type": "integer",
                                                     "example": "2"
-                                                },
-                                                "user_id": {
-                                                    "type": "integer",
-                                                    "example": "3"
-                                                },
-                                                "content": {
-                                                    "type": "string",
-                                                    "example": "Feedback content"
                                                 },
                                                 "created_at": {
                                                     "type": "string",
@@ -1842,6 +2321,41 @@
                                                     "type": "string",
                                                     "format": "date-time",
                                                     "example": "2023-11-28 17:02:29"
+                                                },
+                                                "user": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": "1"
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Kurtis Legros IV"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "haudvph20519@fpt.edu.vn"
+                                                        },
+                                                        "phone": {
+                                                            "type": "string",
+                                                            "example": "+1 (564) 267-3494"
+                                                        },
+                                                        "role": {
+                                                            "type": "integer",
+                                                            "example": "1"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-12-02T08:55:45.000000Z"
+                                                        },
+                                                        "updated_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-12-02T08:55:45.000000Z"
+                                                        }
+                                                    },
+                                                    "type": "object"
                                                 }
                                             },
                                             "type": "object"
@@ -1864,7 +2378,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Comment không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -1901,13 +2415,15 @@
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/feedback/{id}": {
             "put": {
                 "tags": [
                     "feedback"
                 ],
-                "summary": "Update a feedback record by ID",
-                "description": "Update an existing feedback record with the provided data.",
+                "summary": "Cập nhật lại phản hồi",
+                "description": "\n     *      - Endpoint này cho phép cập nhật lại phản hồi vào sự kiện.\n     *      - Trả về thông tin các phản hồi của sự kiện đó.\n     *      - Role được sử dụng quản quản lí,nhân viên,sinh viên\n     *      - id là của feedback đó",
                 "operationId": "updateFeedback",
                 "parameters": [
                     {
@@ -1957,13 +2473,17 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Update One Record Successfully"
+                                            "example": "Cập nhật thành công phản hồi"
                                         },
                                         "metadata": {
                                             "properties": {
                                                 "id": {
                                                     "type": "integer",
-                                                    "example": "1"
+                                                    "example": "3"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "Feedback content update"
                                                 },
                                                 "user_id": {
                                                     "type": "integer",
@@ -1973,19 +2493,55 @@
                                                     "type": "integer",
                                                     "example": "1"
                                                 },
-                                                "content": {
-                                                    "type": "string",
-                                                    "example": "Updated content"
-                                                },
                                                 "created_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2023-11-23 11:20:22"
+                                                    "example": "2023-12-05T12:36:46.000000Z"
                                                 },
                                                 "updated_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2023-11-23 11:25:22"
+                                                    "example": "2023-12-05T12:39:16.000000Z"
+                                                },
+                                                "user": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": "2"
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Tony Herman"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "mohr.delphine@example.com"
+                                                        },
+                                                        "email_verified_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-12-02T08:55:45.000000Z"
+                                                        },
+                                                        "phone": {
+                                                            "type": "string",
+                                                            "example": "+1-458-920-6456"
+                                                        },
+                                                        "role": {
+                                                            "type": "integer",
+                                                            "example": "1"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-12-02T08:55:45.000000Z"
+                                                        },
+                                                        "updated_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-12-02T08:55:45.000000Z"
+                                                        }
+                                                    },
+                                                    "type": "object"
                                                 }
                                             },
                                             "type": "object"
@@ -2050,8 +2606,8 @@
                 "tags": [
                     "feedback"
                 ],
-                "summary": "Delete a feedback record by ID",
-                "description": "Xóa 1 bản ghi bằng ID",
+                "summary": "Xóa bình luận",
+                "description": "\n     *      - Xóa 1 phản hồi bằng ID\n     *      - Trả về thông báo xóa thành công.\n     *      - Role được sử dụng quản quản lí,nhân viên,sinh viên\n     *      - id là của feedback đó",
                 "operationId": "deleteFeedback",
                 "parameters": [
                     {
@@ -2077,7 +2633,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Delete One Record Successfully"
+                                            "example": "Xóa phản hồi thành công"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -2140,13 +2696,14 @@
                 }
             }
         },
-        "/api/notification": {
+        "/api/notification/{id}": {
             "get": {
                 "tags": [
                     "notification"
                 ],
-                "summary": "Lấy hết tất cả bản ghi",
-                "operationId": "08a70d5b13253dab3fa43b4dc6a1ca37",
+                "summary": "Lấy hết tất cả các thông báo đang được SET",
+                "description": "\n     *      - Endpoint này cho phép lấy ra thông tin các thông báo được cài đặt sẵn.\n     *      - Trả về thông tin của các user được cài đặt.\n     *      - Role được sử dụng là cả hai role quản lí ,sinh viên\n     *      - id là id người thực hiện yêu cầu get",
+                "operationId": "6e9018b922157c1b7864903e27267049",
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -2160,7 +2717,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Get All Records Successfully"
+                                            "example": "Lấy ra tất cả bản ghi thành công"
                                         },
                                         "metadata": {
                                             "type": "array",
@@ -2201,6 +2758,41 @@
                                                         "type": "string",
                                                         "format": "date-time",
                                                         "example": "2023-11-28 11:30:00"
+                                                    },
+                                                    "user_receiver": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "John Doe"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "john.doe@example.com"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string",
+                                                                "example": "123456789"
+                                                            },
+                                                            "role": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-23 11:20:22"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-23 11:20:22"
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     }
                                                 },
                                                 "type": "object"
@@ -2265,13 +2857,15 @@
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/notification": {
             "post": {
                 "tags": [
                     "notification"
                 ],
-                "summary": "Store a new notification",
-                "description": "Tạo mới bản ghi dựa theo dữ liệu cung cấp",
+                "summary": "Tạo mới 1 thông báo để chuẩn bị gửi",
+                "description": "\n     *      - Endpoint này cho phép người tạo mới thông báo cho sinh viên.\n     *      - Trả về thông tin các thông báo đã tồn tại\n     *      - Role được sử dụng là cả hai role nhân viên ,quản lí\n     *      - title là tiêu đề của email muốn gửi\n     *      - content là nội dung muốn gửi\n     *      - time_send là thời gian gửi\n     *      - create_by là id người thực hiện tạo",
                 "operationId": "storeNotification",
                 "requestBody": {
                     "required": true,
@@ -2283,12 +2877,20 @@
                                         "type": "string",
                                         "example": "Notification content"
                                     },
+                                    "title": {
+                                        "type": "string",
+                                        "example": "title content"
+                                    },
                                     "time_send": {
                                         "type": "string",
                                         "format": "date-time",
                                         "example": "2023-11-28T17:02:29"
                                     },
                                     "receiver_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "create_by": {
                                         "type": "integer",
                                         "example": 1
                                     }
@@ -2306,20 +2908,87 @@
                                 "schema": {
                                     "properties": {
                                         "metadata": {
-                                            "type": "object",
-                                            "example": {
-                                                "id": 1,
-                                                "content": "<h1 style='color:red;'>Test message</h1>",
-                                                "time_send": "2023-11-25 01:42:27",
-                                                "sent_at": "2023-11-25 01:50:33",
-                                                "receiver_id": 1,
-                                                "created_at": "2023-11-24T18:50:33.000000",
-                                                "updated_at": "2023-11-24T18:50:33.000000Z"
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Nhắc nhở email"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "<h1 style='color:red;'>Test message</h1>"
+                                                    },
+                                                    "time_send": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-25 01:42:27"
+                                                    },
+                                                    "sent_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-25 01:50:33"
+                                                    },
+                                                    "receiver_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-28 11:00:00"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-28 11:30:00"
+                                                    },
+                                                    "user_receiver": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "John Doe"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "john.doe@example.com"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string",
+                                                                "example": "123456789"
+                                                            },
+                                                            "role": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-23 11:20:22"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-23 11:20:22"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
                                             }
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Create One Record Successfully"
+                                            "example": "Cài đặt gửi email thành công"
                                         },
                                         "status": {
                                             "type": "string",
@@ -2348,8 +3017,14 @@
                                         "message": {
                                             "type": "object",
                                             "example": {
+                                                "title": [
+                                                    "Tiêu đề không được để trống"
+                                                ],
                                                 "content": [
                                                     "Nội đung không được để trống"
+                                                ],
+                                                "create_by": [
+                                                    "ID người tạo không được để trống"
                                                 ],
                                                 "time_send": [
                                                     "Thời gian không được để trống"
@@ -2381,7 +3056,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "User does not exist"
+                                            "example": "Người dùng không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -2405,7 +3080,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Internal server error"
+                                            "example": "Lỗi máy chủ nội bộ"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -2426,7 +3101,7 @@
                     "notification"
                 ],
                 "summary": "Send an email",
-                "description": "Send an email with the provided data.",
+                "description": "\n     *      - Gửi email với dữ liệu được cung cấp\n     *      - Trả lại message thông báo gửi thành công\n     *      - Role được sử dụng là Nhân viên và Quản lí",
                 "operationId": "sendEmail",
                 "requestBody": {
                     "required": true,
@@ -2444,6 +3119,11 @@
                                     },
                                     "email": {
                                         "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "create_by": {
+                                        "type": "integer",
                                         "format": "email",
                                         "example": "user@example.com"
                                     }
@@ -2469,7 +3149,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Email sent successfully"
+                                            "example": "Gửi Email example@gmail.com thành công"
                                         },
                                         "status": {
                                             "type": "string",
@@ -2477,7 +3157,7 @@
                                         },
                                         "statusCode": {
                                             "type": "integer",
-                                            "example": 200
+                                            "example": 1
                                         }
                                     },
                                     "type": "object"
@@ -2512,19 +3192,19 @@
                 }
             }
         },
-        "/api/notifications/{id}": {
+        "/api/notifications/show/{id}": {
             "get": {
                 "tags": [
                     "notification"
                 ],
-                "summary": "Get a notification by ID",
-                "description": "Lấy mô hình dữ liệu thông báo theo ID",
+                "summary": "Lấy ra 1 ghi trong notification",
+                "description": "\n     *      -Lấy dữ liệu thông báo theo ID\n     *      - Data trả về là thông tin của thông báo và thông tin người được gửi\n     *      - Role thực hiện là Quản lí và nhân viên",
                 "operationId": "getNotificationById",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of the notification",
+                        "description": "ID của thông báo",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -2539,15 +3219,80 @@
                                 "schema": {
                                     "properties": {
                                         "metadata": {
-                                            "type": "object",
-                                            "example": {
-                                                "id": 1,
-                                                "content": "<h1 style='color:red;'>Test message</h1>",
-                                                "time_send": "2023-11-28T17:02:29.000000Z",
-                                                "receiver_id": 1,
-                                                "created_at": "2023-11-28T17:02:29.000000Z",
-                                                "updated_at": "2023-11-28T17:02:29.000000Z"
-                                            }
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Nhắc nhở email"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "<h1 style='color:red;'>Test message</h1>"
+                                                },
+                                                "time_send": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-11-25 01:42:27"
+                                                },
+                                                "sent_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-11-25 01:50:33"
+                                                },
+                                                "receiver_id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-11-28 11:00:00"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-11-28 11:30:00"
+                                                },
+                                                "user_receiver": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "John Doe"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "john.doe@example.com"
+                                                        },
+                                                        "phone": {
+                                                            "type": "string",
+                                                            "example": "123456789"
+                                                        },
+                                                        "role": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-11-23 11:20:22"
+                                                        },
+                                                        "updated_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-11-23 11:20:22"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
                                         },
                                         "message": {
                                             "type": "string",
@@ -2616,13 +3361,15 @@
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/notifications/{id}": {
             "put": {
                 "tags": [
                     "notification"
                 ],
-                "summary": "Update a notification by ID",
-                "description": "Cập nhật thông báo theo ID của nó với dữ liệu được cung cấp.",
+                "summary": "Cập nhật thông tin thông báo",
+                "description": "\n     *     - Cập nhật thông báo theo ID\n     *     - Data trả về là dữ liệu của các thông báo và dữ liệu của user đã được cài đặt\n     *     - id ở đây là id của thông báo\n     *     - Role được cập nhật là Quản lí và nhân viên\n     *     - id_user là id người thực hiện request update này",
                 "operationId": "updateNotificationById",
                 "parameters": [
                     {
@@ -2653,6 +3400,10 @@
                                         "type": "string",
                                         "format": "email",
                                         "example": "updated@example.com"
+                                    },
+                                    "id_user": {
+                                        "type": "integer",
+                                        "example": 1
                                     }
                                 },
                                 "type": "object"
@@ -2747,19 +3498,30 @@
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/notifications/{id}/{id_user}": {
             "delete": {
                 "tags": [
                     "notification"
                 ],
-                "summary": "Delete a notification by ID",
-                "description": "Xóa 1 bản ghi dựa vào ID",
+                "summary": "Xóa thông báo",
+                "description": "Xóa 1 thông báo đang tham gia sự kiện",
                 "operationId": "deleteNotificationById",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of the notification",
+                        "description": "ID của thông báo",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "id_user",
+                        "in": "path",
+                        "description": "ID của người thực hiện xóa",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -2773,13 +3535,92 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Xóa bản ghi thành công"
-                                        },
                                         "status": {
                                             "type": "string",
                                             "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Xóa thành công thông báo"
+                                        },
+                                        "metadata": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Nhắc nhở email"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "<h1 style='color:red;'>Test message</h1>"
+                                                    },
+                                                    "time_send": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-25 01:42:27"
+                                                    },
+                                                    "sent_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-25 01:50:33"
+                                                    },
+                                                    "receiver_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-28 11:00:00"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-28 11:30:00"
+                                                    },
+                                                    "user_receiver": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "John Doe"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "john.doe@example.com"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string",
+                                                                "example": "123456789"
+                                                            },
+                                                            "role": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-23 11:20:22"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-23 11:20:22"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -2792,7 +3633,7 @@
                         }
                     },
                     "404": {
-                        "description": "Bản ghi không tồn tại ",
+                        "description": "Bản ghi không tồn tại",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2803,7 +3644,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Bản ghi không tồn tại "
+                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -2816,7 +3657,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {

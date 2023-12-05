@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UserAuthController extends Controller
 {
@@ -15,7 +16,11 @@ class UserAuthController extends Controller
      * @OA\Post(
      *     path="/api/register",
      *     tags={"Authentication"},
-     *     summary="Register a new user",
+     *     summary="Đăng ký người dùng mới",
+     *     description="
+     *      - Endpoint này cho phép đăng ký người dùng mới vào hệ thống.
+     *      - Trả về thông tin của người dùng đã đăng ký.
+     *      - Role được sử dụng là nhân viên và sinh viên",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -28,25 +33,26 @@ class UserAuthController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Successful operation",
+     *         description="Thành công",
      *         @OA\JsonContent(
      *             @OA\Property(property="metadata", type="object", example={"id": 1, "name": "John Doe", "email": "john.doe@example.com", "phone": "123456789", "role": "user"}),
-     *             @OA\Property(property="message", type="string", example="Register users Successfully"),
+     *             @OA\Property(property="message", type="string", example="Đăng ký người dùng thành công"),
      *             @OA\Property(property="status", type="string", example="success"),
      *             @OA\Property(property="statusCode", type="int", example=200),
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Internal server error",
+     *         description="Lỗi máy chủ nội bộ",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="object", example={"name": {"name cannot be empty"}, "email": {"email cannot be empty"}}),
+     *             @OA\Property(property="message", type="object", example={"name": {"tên không thể để trống"}, "email": {"email không thể để trống"}}),
      *             @OA\Property(property="statusCode", type="int", example=500),
      *         )
      *     )
      * )
      */
+
     public function register(Request $request)
     {
         $validator   = Validator::make($request->all(), [
@@ -54,14 +60,16 @@ class UserAuthController extends Controller
             'email' => 'required',
             'password' => 'required',
             'phone' => 'required',
-            'role' => 'required'
+            'role' => ['required',
+                Rule::in([0, 1])]
         ], [
-            'name.required' => 'name cannot be empty',
-            'name.max' =>  'Maximum 255 characters allowed',
-            'email.required' => 'email cannot be empty',
-            'password.required' => 'password cannot be empty',
-            'phone.required' => 'phone cannot be empty',
-            'role.required' => 'role cannot be empty',
+            'name.required' => 'tên không thể để trống',
+            'name.max' => 'Tối đa 255 ký tự được phép',
+            'email.required' => 'email không thể để trống',
+            'password.required' => 'mật khẩu không thể để trống',
+            'phone.required' => 'số điện thoại không thể để trống',
+            'role.required' => 'vai trò không thể để trống',
+            'role.in' => 'Role phải là Nhân viên hoặc sinh viên'
         ]);
         if($validator->fails()){
 
@@ -76,7 +84,7 @@ class UserAuthController extends Controller
         $user = User::create($data);
         return response()->json([
             'metadata' => $user,
-            'message' => 'Register users Successfully',
+            'message' => 'Tạo tài khoản thành công',
             'status' => 'success',
             'statusCode' => Response::HTTP_OK
         ], Response::HTTP_OK);
@@ -86,7 +94,11 @@ class UserAuthController extends Controller
      * @OA\Post(
      *     path="/api/login",
      *     tags={"Authentication"},
-     *     summary="Login user",
+     *     summary="Đăng nhập người dùng",
+     *     description="
+     *      - Endpoint này cho phép người dùng đăng nhập vào hệ thống.
+     *      - Trả về thông tin của người dùng đã đăng nhập, bao gồm cả token đăng nhập.
+     *      - Role được sử dụng là cả ba role nhân viên ,quản lí ,sinh viên",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -96,25 +108,35 @@ class UserAuthController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Successful operation",
+     *         description="Thành công",
      *         @OA\JsonContent(
-     *             @OA\Property(property="metadata", type="object", example={"id": 1, "name": "John Doe", "email": "john.doe@example.com", "phone": "123456789", "role": "user", "token": "api-token"}),
-     *             @OA\Property(property="message", type="string", example="Login users Successfully"),
+     *             @OA\Property(property="metadata", type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="name", type="string", example="John Doe"),
+     *                 @OA\Property(property="email", type="string", example="john.doe@example.com"),
+     *                 @OA\Property(property="phone", type="string", example="123456789"),
+     *                 @OA\Property(property="role", type="integer", example=1),
+     *                 @OA\Property(property="token", type="string", example="api-token")
+     *             ),
+     *             @OA\Property(property="message", type="string", example="Đăng nhập người dùng thành công"),
      *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="statusCode", type="int", example=200),
+     *             @OA\Property(property="statusCode", type="integer", example=200),
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Internal server error",
+     *         description="Lỗi máy chủ nội bộ",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Incorrect Details. Please try again"),
-     *             @OA\Property(property="statusCode", type="int", example=500),
+     *             @OA\Property(property="message", type="string", example="Thông tin đăng nhập không chính xác. Vui lòng thử lại"),
+     *             @OA\Property(property="statusCode", type="integer", example=500),
      *         )
      *     )
      * )
      */
+
+
+
     public function login(Request $request)
     {
         $data = $request->validate([
@@ -125,8 +147,8 @@ class UserAuthController extends Controller
         if (!auth()->attempt($data)) {
             return response([
                 "status" => "error",
-                "message" => 'Incorrect Details.
-            Please try again',
+                "message" => 'Tài khoản mật khẩu không chính xác.
+            Vui lòng thử lại',
                 'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -135,7 +157,7 @@ class UserAuthController extends Controller
 
         return response()->json([
             'metadata' => auth()->user(),
-            'message' => 'Login users Successfully',
+            'message' => 'Đăng nhập thành công',
             'status' => 'success',
             'statusCode' => Response::HTTP_OK
         ], Response::HTTP_OK);
