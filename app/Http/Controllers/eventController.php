@@ -9,6 +9,8 @@ use Illuminate\Validation\Rule;
 use App\Http\Resources\EventResources;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Support\Facades\DB;
+
 
 class eventController extends Controller
 {
@@ -23,7 +25,7 @@ class eventController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *              @OA\Property(property="status", type="string", example="success"),
-     *              @OA\Property(property="message", type="string", example="Get One Record Successfully"),
+     *              @OA\Property(property="message", type="string", example="Lấy dữ liệu thành công"),
      *              @OA\Property(property="statusCode", type="integer", example=200),
      *              @OA\Property(property="metadata",type="array",
      *                  @OA\Items(
@@ -40,21 +42,21 @@ class eventController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Không tìm thấy bản ghi",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Không tìm thấy bản ghi"),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
     *      @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi hệ thống",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
@@ -83,12 +85,93 @@ class eventController extends Controller
         }
     }
 
+    /**
+ * @OA\Post(
+ *     path="/api/searchEvent",
+ *     summary="Tìm kiếm sự kiện theo tên ",
+ *     tags={"Event"},
+ *     operationId="Tìm kiếm sự kiện",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             @OA\Property(property="name", type="string", example="Event Name")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Successful operation",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="success"),
+ *             @OA\Property(property="message", type="string", example="EVent information retrieved successfully"),
+ *             @OA\Property(property="statusCode", type="integer", example=200),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                       @OA\Property(property="name", type="string", example="Event Name"),
+ *                       @OA\Property(property="location", type="string", example="Ha Noi"),
+ *                       @OA\Property(property="contact", type="string", example="0986567467"),
+ *                       @OA\Property(property="user_id", type="integer", example=2),
+ *                       @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+ *                       @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Event not found",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="User not found"),
+ *             @OA\Property(property="statusCode", type="integer", example=404)
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Server error",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Internal server error"),
+ *             @OA\Property(property="statusCode", type="integer", example=500)
+ *         )
+ *     )
+ * )
+ */
+    public function searchEvent(Request $request){
+        try{
+            if($request->name == "" || $request->name == null){
+                $request->name == "";
+            }
+            $events = DB::table('events')->where('name','like',"%{$request->name}%")->get();
+            return response()->json([
+                'metadata' => $events,
+                'message' => 'Lấy các bản ghi thành công',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ],Response::HTTP_OK); 
+        }catch(\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'status'=>'error',
+                'statusCode'=>$e instanceof HttpException
+                    ? $e->getStatusCode()
+                    : Response::HTTP_INTERNAL_SERVER_ERROR
+            ],  $e instanceof HttpException
+                ? $e->getStatusCode()
+                : Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        
+
+    }
+
 /**
  * @OA\Post(
  *     path="/api/event",
  *     tags={"Event"},
  *     summary="Store a new event record",
- *     description="Store a new event record with the provided data.",
+ *     description="Thêm mới bản ghi với dữ liệu được cung cấp",
  *     operationId="storeEvent",
  *     @OA\RequestBody(
  *         required=true,
@@ -103,10 +186,10 @@ class eventController extends Controller
  *     ),
  *     @OA\Response(
  *         response=200,
- *         description="Successful operation",
+ *         description="Thêm mới dữ liệu thành công",
  *         @OA\JsonContent(
  *             @OA\Property(property="status", type="string", example="success"),
- *             @OA\Property(property="message", type="string", example="Create Record Successfully"),
+ *             @OA\Property(property="message", type="string", example="Tạo mới bản ghi thành công"),
  *             @OA\Property(property="statusCode", type="int", example=200),
  *             @OA\Property(property="metadata", type="array",
  *                  @OA\Items(type="object",
@@ -122,19 +205,19 @@ class eventController extends Controller
  *     ),
  *     @OA\Response(
  *         response=422,
- *         description="Validation error",
+ *         description="Sai validate",
  *         @OA\JsonContent(
  *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Validation error"),
+ *             @OA\Property(property="message", type="string", example="Sai validate"),
  *             @OA\Property(property="statusCode", type="int", example=422),
  *         )
  *     ),
  *     @OA\Response(
  *         response=500,
- *         description="Internal server error",
+ *         description="Lỗi hệ thống",
  *         @OA\JsonContent(
  *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Internal server error"),
+ *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
  *             @OA\Property(property="statusCode", type="int", example=500),
  *         )
  *     )
@@ -211,10 +294,10 @@ class eventController extends Controller
      *      operationId="getEventsById",
      *      tags={"Event"},
      *      summary="Get events by ID",
-     *      description="Get a specific events by its ID.",
+     *      description="Lấy dữ liệu sự kiện từ một id cho trước",
      *      @OA\Parameter(
      *          name="id",
-     *          description="Events ID",
+     *          description="ID sự kiện ",
      *          required=true,
      *          in="path",
      *          @OA\Schema(type="integer")
@@ -240,21 +323,21 @@ class eventController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi hệ thống",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
@@ -291,10 +374,10 @@ class eventController extends Controller
  *     operationId="updateEvent",
  *     tags={"Event"},
  *     summary="Update Event",
- *     description="Update a specific event.",
+ *     description="Sửa dữ liệu của một sự kiện ",
  *     @OA\Parameter(
  *         name="id",
- *         description="Event ID",
+ *         description="ID của một sự kiện",
  *         required=true,
  *         in="path",
  *         @OA\Schema(type="integer")
@@ -313,7 +396,7 @@ class eventController extends Controller
  *     ),
  *     @OA\Response(
  *         response=200,
- *         description="Successful operation",
+ *         description="Sửa dữ liệu thành công",
  *         @OA\JsonContent(
  *             type="object",
  *             @OA\Property(property="status", type="string", example="success"),
@@ -331,21 +414,21 @@ class eventController extends Controller
  *     ),
  *     @OA\Response(
  *         response=404,
- *         description="Record not exists",
+ *         description="Bản ghi không tồn tại ",
  *         @OA\JsonContent(
  *             type="object",
  *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Record not exists"),
+ *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại "),
  *             @OA\Property(property="statusCode", type="integer", example=404)
  *         )
  *     ),
  *     @OA\Response(
  *         response=500,
- *         description="Server error",
+ *         description="Lỗi hệ thống",
  *         @OA\JsonContent(
  *             type="object",
  *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Server error"),
+ *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
  *             @OA\Property(property="statusCode", type="integer", example=500)
  *         )
  *     )
@@ -423,7 +506,7 @@ class eventController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/event/{id}",
-     *     summary="Delete an events record",
+     *     summary="Xóa một bản ghi",
      *     tags={"Event"},
      *     @OA\Parameter(
      *         name="events",
@@ -438,27 +521,27 @@ class eventController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="Delete One Record Successfully"),
+     *             @OA\Property(property="message", type="string", example="Xóa một bản ghi thành công"),
      *             @OA\Property(property="statusCode", type="integer", example=200)
      *         )
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi hệ thống",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
@@ -470,14 +553,14 @@ class eventController extends Controller
             $event = event::findOrFail($id);
             if(!$event){
                 return response()->json([
-                    'message' => 'Record not exists',
+                    'message' => 'Không tồn tại bản ghi',
                     'status' => 'error',
                     'statusCode' => Response::HTTP_NOT_FOUND
                 ], Response::HTTP_NOT_FOUND);
             }
             $event->delete();
             return response()->json([
-                'message' => 'Delete One Record Successfully',
+                'message' => 'Xóa bản ghi thành công',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
             ], Response::HTTP_OK);
