@@ -226,7 +226,7 @@
                 "tags": [
                     "Attendances"
                 ],
-                "summary": "Get all attendance records with event",
+                "summary": "Lấy tất cả các bản ghi",
                 "operationId": "26abbb26674aa21867b017247202ad5f",
                 "responses": {
                     "200": {
@@ -284,7 +284,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -295,7 +295,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -308,7 +308,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -319,7 +319,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -340,7 +340,7 @@
                     "Attendances"
                 ],
                 "summary": "Store a new attendance record",
-                "description": "Store a new attendance record with the provided data.",
+                "description": "Tạo mới một bản ghi dựa vào dữ liệu được cung cấp",
                 "operationId": "storeAttendance",
                 "requestBody": {
                     "required": true,
@@ -418,7 +418,7 @@
                         }
                     },
                     "500": {
-                        "description": "Validation error or internal server error",
+                        "description": "Sai validate",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -431,7 +431,7 @@
                                             "type": "object",
                                             "example": {
                                                 "user_id": [
-                                                    "User ID is required"
+                                                    "ID của người dùng không được để trống"
                                                 ]
                                             }
                                         },
@@ -459,7 +459,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of the attendance record",
+                        "description": "ID của attendance",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -515,7 +515,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -526,7 +526,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -539,7 +539,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -550,7 +550,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -576,7 +576,7 @@
                     {
                         "name": "atendance",
                         "in": "path",
-                        "description": "Attendance record model",
+                        "description": "Mô hình dữ liệu attendance",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -652,7 +652,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại ",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -663,7 +663,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại "
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -676,7 +676,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -687,7 +687,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -711,7 +711,7 @@
                     {
                         "name": "atendance",
                         "in": "path",
-                        "description": "Attendance record model",
+                        "description": "Mô hình dữ liệu attendance",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -744,7 +744,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -755,7 +755,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -768,7 +768,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -779,7 +779,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -814,7 +814,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Get One Record Successfully"
+                                            "example": "Lấy dữ liệu thành công"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -861,7 +861,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Không tìm thấy bản ghi",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -872,7 +872,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Không tìm thấy bản ghi"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -885,7 +885,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -896,7 +896,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -915,7 +915,7 @@
                     "Event"
                 ],
                 "summary": "Store a new event record",
-                "description": "Store a new event record with the provided data.",
+                "description": "Thêm mới bản ghi với dữ liệu được cung cấp",
                 "operationId": "storeEvent",
                 "requestBody": {
                     "required": true,
@@ -957,7 +957,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
+                        "description": "Thêm mới dữ liệu thành công",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -968,7 +968,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Create Record Successfully"
+                                            "example": "Tạo mới bản ghi thành công"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -1015,7 +1015,7 @@
                         }
                     },
                     "422": {
-                        "description": "Validation error",
+                        "description": "Sai validate",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1026,7 +1026,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Validation error"
+                                            "example": "Sai validate"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -1039,7 +1039,7 @@
                         }
                     },
                     "500": {
-                        "description": "Internal server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1050,7 +1050,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Internal server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -1065,24 +1065,29 @@
                 }
             }
         },
-        "/api/searchEvent/{name}": {
-            "get": {
+        "/api/searchEvent": {
+            "post": {
                 "tags": [
                     "Event"
                 ],
-                "summary": "Get event information by name",
-                "operationId": "40c09b9b91c615a73fafaf56c1aed906",
-                "parameters": [
-                    {
-                        "name": "name",
-                        "in": "path",
-                        "description": "Name of the event to retrieve",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+                "summary": "Tìm kiếm sự kiện theo tên ",
+                "operationId": "Tìm kiếm sự kiện",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Event Name"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -1196,13 +1201,13 @@
                     "Event"
                 ],
                 "summary": "Get events by ID",
-                "description": "Get a specific events by its ID.",
+                "description": "Lấy dữ liệu sự kiện từ một id cho trước",
                 "operationId": "getEventsById",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Events ID",
+                        "description": "ID sự kiện ",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -1262,7 +1267,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1273,7 +1278,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -1286,7 +1291,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1297,7 +1302,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -1316,13 +1321,13 @@
                     "Event"
                 ],
                 "summary": "Update Event",
-                "description": "Update a specific event.",
+                "description": "Sửa dữ liệu của một sự kiện ",
                 "operationId": "updateEvent",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Event ID",
+                        "description": "ID của một sự kiện",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -1373,7 +1378,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
+                        "description": "Sửa dữ liệu thành công",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1428,7 +1433,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại ",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1439,7 +1444,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại "
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -1452,7 +1457,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1463,7 +1468,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -1481,7 +1486,7 @@
                 "tags": [
                     "Event"
                 ],
-                "summary": "Delete an events record",
+                "summary": "Xóa một bản ghi",
                 "operationId": "fcf20ee4d1deab33b151a91c0299ef50",
                 "parameters": [
                     {
@@ -1507,7 +1512,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Delete One Record Successfully"
+                                            "example": "Xóa một bản ghi thành công"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -1520,7 +1525,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1531,7 +1536,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -1544,7 +1549,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1555,7 +1560,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -1579,7 +1584,7 @@
                 "operationId": "f3fc0793a3c56e31074677bca6ba16aa",
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
+                        "description": "Dữ liệu trả về thành công",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1663,7 +1668,7 @@
                     "feedback"
                 ],
                 "summary": "Store a new feedback record",
-                "description": "Store a new feedback record with the provided data.",
+                "description": "Tạo mới bản ghi dựa vào dữ liệu được cung cấp",
                 "operationId": "storeFeedback",
                 "requestBody": {
                     "required": true,
@@ -1788,7 +1793,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of the feedback record",
+                        "description": "ID của bản ghi feedback",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -1992,7 +1997,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2003,7 +2008,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -2016,7 +2021,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2027,7 +2032,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -2046,7 +2051,7 @@
                     "feedback"
                 ],
                 "summary": "Delete a feedback record by ID",
-                "description": "Delete a feedback record by ID.",
+                "description": "Xóa 1 bản ghi bằng ID",
                 "operationId": "deleteFeedback",
                 "parameters": [
                     {
@@ -2085,7 +2090,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2096,7 +2101,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -2140,7 +2145,7 @@
                 "tags": [
                     "notification"
                 ],
-                "summary": "Get all notification records",
+                "summary": "Lấy hết tất cả bản ghi",
                 "operationId": "08a70d5b13253dab3fa43b4dc6a1ca37",
                 "responses": {
                     "200": {
@@ -2212,7 +2217,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2223,7 +2228,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -2236,7 +2241,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2247,7 +2252,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -2266,7 +2271,7 @@
                     "notification"
                 ],
                 "summary": "Store a new notification",
-                "description": "Store a new notification with the provided data.",
+                "description": "Tạo mới bản ghi dựa theo dữ liệu cung cấp",
                 "operationId": "storeNotification",
                 "requestBody": {
                     "required": true,
@@ -2344,13 +2349,13 @@
                                             "type": "object",
                                             "example": {
                                                 "content": [
-                                                    "Content cannot be empty"
+                                                    "Nội đung không được để trống"
                                                 ],
                                                 "time_send": [
-                                                    "Time send cannot be empty"
+                                                    "Thời gian không được để trống"
                                                 ],
                                                 "receiver_id": [
-                                                    "User ID cannot be empty"
+                                                    "Người nhận không được để trống"
                                                 ]
                                             }
                                         },
@@ -2481,7 +2486,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2492,7 +2497,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Internal server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -2513,7 +2518,7 @@
                     "notification"
                 ],
                 "summary": "Get a notification by ID",
-                "description": "Get a notification by its ID.",
+                "description": "Lấy mô hình dữ liệu thông báo theo ID",
                 "operationId": "getNotificationById",
                 "parameters": [
                     {
@@ -2563,7 +2568,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2574,7 +2579,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -2587,7 +2592,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2598,7 +2603,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Internal server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -2617,13 +2622,13 @@
                     "notification"
                 ],
                 "summary": "Update a notification by ID",
-                "description": "Update a notification by its ID with the provided data.",
+                "description": "Cập nhật thông báo theo ID của nó với dữ liệu được cung cấp.",
                 "operationId": "updateNotificationById",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of the notification",
+                        "description": "ID thông báo",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -2748,7 +2753,7 @@
                     "notification"
                 ],
                 "summary": "Delete a notification by ID",
-                "description": "Delete a notification by its ID.",
+                "description": "Xóa 1 bản ghi dựa vào ID",
                 "operationId": "deleteNotificationById",
                 "parameters": [
                     {
@@ -2770,7 +2775,7 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Delete One Record Successfully"
+                                            "example": "Xóa bản ghi thành công"
                                         },
                                         "status": {
                                             "type": "string",
@@ -2787,7 +2792,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại ",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2798,7 +2803,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại "
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -2822,7 +2827,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Internal server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -2846,7 +2851,7 @@
                 "operationId": "21e1cd188747fc59953037ea2feb3072",
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
+                        "description": "Dữ liệu trả về thành công",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2898,7 +2903,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2909,7 +2914,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại "
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -2922,7 +2927,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi server",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2933,7 +2938,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi server"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -3070,33 +3075,34 @@
                 }
             }
         },
-        "/api/searchUser/{email}/{phone}": {
-            "get": {
+        "/api/searchUser": {
+            "post": {
                 "tags": [
                     "Participants"
                 ],
                 "summary": "Get user information by email and phone",
-                "operationId": "aa1009854a70155cbde43897245b8984",
-                "parameters": [
-                    {
-                        "name": "email",
-                        "in": "path",
-                        "description": "Email of the participant to retrieve",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "phone",
-                        "in": "path",
-                        "description": "Phone of the participant to retrieve",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+                "description": "Tìm kiếm người dùng theo email và số điện thoại",
+                "operationId": "getUserByEmailAndPhone",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "phuclaf@gmail.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "0983118272"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -3110,7 +3116,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "User information retrieved successfully"
+                                            "example": "Dữ liệu người dùng được trả về thành công"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -3148,7 +3154,7 @@
                         }
                     },
                     "404": {
-                        "description": "User not found",
+                        "description": "Không tìm thấy người dùng mong muốn",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3159,7 +3165,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "User not found"
+                                            "example": "Không tìm thấy người dùng"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -3172,7 +3178,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3183,7 +3189,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Internal server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -3204,7 +3210,7 @@
                     "Participants"
                 ],
                 "summary": "Get participants by ID",
-                "description": "Get specific participant details by their ID.",
+                "description": "Lấy dữ liệu người dùng theo id cho trước",
                 "operationId": "getParticipantsById",
                 "parameters": [
                     {
@@ -3230,7 +3236,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Get Record Successfully"
+                                            "example": "Lấy bản ghi thành công"
                                         },
                                         "metadata": {
                                             "properties": {
@@ -3264,7 +3270,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not found",
+                        "description": "Không tìm thấy bản ghi nào như thế",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3275,7 +3281,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not found"
+                                            "example": "Không tìm thấy bản ghi nào như thế"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -3288,7 +3294,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi server",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3299,7 +3305,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi server"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -3318,13 +3324,13 @@
                     "Participants"
                 ],
                 "summary": "Update Participants",
-                "description": "Update a specific participants.",
+                "description": "Sửa dữ liệu bản ghi theo id cho trước",
                 "operationId": "updateParticipants",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "participants model",
+                        "description": "Mẫu người dùng",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -3361,7 +3367,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
+                        "description": "Dữ liệu trả về thành công",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3372,7 +3378,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Update One Record Successfully"
+                                            "example": "Sửa dữ liệu thành công"
                                         },
                                         "metadata": {
                                             "properties": {
@@ -3465,7 +3471,7 @@
                     {
                         "name": "participants",
                         "in": "path",
-                        "description": "Participants record model",
+                        "description": "Mô hình dữ liệu người dùng",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -3485,7 +3491,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Delete One Record Successfully"
+                                            "example": "Xóa bản ghi thành công"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -3509,7 +3515,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -3522,7 +3528,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi server",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3533,7 +3539,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi server"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -3601,7 +3607,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3612,7 +3618,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -3625,7 +3631,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3636,7 +3642,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -3655,7 +3661,7 @@
                     "Resource"
                 ],
                 "summary": "Store a new resources record",
-                "description": "Store a new resource record with the provided data.",
+                "description": "Lưu trữ một bản ghi tài nguyên mới với dữ liệu được cung cấp.",
                 "operationId": "storeResource",
                 "requestBody": {
                     "required": true,
@@ -3727,7 +3733,7 @@
                         }
                     },
                     "500": {
-                        "description": "Validation error or internal server error",
+                        "description": "Lỗi xác thực hoặc lỗi máy chủ nội bộ",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3740,7 +3746,7 @@
                                             "type": "object",
                                             "example": {
                                                 "user_id": [
-                                                    "User ID is required"
+                                                    "ID người dùng là bắt buộc"
                                                 ]
                                             }
                                         },
@@ -3763,7 +3769,7 @@
                     "Resource"
                 ],
                 "summary": "Get resources by ID",
-                "description": "Get a specific resource by its ID.",
+                "description": "Lấy model resource theo ID",
                 "operationId": "getResourceById",
                 "parameters": [
                     {
@@ -3815,7 +3821,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3826,7 +3832,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -3839,7 +3845,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3850,7 +3856,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -3941,7 +3947,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3952,7 +3958,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -3965,7 +3971,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3976,7 +3982,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -4000,7 +4006,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of resource model",
+                        "description": "ID của mô hình tài nguyên",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -4033,7 +4039,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4044,7 +4050,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -4057,7 +4063,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4068,7 +4074,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -4089,7 +4095,7 @@
                     "Resource"
                 ],
                 "summary": "Get resources by Event ID",
-                "description": "Get a specific resource by Event ID.",
+                "description": "Nhận tài nguyên cụ thể bằng ID sự kiện.",
                 "operationId": "getResourceByEventId",
                 "parameters": [
                     {
@@ -4148,7 +4154,7 @@
                         }
                     },
                     "404": {
-                        "description": "Record not exists",
+                        "description": "Bản ghi không tồn tại",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4159,7 +4165,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Record not exists"
+                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -4172,7 +4178,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Lỗi hệ thống",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4183,7 +4189,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Server error"
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",

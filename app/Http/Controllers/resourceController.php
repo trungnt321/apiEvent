@@ -42,21 +42,21 @@ class resourceController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi hệ thống",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
@@ -94,7 +94,7 @@ class resourceController extends Controller
      *     path="/api/resource",
      *     tags={"Resource"},
      *     summary="Store a new resources record",
-     *     description="Store a new resource record with the provided data.",
+     *     description="Lưu trữ một bản ghi tài nguyên mới với dữ liệu được cung cấp.",
      *     operationId="storeResource",
      *     @OA\RequestBody(
      *         required=true,
@@ -125,10 +125,10 @@ class resourceController extends Controller
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Validation error or internal server error",
+     *         description="Lỗi xác thực hoặc lỗi máy chủ nội bộ",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="object", example={"user_id": {"User ID is required"}}),
+     *             @OA\Property(property="message", type="object", example={"user_id": {"ID người dùng là bắt buộc"}}),
      *             @OA\Property(property="statusCode", type="int", example=500),
 
      *         )
@@ -198,7 +198,7 @@ class resourceController extends Controller
      *      operationId="getResourceById",
      *      tags={"Resource"},
      *      summary="Get resources by ID",
-     *      description="Get a specific resource by its ID.",
+     *      description="Lấy model resource theo ID",
      *      @OA\Parameter(
      *          name="id",
      *          description="Resource ID",
@@ -224,21 +224,21 @@ class resourceController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi hệ thống",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
@@ -279,7 +279,7 @@ class resourceController extends Controller
      *      operationId="getResourceByEventId",
      *      tags={"Resource"},
      *      summary="Get resources by Event ID",
-     *      description="Get a specific resource by Event ID.",
+     *      description="Nhận tài nguyên cụ thể bằng ID sự kiện.",
      *      @OA\Parameter(
      *          name="event_id",
      *          description="Event ID",
@@ -309,21 +309,21 @@ class resourceController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi hệ thống",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
@@ -392,21 +392,21 @@ class resourceController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi hệ thống",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
@@ -423,10 +423,10 @@ class resourceController extends Controller
                     Rule::exists('events', 'id'),
                 ]
             ],[
-                'name.required' => 'Name must not be empty',
-                'url.required' => 'Url must not be empty',
-                'event_id.required' => 'Event id must not be empty',
-                'event_id.exists' => 'Event id does not exist',
+                'name.required' => 'Tên ảnh phải có',
+                'url.required' => 'Url không được để trống',
+                'event_id.required' => 'ID event không được để trống',
+                'event_id.exists' => 'ID event không tồn tại',
             ]);
             if($validate->fails()){
                 return response([
@@ -494,7 +494,7 @@ class resourceController extends Controller
      *         name="id",
      *         in="path",
      *         required=true,
-     *         description="ID of resource model",
+     *         description="ID của mô hình tài nguyên",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
@@ -509,21 +509,21 @@ class resourceController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi hệ thống",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )

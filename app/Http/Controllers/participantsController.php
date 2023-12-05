@@ -20,7 +20,7 @@ class participantsController extends Controller
      *     tags={"Participants"},
      *     @OA\Response(
      *         response=200,
-     *         description="Successful operation",
+     *         description="Dữ liệu trả về thành công",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="success"),
@@ -42,21 +42,21 @@ class participantsController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại "),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi server",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi server"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
@@ -85,23 +85,18 @@ class participantsController extends Controller
         }
     }
 /**
- * @OA\Get(
- *     path="/api/searchUser/{email}/{phone}",
+ * @OA\Post(
+ *     path="/api/searchUser",
  *     summary="Get user information by email and phone",
  *     tags={"Participants"},
- *     @OA\Parameter(
- *         name="email",
- *         in="path",
+ *     description="Tìm kiếm người dùng theo email và số điện thoại",
+ *     operationId="getUserByEmailAndPhone",
+ *     @OA\RequestBody(
  *         required=true,
- *         description="Email of the participant to retrieve",
- *         @OA\Schema(type="string")
- *     ),
- *     @OA\Parameter(
- *         name="phone",
- *         in="path",
- *         required=true,
- *         description="Phone of the participant to retrieve",
- *         @OA\Schema(type="string")
+ *         @OA\JsonContent(
+ *             @OA\Property(property="email", type="string", example="phuclaf@gmail.com"),
+ *             @OA\Property(property="phone", type="string", example="0983118272")
+ *         )
  *     ),
  *     @OA\Response(
  *         response=200,
@@ -109,7 +104,7 @@ class participantsController extends Controller
  *         @OA\JsonContent(
  *             type="object",
  *             @OA\Property(property="status", type="string", example="success"),
- *             @OA\Property(property="message", type="string", example="User information retrieved successfully"),
+ *             @OA\Property(property="message", type="string", example="Dữ liệu người dùng được trả về thành công"),
  *             @OA\Property(property="statusCode", type="integer", example=200),
  *             @OA\Property(
  *                 property="data",
@@ -118,34 +113,52 @@ class participantsController extends Controller
  *                 @OA\Property(property="email", type="string", example="phuclaf@gmail.com"),
  *                 @OA\Property(property="password", type="string", example="123456"),
  *                 @OA\Property(property="phone", type="string", example="0983118272"),
- *                 @OA\Property(property="role", type="integer", example=1),
+ *                 @OA\Property(property="role", type="integer", example=1)
  *             )
  *         )
  *     ),
  *     @OA\Response(
  *         response=404,
- *         description="User not found",
+ *         description="Không tìm thấy người dùng mong muốn",
  *         @OA\JsonContent(
  *             type="object",
  *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="User not found"),
+ *             @OA\Property(property="message", type="string", example="Không tìm thấy người dùng"),
  *             @OA\Property(property="statusCode", type="integer", example=404)
  *         )
  *     ),
  *     @OA\Response(
  *         response=500,
- *         description="Server error",
+ *         description="Lỗi hệ thống",
  *         @OA\JsonContent(
  *             type="object",
  *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Internal server error"),
+ *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
  *             @OA\Property(property="statusCode", type="integer", example=500)
  *         )
  *     )
  * )
  */
-    public function getUserByEmail($email,$phone){
+    public function getUserByEmailAndPhone(Request $request){
         try{
+            $validator = Validator::make($request->all(),[
+                'email'=>'required',
+                'phone'=> 'required'
+                
+            ],[
+                'email.required' => 'Email không được để trống',
+                'phone.required' => 'Số điện thoại không được để trống'
+            ]);
+            if($validator->fails()){
+                return response([
+                    "status" => "error",
+                    "message" => $validator->errors(),
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+            $data = $request->all();
+            $email = $data['email'];
+            $phone = $data['phone'];
             $users = DB::table('users')
             ->where(function($query) use ($email, $phone) {
                 $query->where('email', 'like', "%{$email}%")
@@ -264,7 +277,7 @@ class participantsController extends Controller
             $user = User::create($data);
             return response()->json([
                 'metadata' => $user,
-                'message' => 'Create Record Successfully',
+                'message' => 'Tạo mới bản ghi thành công',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
             ], Response::HTTP_OK);
@@ -287,7 +300,7 @@ class participantsController extends Controller
  *      operationId="getParticipantsById",
  *      tags={"Participants"},
  *      summary="Get participants by ID",
- *      description="Get specific participant details by their ID.",
+ *      description="Lấy dữ liệu người dùng theo id cho trước",
  *      @OA\Parameter(
  *          name="id",
  *          description="Participant ID",
@@ -300,7 +313,7 @@ class participantsController extends Controller
  *         description="Successful operation",
  *         @OA\JsonContent(
  *             @OA\Property(property="status", type="string", example="success"),
- *             @OA\Property(property="message", type="string", example="Get Record Successfully"),
+ *             @OA\Property(property="message", type="string", example="Lấy bản ghi thành công"),
  *             @OA\Property(
  *                 property="metadata",
  *                 type="object",
@@ -314,19 +327,19 @@ class participantsController extends Controller
  *     ),
  *     @OA\Response(
  *         response=404,
- *         description="Record not found",
+ *         description="Không tìm thấy bản ghi nào như thế",
  *         @OA\JsonContent(
  *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Record not found"),
+ *             @OA\Property(property="message", type="string", example="Không tìm thấy bản ghi nào như thế"),
  *             @OA\Property(property="statusCode", type="integer", example=404)
  *         )
  *     ),
  *     @OA\Response(
  *         response=500,
- *         description="Server error",
+ *         description="Lỗi server",
  *         @OA\JsonContent(
  *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Server error"),
+ *             @OA\Property(property="message", type="string", example="Lỗi server"),
  *             @OA\Property(property="statusCode", type="integer", example=500)
  *         )
  *     )
@@ -357,10 +370,10 @@ class participantsController extends Controller
      *      operationId="updateParticipants",
      *      tags={"Participants"},
      *      summary="Update Participants",
-     *      description="Update a specific participants.",
+     *      description="Sửa dữ liệu bản ghi theo id cho trước",
      *      @OA\Parameter(
      *          name="id",
-     *          description="participants model",
+     *          description="Mẫu người dùng",
      *          required=true,
      *          in="path",
      *          @OA\Schema(type="integer")
@@ -369,23 +382,23 @@ class participantsController extends Controller
      *          required=true,
      *             @OA\JsonContent(
      *             @OA\Property(property="name", type="string", example="Phuc La"),
-     *  @OA\Property(property="email", type="string", example="phucla@gmail.com"),
-     * @OA\Property(property="phone", type="string", example="0982221151"),
-     * @OA\Property(property="role", type="integer", example=1),
+     *             @OA\Property(property="email", type="string", example="phucla@gmail.com"),
+     *             @OA\Property(property="phone", type="string", example="0982221151"),
+     *             @OA\Property(property="role", type="integer", example=1),
      *         )
      *      ),
      *      @OA\Response(
      *         response=200,
-     *         description="Successful operation",
+     *         description="Dữ liệu trả về thành công",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="Update One Record Successfully"),
+     *             @OA\Property(property="message", type="string", example="Sửa dữ liệu thành công"),
      *             @OA\Property(
      *                 property="metadata",
      *                 type="object",
-     *                  @OA\Property(property="id", type="string", example="1"),
-     *                     @OA\Property(property="name", type="string", example="Phuc La"),
+     *                      @OA\Property(property="id", type="string", example="1"),
+     *                      @OA\Property(property="name", type="string", example="Phuc La"),
      *                      @OA\Property(property="email", type="string", example="phucla@gmail.com"),
      *                      @OA\Property(property="phone", type="string", example="0982221151"),
      *                      @OA\Property(property="role", type="integer", example=1),
@@ -507,7 +520,7 @@ class participantsController extends Controller
      *         name="participants",
      *         in="path",
      *         required=true,
-     *         description="Participants record model",
+     *         description="Mô hình dữ liệu người dùng",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
@@ -516,7 +529,7 @@ class participantsController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="Delete One Record Successfully"),
+     *             @OA\Property(property="message", type="string", example="Xóa bản ghi thành công"),
      *             @OA\Property(property="statusCode", type="integer", example=200)
      *         )
      *     ),
@@ -526,17 +539,17 @@ class participantsController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi server",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi server"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )

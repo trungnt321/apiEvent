@@ -16,7 +16,7 @@ class notificationController extends Controller
     /**
      * @OA\Get(
      *     path="/api/notification",
-     *     summary="Get all notification records",
+     *     summary="Lấy hết tất cả bản ghi",
      *     tags={"notification"},
      *     @OA\Response(
      *         response=200,
@@ -45,21 +45,21 @@ class notificationController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi hệ thống",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
@@ -115,7 +115,7 @@ class notificationController extends Controller
      *     path="/api/notification",
      *     tags={"notification"},
      *     summary="Store a new notification",
-     *     description="Store a new notification with the provided data.",
+     *     description="Tạo mới bản ghi dựa theo dữ liệu cung cấp",
      *     operationId="storeNotification",
      *     @OA\RequestBody(
      *         required=true,
@@ -149,9 +149,9 @@ class notificationController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="error"),
      *             @OA\Property(property="message", type="object", example={
-     *                 "content": {"Content cannot be empty"},
-     *                 "time_send": {"Time send cannot be empty"},
-     *                 "receiver_id": {"User ID cannot be empty"}
+     *                 "content": {"Nội đung không được để trống"},
+     *                 "time_send": {"Thời gian không được để trống"},
+     *                 "receiver_id": {"Người nhận không được để trống"}
      *             }),
      *             @OA\Property(property="statusCode", type="integer", example=400)
      *         )
@@ -186,11 +186,11 @@ class notificationController extends Controller
                 'time_send' => 'required',
                 'receiver_id' => 'required|exists:users,id',
             ], [
-                'title.required' => 'Title cannot be empty',
-                'content.required' => 'Content cannot be empty',
-                'receiver_id.required' => 'User ID cannot be empty',
-                'receiver_id.exists' => 'User does not exist',
-                'event_id.exists' => 'Event does not exist',
+                'title.required' => 'Tiêu để không được để trống',
+                'content.required' => 'Nội dung không được để trống',
+                'receiver_id.required' => 'ID của ngườu dùng không được để trống',
+                'receiver_id.exists' => 'ID của người dùng không tồn tại',
+                'event_id.exists' => 'Sự kiện không tồn tại',
             ]);
 
             if($validator->fails()){
@@ -243,10 +243,10 @@ class notificationController extends Controller
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi hệ thống",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Internal server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
@@ -281,7 +281,7 @@ class notificationController extends Controller
      *     path="/api/notifications/{id}",
      *     tags={"notification"},
      *     summary="Get a notification by ID",
-     *     description="Get a notification by its ID.",
+     *     description="Lấy mô hình dữ liệu thông báo theo ID",
      *     operationId="getNotificationById",
      *     @OA\Parameter(
      *         name="id",
@@ -310,19 +310,19 @@ class notificationController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi hệ thống",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Internal server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
@@ -354,13 +354,13 @@ class notificationController extends Controller
      *     path="/api/notifications/{id}",
      *     tags={"notification"},
      *     summary="Update a notification by ID",
-     *     description="Update a notification by its ID with the provided data.",
+     *     description="Cập nhật thông báo theo ID của nó với dữ liệu được cung cấp.",
      *     operationId="updateNotificationById",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
      *         required=true,
-     *         description="ID of the notification",
+     *         description="ID thông báo",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\RequestBody(
@@ -420,10 +420,10 @@ class notificationController extends Controller
                 'message' => 'required',
                 'email' => 'required|email',
             ], [
-                'title.required' => 'Title cannot be empty',
-                'message.required' => 'Content cannot be empty',
-                'email.required' => 'Email address cannot be empty',
-                'email.email' => 'Invalid email address',
+                'title.required' => 'Tiêu để không được để trống',
+                'message.required' => 'Nội dung không được để trống',
+                'email.required' => 'Email không được để trống',
+                'email.email' => 'Email không đúng định dạng',
             ]);
 
             if ($validator->fails()) {
@@ -457,7 +457,7 @@ class notificationController extends Controller
      *     path="/api/notifications/{id}",
      *     tags={"notification"},
      *     summary="Delete a notification by ID",
-     *     description="Delete a notification by its ID.",
+     *     description="Xóa 1 bản ghi dựa vào ID",
      *     operationId="deleteNotificationById",
      *     @OA\Parameter(
      *         name="id",
@@ -470,17 +470,17 @@ class notificationController extends Controller
      *         response=200,
      *         description="Successful operation",
      *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Delete One Record Successfully"),
+     *             @OA\Property(property="message", type="string", example="Xóa bản ghi thành công"),
      *             @OA\Property(property="status", type="string", example="success"),
      *             @OA\Property(property="statusCode", type="integer", example=200)
      *         )
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại ",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại "),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
@@ -489,7 +489,7 @@ class notificationController extends Controller
      *         description="Server error",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Internal server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
