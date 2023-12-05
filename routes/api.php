@@ -39,7 +39,11 @@ Route::get('/event',[eventController::class,'index']);
 Route::apiResource('participants',participantsController::class)->middleware('auth:api');
 Route::apiResource('event',eventController::class)->middleware('auth:api');
 Route::get('resourceByEventID/{event_id}',[resourceController::class,'GetRecordByEventId'])->middleware('auth:api');
-Route::apiResource('resource',resourceController::class)->middleware('auth:api');;
+Route::apiResource('resource',resourceController::class)->middleware('auth:api');
+
+//Search
+Route::post('searchUser',[participantsController::class,'getUserByEmailAndPhone'])->middleware('auth:api');
+Route::post('searchEvent',[eventController::class,'searchEvent'])->middleware('auth:api');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

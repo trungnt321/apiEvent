@@ -19,7 +19,7 @@ class feedbackController extends Controller
      *     tags={"feedback"},
      *     @OA\Response(
      *         response=200,
-     *         description="Successful operation",
+     *         description="Dữ liệu trả về thành công",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="success"),
@@ -79,7 +79,7 @@ class feedbackController extends Controller
      *     path="/api/feedback",
      *     tags={"feedback"},
      *     summary="Store a new feedback record",
-     *     description="Store a new feedback record with the provided data.",
+     *     description="Tạo mới bản ghi dựa vào dữ liệu được cung cấp",
      *     operationId="storeFeedback",
      *     @OA\RequestBody(
      *         required=true,
@@ -129,11 +129,11 @@ class feedbackController extends Controller
                 'event_id' => 'required|exists:events,id',
                 'user_id' => 'required|exists:users,id',
             ], [
-                'content.required' => 'Content cannot be empty',
-                'event_id.required' => 'Event ID cannot be empty',
-                'user_id.required' => 'User ID cannot be empty',
-                'user_id.exists' => 'User does not exist',
-                'event_id.exists' => 'Event does not exist',
+                'content.required' => 'Nội dung không được để trống',
+                'event_id.required' => 'ID của event không được để trống',
+                'user_id.required' => 'ID người dùng cũng không được để trống',
+                'user_id.exists' => 'Người dùng không tồn tại',
+                'event_id.exists' => 'Sự kiện không tồn tại',
             ]);
 
             if($validator->fails()){
@@ -173,7 +173,7 @@ class feedbackController extends Controller
      *         name="id",
      *         in="path",
      *         required=true,
-     *         description="ID of the feedback record",
+     *         description="ID của bản ghi feedback",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
@@ -277,19 +277,19 @@ class feedbackController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi hệ thống",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
@@ -306,11 +306,11 @@ class feedbackController extends Controller
                 'event_id' => 'required|exists:events,id',
                 'user_id' => 'required|exists:users,id',
             ], [
-                'content.required' => 'Content cannot be empty',
-                'event_id.required' => 'Event ID cannot be empty',
-                'user_id.required' => 'User ID cannot be empty',
-                'user_id.exists' => 'User does not exist',
-                'event_id.exists' => 'Event does not exist',
+                'content.required' => 'Nội dung không được để trống',
+                'event_id.required' => 'ID của event không được để trống',
+                'user_id.required' => 'ID người dùng cũng không được để trống',
+                'user_id.exists' => 'Người dùng không tồn tại',
+                'event_id.exists' => 'Sự kiện không tồn tại',
             ]);
 
             if ($validator->fails()) {
@@ -343,7 +343,7 @@ class feedbackController extends Controller
      *     path="/api/feedback/{id}",
      *     tags={"feedback"},
      *     summary="Delete a feedback record by ID",
-     *     description="Delete a feedback record by ID.",
+     *     description="Xóa 1 bản ghi bằng ID",
      *     operationId="deleteFeedback",
      *     @OA\Parameter(
      *         name="id",
@@ -363,11 +363,11 @@ class feedbackController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
      *             @OA\Property(property="statusCode", type="int", example=404)
      *         )
      *     ),

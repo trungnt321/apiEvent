@@ -14,7 +14,7 @@ class atendanceController extends Controller
     /**
      * @OA\Get(
      *     path="/api/atendances/join/{id}",
-     *     summary="Get all attendance records with event",
+     *     summary="Lấy tất cả các bản ghi",
      *     tags={"Attendances"},
      *     @OA\Response(
      *         response=200,
@@ -40,21 +40,21 @@ class atendanceController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi hệ thống",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
@@ -89,7 +89,7 @@ class atendanceController extends Controller
      *     path="/api/attendances",
      *     tags={"Attendances"},
      *     summary="Store a new attendance record",
-     *     description="Store a new attendance record with the provided data.",
+     *     description="Tạo mới một bản ghi dựa vào dữ liệu được cung cấp",
      *     operationId="storeAttendance",
      *     @OA\RequestBody(
      *         required=true,
@@ -121,10 +121,10 @@ class atendanceController extends Controller
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Validation error or internal server error",
+     *         description="Sai validate",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="object", example={"user_id": {"User ID is required"}}),
+     *             @OA\Property(property="message", type="object", example={"user_id": {"ID của người dùng không được để trống"}}),
      *             @OA\Property(property="statusCode", type="int", example=500),
 
      *         )
@@ -226,7 +226,7 @@ class atendanceController extends Controller
      *         name="id",
      *         in="path",
      *         required=true,
-     *         description="ID of the attendance record",
+     *         description="ID của attendance",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
@@ -249,21 +249,21 @@ class atendanceController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi hệ thống",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
@@ -297,7 +297,7 @@ class atendanceController extends Controller
      *         name="atendance",
      *         in="path",
      *         required=true,
-     *         description="Attendance record model",
+     *         description="Mô hình dữ liệu attendance",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\RequestBody(
@@ -327,21 +327,21 @@ class atendanceController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại ",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại "),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi hệ thống",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
@@ -377,7 +377,7 @@ class atendanceController extends Controller
      *         name="atendance",
      *         in="path",
      *         required=true,
-     *         description="Attendance record model",
+     *         description="Mô hình dữ liệu attendance",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
@@ -392,21 +392,21 @@ class atendanceController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Record not exists",
+     *         description="Bản ghi không tồn tại",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Record not exists"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Lỗi hệ thống",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
