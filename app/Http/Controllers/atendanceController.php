@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-
+use App\Models\User;
 class atendanceController extends Controller
 {
     /**
@@ -66,7 +66,7 @@ class atendanceController extends Controller
             $atendance = atendance::where('event_id',$request->id)->get();
             return response()->json([
                 'metadata' => $atendance,
-                'message' => 'Get All records Successfully',
+                'message' => 'Lấy thành công tất cả các bản ghi',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
             ], Response::HTTP_OK);
@@ -138,9 +138,9 @@ class atendanceController extends Controller
                 'event_id' => 'required',
                 'user_id' => 'required|exists:users,id'
             ], [
-                'event_id.required' => 'Event ID is required.',
-                'user_id.required' => 'User ID is required.',
-                'user_id.exists' => 'Invalid user role.'
+                'event_id.required' => 'Id sự kiện không được để trống',
+                'user_id.required' => 'Id người dùng không được để trống.',
+                'user_id.exists' => 'Id người dùng không tồn tại.'
             ]);
 
             if ($validator->fails()) {
@@ -155,7 +155,7 @@ class atendanceController extends Controller
             $atendance = atendance::create($request->all());
             return response()->json([
                 'metadata' => $atendance,
-                'message' => 'Create Record Successfully',
+                'message' => 'Tạo mới bản ghi thành công',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
             ], Response::HTTP_OK);
@@ -172,6 +172,50 @@ class atendanceController extends Controller
         }
     }
 
+    public function addEmail(Request $request){
+        try {
+            $validator = Validator::make($request->all(), [
+                'event_id' => 'required|exists:events,id',
+                'email' => 'required|exists:users,email'
+            ], [
+                'event_id.required' => 'Id sự kiện không để trống.',
+                'event_id.exists' => 'Id sự kiện không tồn tại.',
+                'email.required' => 'Email không để trống.',
+                'email.exists' => 'Email không tồn tại.'
+            ]);
+
+            if ($validator->fails()) {
+//                return response(['status' => 'error', 'message' => $validator->errors()], 500);
+                return response([
+                    "status" => "error",
+                    "message" => $validator->errors(),
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            $id = User::select('id')->where('email',$request->email)->first()->id;
+            $atendance = atendance::create([
+                "user_id" => (int)$id,
+                "event_id" => $request->event_id
+            ]);
+            return response()->json([
+                'metadata' => $atendance,
+                'message' => 'Tạo mới bản ghi thành công ',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'status' => 'error',
+                'statusCode' => $e instanceof HttpException
+                    ? $e->getStatusCode()
+                    : 500 // Internal Server Error by default
+            ], $e instanceof HttpException
+                ? $e->getStatusCode()
+                : 500);
+        }
+    }
 
     /**
      * @OA\Get(
@@ -231,14 +275,14 @@ class atendanceController extends Controller
             $attendance = Atendance::findOrFail($id);
             return response()->json([
                 'metadata' => $attendance,
-                'message' => 'Get One Record Successfully',
+                'message' => 'Lấy 1 bản ghi thành công',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
             ], Response::HTTP_OK);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response([
                 "status" => "error",
-                "message" => "Record not exists",
+                "message" => "Bản ghi không tồn tại",
                 'statusCode' => Response::HTTP_NOT_FOUND
             ], Response::HTTP_NOT_FOUND);
         }
@@ -310,14 +354,14 @@ class atendanceController extends Controller
             $atendance->update($request->all());
             return response()->json([
                 'metadata' => $atendance,
-                'message' => 'Update One Record Successfully',
+                'message' => 'Cập nhật thành công',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
             ], Response::HTTP_OK);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response([
                 "status" => "error",
-                "message" => "Record not exists",
+                "message" => "Bản ghi không tồn tại",
                 'statusCode' => Response::HTTP_NOT_FOUND
             ], Response::HTTP_NOT_FOUND);
         }
@@ -373,7 +417,7 @@ class atendanceController extends Controller
         try {
             if (!$atendance) {
                 return response()->json([
-                    'message' => 'Record not exists',
+                    'message' => 'Bản ghi không tồn tại',
                     'status' => 'error',
                     'statusCode' => Response::HTTP_NOT_FOUND
                 ], Response::HTTP_NOT_FOUND);
@@ -381,7 +425,7 @@ class atendanceController extends Controller
 
             $atendance->delete();
             return response()->json([
-                'message' => 'Delete One Record Successfully',
+                'message' => 'Xóa bản ghi thành công',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
             ], Response::HTTP_OK);

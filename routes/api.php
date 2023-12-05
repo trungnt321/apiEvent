@@ -27,7 +27,7 @@ Route::post('login',[UserAuthController::class,'login']);
 
 //Route::apiResource('employees',EmployeeController::class)->middleware('auth:api');
 Route::get('atendances/join/{id}',[atendanceController::class,'index']);
-//Route::post('atendances/join/{id}',[atendanceController::class,'index']);
+Route::post('atendances/add',[atendanceController::class,'addEmail']);
 Route::apiResource('atendances',atendanceController::class)->middleware('auth:api');
 Route::apiResource('feedback',feedbackController::class)->middleware('auth:api');
 Route::post('notification/send',[notificationController::class,'create'])->middleware('auth:api');
