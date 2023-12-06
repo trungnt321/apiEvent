@@ -45,6 +45,9 @@ Route::apiResource('resource',resourceController::class)->middleware('auth:api')
 Route::post('searchUser',[participantsController::class,'getUserByEmailAndPhone'])->middleware('auth:api');
 Route::post('searchEvent',[eventController::class,'searchEvent'])->middleware('auth:api');
 
+
+//Event statistics
+Route::post('eventStatistics',[eventController::class,'eventStatistics'])->middleware('auth:api');
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
