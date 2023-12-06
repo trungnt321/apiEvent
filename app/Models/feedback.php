@@ -9,4 +9,11 @@ class feedback extends Model
 {
     use HasFactory;
     protected $fillable = ['content','user_id','event_id'];
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function event() {
+        return $this->belongsTo(Event::class, 'event_id');
+    }
 }
