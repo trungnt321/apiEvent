@@ -18,8 +18,11 @@ class resourceController extends Controller
     /**
      * @OA\Get(
      *     path="/api/resource",
-     *     summary="Get all resource records",
+     *     summary="Lấy tất cả bản ghi",
      *     tags={"Resource"},
+     * description="
+     *      - Endpoint trả về hình ảnh của tất cả sự kiện.
+     *      - Role được sử dụng là tất cả các role ",
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
@@ -93,8 +96,13 @@ class resourceController extends Controller
      * @OA\Post(
      *     path="/api/resource",
      *     tags={"Resource"},
-     *     summary="Store a new resources record",
-     *     description="Lưu trữ một bản ghi tài nguyên mới với dữ liệu được cung cấp.",
+     *     summary="Lưu trữ một bản ghi tài nguyên mới với dữ liệu được cung cấp.",
+     *     description="
+     * -Dữ liệu được thêm vào là post
+     * -name là tên ảnh
+     * -url là file ảnh, sẽ được lưu trong CSDL là thời gian hienj tại, để tránh bị trùng lạp
+     * event_id là id của sự kiện
+     * -Role được sử dụng là tất cả các role",
      *     operationId="storeResource",
      *     @OA\RequestBody(
      *         required=true,
@@ -197,8 +205,13 @@ class resourceController extends Controller
      *      path="/api/resource/{id}",
      *      operationId="getResourceById",
      *      tags={"Resource"},
-     *      summary="Get resources by ID",
-     *      description="Lấy model resource theo ID",
+     *      summary="Lấy model resource theo ID",
+     *      description="
+     * -Lấy một bản ghi hình ảnh theo id cho trước
+     * - Endpoint trả về hình ảnh của tất cả sự kiện.
+     * -name là tên ảnh
+     * -url là url của ảnh đó
+     * event_id là id của event ",
      *      @OA\Parameter(
      *          name="id",
      *          description="Resource ID",
@@ -278,8 +291,12 @@ class resourceController extends Controller
      *      path="/api/resourceByEventID/{event_id}",
      *      operationId="getResourceByEventId",
      *      tags={"Resource"},
-     *      summary="Get resources by Event ID",
-     *      description="Nhận tài nguyên cụ thể bằng ID sự kiện.",
+     *      summary="Nhận tài nguyên cụ thể bằng ID sự kiện.",
+     *      description="
+     * - Endpoint trả về tất cả ảnh của một sự kiện
+     * -event_id là id của sự kiện
+     * -Role được sử dụng là tất cả các role
+     * ",
      *      @OA\Parameter(
      *          name="event_id",
      *          description="Event ID",
@@ -358,8 +375,11 @@ class resourceController extends Controller
      *      path="/api/resource/{id}",
      *      operationId="updateResource",
      *      tags={"Resource"},
-     *      summary="Update Resource",
-     *      description="Update a specific resources.",
+     *      summary="Sửa dữ liệu bản ghi hình ảnh",
+     *      description="
+     * -Endpoint trả về hình ảnh mà mình đã sửa
+     * -Role được sử dụng là role nhân viên và quản lí
+     * -Ảnh mới sẽ được thêm vào đồng thời xóa đi ảnh cũ",
     *       @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -468,7 +488,7 @@ class resourceController extends Controller
             }
             return response([
                 "status" => "error",
-                "message" => "Students cannot edit anything",
+                "message" => "Học sinh không thể sửa ảnh",
                 "statusCode" => Response::HTTP_CONFLICT
             ], Response::HTTP_CONFLICT);
 
@@ -489,6 +509,11 @@ class resourceController extends Controller
      * @OA\Delete(
      *     path="/api/resource/{id}",
      *     summary="Delete an resource record",
+     * description="
+     * -Xóa đi một ảnh theo một id cho trước
+     * -Ảnh sẽ xóa trong SQL, đồng thời xóa trong thư mục Backend
+     * -Role được sử dụng là tất cả các role
+     * ",
      *     tags={"Resource"},
      *     @OA\Parameter(
      *         name="id",

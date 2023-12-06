@@ -1199,7 +1199,8 @@
                 "tags": [
                     "Event"
                 ],
-                "summary": "Get all events records",
+                "summary": "Lấy tất cả các sự kiện",
+                "description": "\n     *      - Endpoint trả về thông tin của tất cả các sự kiện\n     *      - Role được sử dụng là role của tất cả \n     *      - Trả về thông tin của tất cả các sự kiện đã diễn ra\n     * ",
                 "operationId": "1713890b60b4f32dcbc6113136f80b49",
                 "responses": {
                     "200": {
@@ -1314,8 +1315,8 @@
                 "tags": [
                     "Event"
                 ],
-                "summary": "Store a new event record",
-                "description": "Thêm mới bản ghi với dữ liệu được cung cấp",
+                "summary": "Thêm mới bản ghi với dữ liệu được cung cấp",
+                "description": "\n     * - Endpoint trả về bản ghi mới được thêm vào \n     * -Role đước sử dụng là nhân viên, quản lí\n     * -name là tên sự kiện \n     * -location là nơi tổ chức sự kiện \n     * -contact là liên lạc bằng số điện thoại\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * ",
                 "operationId": "storeEvent",
                 "requestBody": {
                     "required": true,
@@ -1471,6 +1472,7 @@
                     "Event"
                 ],
                 "summary": "Tìm kiếm sự kiện theo tên ",
+                "description": "\n     * - Request cần nhập vào là tên sự kiện\n     * - Tên sự kiện chỉ cần nhập gần giống, không nhất thiết phải giống hẳn\n     * - Endpoit trả ra là những sự kiện có tên dạng vậy",
                 "operationId": "Tìm kiếm sự kiện",
                 "requestBody": {
                     "required": true,
@@ -1600,8 +1602,8 @@
                 "tags": [
                     "Event"
                 ],
-                "summary": "Get events by ID",
-                "description": "Lấy dữ liệu sự kiện từ một id cho trước",
+                "summary": "Lấy dữ liệu sự kiện từ một id cho trước",
+                "description": "\n     * -Endpoint này lấy ra 1 bản ghi của sự kiện\n     * -id là id của event mà mình cần tìm kiếm",
                 "operationId": "getEventsById",
                 "parameters": [
                     {
@@ -1720,8 +1722,8 @@
                 "tags": [
                     "Event"
                 ],
-                "summary": "Update Event",
-                "description": "Sửa dữ liệu của một sự kiện ",
+                "summary": "Sửa dữ liệu của một sự kiện ",
+                "description": "\n     * -Endpoint trả về dữ liệu bản ghi mới được sửa đổi\n     * -Role quy định là role nhân viên, quản lí\n     * -name là tên sự kiện \n     * -location là nơi tổ chức sự kiện \n     * -contact là liên lạc bằng số điện thoại\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * ",
                 "operationId": "updateEvent",
                 "parameters": [
                     {
@@ -1887,6 +1889,7 @@
                     "Event"
                 ],
                 "summary": "Xóa một bản ghi",
+                "description": "\n     *          - Endpoint này sẽ xóa 1 sự kiện \n     *          - Role được sử dụng là role Quản lí\n     *          - Xóa thành công sẽ trả lại data là của các sự kiện còn lại\n     *          - id là id của event cần xóa\n     *          ",
                 "operationId": "fcf20ee4d1deab33b151a91c0299ef50",
                 "parameters": [
                     {
@@ -1941,6 +1944,204 @@
                                         "statusCode": {
                                             "type": "integer",
                                             "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi hệ thống",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lỗi hệ thống"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/eventStatistics": {
+            "post": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Thống kê sự kiện ",
+                "description": "\n     * - Endpoint trả về các bản ghi sự kiện\n     * -Role đước sử dụng quản lí, nhân viên\n     * -name là tên sự kiện \n     * -location là nơi tổ chức sự kiện \n     * -contact là liên lạc bằng số điện thoại\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * -attendances_count là số sinh viên tham gia\n     *  - attendances là thông tin của các sinh viên tham gia\n     *  - feedback là thông tin của các feedback của sinh viên\n     * - start_time có thể rỗng \n     * - end_time có thể rỗng\n     * - Nhưng nếu nhập start_time thì bắt buộc phải nhập end_time\n     * - Nếu không nhập cả start_time và end_time thì sẽ là thống kê của tuần hiện tại\n     * ",
+                "operationId": "eventStatistics",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "start_time": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2023-11-23 11:20:22"
+                                    },
+                                    "end_time": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2023-11-23 11:20:22"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Dữ liệ trả về thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tạo mới bản ghi thành công"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "metadata": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Event Name"
+                                                    },
+                                                    "location": {
+                                                        "type": "string",
+                                                        "example": "Ha Noi"
+                                                    },
+                                                    "contact": {
+                                                        "type": "string",
+                                                        "example": "0986567467"
+                                                    },
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "start_time": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-23 11:20:22"
+                                                    },
+                                                    "end_time": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-23 11:20:22"
+                                                    },
+                                                    "attendances_count": {
+                                                        "type": "integer",
+                                                        "example": 0
+                                                    },
+                                                    "feedback": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer",
+                                                                    "example": "1"
+                                                                },
+                                                                "content": {
+                                                                    "type": "string",
+                                                                    "example": "Phucla DepZai"
+                                                                },
+                                                                "user_id": {
+                                                                    "type": "integer",
+                                                                    "example": "1"
+                                                                },
+                                                                "event_id": {
+                                                                    "type": "integer",
+                                                                    "example": "2"
+                                                                },
+                                                                "created_at": {
+                                                                    "type": "string",
+                                                                    "format": "date-time",
+                                                                    "example": "2023-11-28 17:02:29"
+                                                                },
+                                                                "updated_at": {
+                                                                    "type": "string",
+                                                                    "format": "date-time",
+                                                                    "example": "2023-11-28 17:02:29"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "attendances": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "interger",
+                                                                    "example": 1
+                                                                },
+                                                                "user_id": {
+                                                                    "type": "integer",
+                                                                    "example": 1
+                                                                },
+                                                                "event_id": {
+                                                                    "type": "integer",
+                                                                    "example": 2
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Sai validate",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sai validate"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 422
                                         }
                                     },
                                     "type": "object"
@@ -3688,7 +3889,8 @@
                 "tags": [
                     "Participants"
                 ],
-                "summary": "Get all participants records",
+                "summary": "Lấy tất cả bản ghi",
+                "description": "\n     *      - Endpoint trả về thôn tin của tất cả người dùng.\n     *      - Role được sử dụng là role quản lí ",
                 "operationId": "21e1cd188747fc59953037ea2feb3072",
                 "responses": {
                     "200": {
@@ -3797,8 +3999,8 @@
                 "tags": [
                     "Participants"
                 ],
-                "summary": "Store a new participants record",
-                "description": "Store a new participants record with the provided data.",
+                "summary": "Thêm mới người dùng với dữ liệu được cung cấp",
+                "description": "\n     * -Endpoint trả về người dùng vừa được thêm\n     * -Role người thêm phải lớn hơn hoặc bằng người được thêm\n     * -Role là sinh viên thì không có quyền thêm\n     * \n     * ",
                 "operationId": "storeParticipants",
                 "requestBody": {
                     "required": true,
@@ -3921,8 +4123,8 @@
                 "tags": [
                     "Participants"
                 ],
-                "summary": "Get user information by email and phone",
-                "description": "Tìm kiếm người dùng theo email và số điện thoại",
+                "summary": "Tìm kiếm người dùng theo email hoặc số điện thoại",
+                "description": "\n * -Tìm kiếm theo post\n * -Request là email và phone\n * -email là email của người cần tìm, không cần nhập quá giống\n * -phone là số diện thoại của người cần tìm, không cần nhập quá giống\n * -Ta sẽ tìm kiếm theo SDT hoặc Email\n * -Role là tất cả các role\n * ",
                 "operationId": "getUserByEmailAndPhone",
                 "requestBody": {
                     "required": true,
@@ -4050,8 +4252,8 @@
                 "tags": [
                     "Participants"
                 ],
-                "summary": "Get participants by ID",
-                "description": "Lấy dữ liệu người dùng theo id cho trước",
+                "summary": "Lấy dữ liệu người dùng theo id cho trước",
+                "description": "\n * -Endpoint trả về một người dùng theo id cho trước\n * id là id của người dùng",
                 "operationId": "getParticipantsById",
                 "parameters": [
                     {
@@ -4164,8 +4366,8 @@
                 "tags": [
                     "Participants"
                 ],
-                "summary": "Update Participants",
-                "description": "Sửa dữ liệu bản ghi theo id cho trước",
+                "summary": "Sửa dữ liệu bản ghi theo id cho trước",
+                "description": "\n     * -Sửa người dùng cho theo id cho trước\n     * -Endpoint trả về người mới được sửa đổi\n     * -Người sửa role không được lớn hơn người được sửa\n     * - Role sinh viên không được sửa bất kì cái gì",
                 "operationId": "updateParticipants",
                 "parameters": [
                     {
@@ -4306,7 +4508,8 @@
                 "tags": [
                     "Participants"
                 ],
-                "summary": "Delete an participants record",
+                "summary": "Xóa 1 bản ghi người dùng",
+                "description": "\n     * - id là id của người dùng\n     * - Role xóa chỉ có thể là quản lí\n     * ",
                 "operationId": "ec6365c5f315ce8381da73eafdc5ccb3",
                 "parameters": [
                     {
@@ -4400,7 +4603,8 @@
                 "tags": [
                     "Resource"
                 ],
-                "summary": "Get all resource records",
+                "summary": "Lấy tất cả bản ghi",
+                "description": "\n     *      - Endpoint trả về hình ảnh của tất cả sự kiện.\n     *      - Role được sử dụng là tất cả các role ",
                 "operationId": "e343d47f6700e1b43b8f853c0dbc0f88",
                 "responses": {
                     "200": {
@@ -4501,8 +4705,8 @@
                 "tags": [
                     "Resource"
                 ],
-                "summary": "Store a new resources record",
-                "description": "Lưu trữ một bản ghi tài nguyên mới với dữ liệu được cung cấp.",
+                "summary": "Lưu trữ một bản ghi tài nguyên mới với dữ liệu được cung cấp.",
+                "description": "\n     * -Dữ liệu được thêm vào là post\n     * -name là tên ảnh\n     * -url là file ảnh, sẽ được lưu trong CSDL là thời gian hienj tại, để tránh bị trùng lạp\n     * event_id là id của sự kiện\n     * -Role được sử dụng là tất cả các role",
                 "operationId": "storeResource",
                 "requestBody": {
                     "required": true,
@@ -4609,8 +4813,8 @@
                 "tags": [
                     "Resource"
                 ],
-                "summary": "Get resources by ID",
-                "description": "Lấy model resource theo ID",
+                "summary": "Lấy model resource theo ID",
+                "description": "\n     * -Lấy một bản ghi hình ảnh theo id cho trước\n     * - Endpoint trả về hình ảnh của tất cả sự kiện.\n     * -name là tên ảnh\n     * -url là url của ảnh đó\n     * event_id là id của event ",
                 "operationId": "getResourceById",
                 "parameters": [
                     {
@@ -4715,8 +4919,8 @@
                 "tags": [
                     "Resource"
                 ],
-                "summary": "Update Resource",
-                "description": "Update a specific resources.",
+                "summary": "Sửa dữ liệu bản ghi hình ảnh",
+                "description": "\n     * -Endpoint trả về hình ảnh mà mình đã sửa\n     * -Role được sử dụng là role nhân viên và quản lí\n     * -Ảnh mới sẽ được thêm vào đồng thời xóa đi ảnh cũ",
                 "operationId": "updateResource",
                 "parameters": [
                     {
@@ -4842,6 +5046,7 @@
                     "Resource"
                 ],
                 "summary": "Delete an resource record",
+                "description": "\n     * -Xóa đi một ảnh theo một id cho trước\n     * -Ảnh sẽ xóa trong SQL, đồng thời xóa trong thư mục Backend\n     * -Role được sử dụng là tất cả các role\n     * ",
                 "operationId": "b5f4211417a955e75fcc743d170fcab5",
                 "parameters": [
                     {
@@ -4935,8 +5140,8 @@
                 "tags": [
                     "Resource"
                 ],
-                "summary": "Get resources by Event ID",
-                "description": "Nhận tài nguyên cụ thể bằng ID sự kiện.",
+                "summary": "Nhận tài nguyên cụ thể bằng ID sự kiện.",
+                "description": "\n     * - Endpoint trả về tất cả ảnh của một sự kiện\n     * -event_id là id của sự kiện\n     * -Role được sử dụng là tất cả các role\n     * ",
                 "operationId": "getResourceByEventId",
                 "parameters": [
                     {
