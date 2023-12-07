@@ -20,4 +20,8 @@ class event extends Model
     {
         return $this->hasMany(atendance::class);
     }
+    public function feedback()
+    {
+        return $this->hasMany(feedback::class);
+    }
 }

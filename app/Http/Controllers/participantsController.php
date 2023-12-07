@@ -16,8 +16,11 @@ class participantsController extends Controller
     /**
      * @OA\Get(
      *     path="/api/participants",
-     *     summary="Get all participants records",
+     *     summary="Lấy tất cả bản ghi",
      *     tags={"Participants"},
+     *  description="
+     *      - Endpoint trả về thôn tin của tất cả người dùng.
+     *      - Role được sử dụng là role quản lí ",
      *     @OA\Response(
      *         response=200,
      *         description="Dữ liệu trả về thành công",
@@ -65,6 +68,13 @@ class participantsController extends Controller
     public function index()
     {
         try {
+            if(auth()->user()->role != 2){
+                return response([
+                    "status" => "error",
+                    "message" => "Role người dùng không hợp lệ",
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
             $users = User::all();
             return response()->json([
                 'metadata' => $users,
@@ -87,9 +97,16 @@ class participantsController extends Controller
 /**
  * @OA\Post(
  *     path="/api/searchUser",
- *     summary="Get user information by email and phone",
+ *     summary="Tìm kiếm người dùng theo email hoặc số điện thoại",
  *     tags={"Participants"},
- *     description="Tìm kiếm người dùng theo email và số điện thoại",
+ *     description="
+ * -Tìm kiếm theo post
+ * -Request là email và phone
+ * -email là email của người cần tìm, không cần nhập quá giống
+ * -phone là số diện thoại của người cần tìm, không cần nhập quá giống
+ * -Ta sẽ tìm kiếm theo SDT hoặc Email
+ * -Role là tất cả các role
+ * ",
  *     operationId="getUserByEmailAndPhone",
  *     @OA\RequestBody(
  *         required=true,
@@ -187,8 +204,13 @@ class participantsController extends Controller
      * @OA\Post(
      *     path="/api/participants",
      *     tags={"Participants"},
-     *     summary="Store a new participants record",
-     *     description="Store a new participants record with the provided data.",
+     *     summary="Thêm mới người dùng với dữ liệu được cung cấp",
+     *     description="
+     * -Endpoint trả về người dùng vừa được thêm
+     * -Role người thêm phải lớn hơn hoặc bằng người được thêm
+     * -Role là sinh viên thì không có quyền thêm
+     * 
+     * ",
      *     operationId="storeParticipants",
      *     @OA\RequestBody(
      *         required=true,
@@ -236,6 +258,8 @@ class participantsController extends Controller
     public function store(Request $request)
     {
         try {
+            $logUser = auth()->user()->role;
+            $userAdd = $request->role;
             $validator = Validator::make($request->all(), [
                 'name' => [
                     'required'
@@ -253,7 +277,7 @@ class participantsController extends Controller
                 ],
                 'role' =>[
                     'required',
-                    Rule::in([0, 1])
+                    Rule::in([0,1,2])
                 ]
             ], [
                 'name.required' => 'Không để trống name của người dùng',
@@ -262,13 +286,21 @@ class participantsController extends Controller
                 'phone.required'=> 'Số điện thoại không được để trống',
                 'phone.regex'=> 'Số điện thoại không đúng định dạng',
                 'role.required' => 'Role không được để trống',
-                'role.in' => 'Role phải là 0 hoặc 1'
+                'role.in' => 'Role phải là 0 hoặc 1 hoặc 2'
             ]);
 
             if($validator->fails()){
                 return response([
                     "status" => "error",
                     "message" => $validator->errors(),
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+            if($logUser < $userAdd || $logUser == 0){
+                //Nếu role thấp hơn hoặc role là sinh viên thì loại
+                return response([
+                    "status" => "error",
+                    "message" => "Sai role ,Role không được là sinh viên, và người add phải có role lớn hơn người được add",
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
@@ -299,8 +331,10 @@ class participantsController extends Controller
  *      path="/api/participants/{id}",
  *      operationId="getParticipantsById",
  *      tags={"Participants"},
- *      summary="Get participants by ID",
- *      description="Lấy dữ liệu người dùng theo id cho trước",
+ *      summary="Lấy dữ liệu người dùng theo id cho trước",
+ *      description="
+ * -Endpoint trả về một người dùng theo id cho trước
+ * id là id của người dùng",
  *      @OA\Parameter(
  *          name="id",
  *          description="Participant ID",
@@ -369,8 +403,12 @@ class participantsController extends Controller
      *      path="/api/participants/{id}",
      *      operationId="updateParticipants",
      *      tags={"Participants"},
-     *      summary="Update Participants",
-     *      description="Sửa dữ liệu bản ghi theo id cho trước",
+     *      summary="Sửa dữ liệu bản ghi theo id cho trước",
+     *      description="
+     * -Sửa người dùng cho theo id cho trước
+     * -Endpoint trả về người mới được sửa đổi
+     * -Người sửa role không được lớn hơn người được sửa
+     * - Role sinh viên không được sửa bất kì cái gì",
      *      @OA\Parameter(
      *          name="id",
      *          description="Mẫu người dùng",
@@ -485,7 +523,7 @@ class participantsController extends Controller
             if($roleUpdate == 2){
                 return response([
                     "status" => "error",
-                    "message" => "Employees cannot edit manager information",
+                    "message" => "Nhân viên không thể sửa đổi thông tin quản lí",
                     "statusCode" => Response::HTTP_CONFLICT
                 ], Response::HTTP_CONFLICT);
             }else{
@@ -496,7 +534,7 @@ class participantsController extends Controller
             //Trường hợp còn lại là sinh viên thì không cho chỉnh sửa bất cứ cải gì
             return response([
                 "status" => "error",
-                "message" => "Students cannot edit anything",
+                "message" => "Sinh viên không thể sửa đổi cái gì",
                 "statusCode" => Response::HTTP_CONFLICT
             ], Response::HTTP_CONFLICT);
         }
@@ -514,7 +552,11 @@ class participantsController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/participants/{id}",
-     *     summary="Delete an participants record",
+     *     summary="Xóa 1 bản ghi người dùng",
+     * description="
+     * - id là id của người dùng
+     * - Role xóa chỉ có thể là quản lí
+     * ",
      *     tags={"Participants"},
      *     @OA\Parameter(
      *         name="participants",
@@ -564,6 +606,13 @@ class participantsController extends Controller
                     'status' => 'error',
                     'statusCode' => Response::HTTP_NOT_FOUND
                 ], Response::HTTP_NOT_FOUND);
+            }
+            if(auth()->user()->role != 2){
+                return response()->json([
+                    'message' => 'Không thể xóa bản ghi do role không phải quản lí',
+                    'status' => 'error',
+                    'statusCode' => Response::HTTP_CONFLICT
+                ], Response::HTTP_CONFLICT);
             }
             $user->delete();
             return response()->json([
