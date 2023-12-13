@@ -57,7 +57,7 @@ class UserAuthController extends Controller
     {
         $validator   = Validator::make($request->all(), [
             'name' => 'required|max:255',
-            'email' => 'required|exists:users,email',
+            'email' => 'required',
             'password' => 'required',
             'phone' => 'required',
             'role' => ['required',
@@ -66,14 +66,12 @@ class UserAuthController extends Controller
             'name.required' => 'tên không thể để trống',
             'name.max' => 'Tối đa 255 ký tự được phép',
             'email.required' => 'email không thể để trống',
-            'email.exists' => 'Email đã tồn tại',
             'password.required' => 'mật khẩu không thể để trống',
             'phone.required' => 'số điện thoại không thể để trống',
             'role.required' => 'vai trò không thể để trống',
             'role.in' => 'Role phải là Nhân viên hoặc sinh viên'
         ]);
         if($validator->fails()){
-
             return response([
                 "status" => "error",
                 "message" => $validator->errors(),
