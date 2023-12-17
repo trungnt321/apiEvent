@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->date('date');
             $table->string('location');
             $table->string('contact');
-            $table->tinyInteger('status');
+            $table->tinyInteger('status')->default(1);
             $table->tinyInteger('user_id');
+            $table->string('banner');
             $table->dateTime('start_time');
             $table->dateTime('end_time');
             $table->timestamps();
