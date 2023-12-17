@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\atendanceController;
+use App\Http\Controllers\chatController;
 use App\Http\Controllers\eventController;
 use App\Http\Controllers\notificationController;
 use App\Http\Controllers\participantsController;
@@ -64,6 +65,9 @@ Route::apiResource('resource',resourceController::class)->middleware('auth:api')
 Route::post('searchUser',[participantsController::class,'getUserByEmailAndPhone'])->middleware('auth:api');
 Route::post('searchEvent',[eventController::class,'searchEvent'])->middleware('auth:api');
 
+//Real Time
+Route::get('/websocket/token', [chatController::class, 'authenticate']);
+Route::get('/websocket/event', [chatController::class, 'chatRealTimeAction']);
 
 //Event statistics
 Route::post('eventStatistics',[eventController::class,'eventStatistics'])->middleware('auth:api');

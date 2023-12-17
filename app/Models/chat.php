@@ -9,4 +9,9 @@ class chat extends Model
 {
     use HasFactory;
     protected $fillable = ['content','sender_id','event_id'];
+
+    public function BelongUser()
+    {
+        return $this->belongsTo(User::class,'sender_id');
+    }
 }

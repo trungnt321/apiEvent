@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
 
 class eventController extends Controller
 {
@@ -39,8 +40,10 @@ class eventController extends Controller
      *                       @OA\Property(property="location", type="string", example="Ha Noi"),
      *                       @OA\Property(property="contact", type="string", example="0986567467"),
      *                       @OA\Property(property="user_id", type="integer", example=2),
+     *                       @OA\Property(property="banner", type="string", example="anhsukien.jpg"),
      *                       @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                       @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     * @OA\Property(property="attendances_count", type="interger", example=3),
      *                  )
      *              )
      *         )
@@ -70,9 +73,14 @@ class eventController extends Controller
     public function index()
     {
         try {
-            $event = event::all();
+            $event = event::withCount('attendances')->get();
+            $returnData = $event->map(function ($event) {
+                $imageUrl = asset("Upload/{$event->banner}");
+                $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
+                return $event;
+            });
             return response()->json([
-                'metadata' => $event,
+                'metadata' => $returnData,
                 'message' => 'Get All Records Successfully',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
@@ -103,7 +111,12 @@ class eventController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="name", type="string", example="Event Name")
+     *             @OA\Property(property="name", type="string", example="Event Name"),
+     *                       @OA\Property(property="location", type="string", example="Ha Noi"),
+     *                       @OA\Property(property="contact", type="string", example="0986567467"),
+     *                       @OA\Property(property="user_id", type="integer", example=2),
+     *                       @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                       @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *         )
      *     ),
      *     @OA\Response(
@@ -121,8 +134,10 @@ class eventController extends Controller
      *                       @OA\Property(property="location", type="string", example="Ha Noi"),
      *                       @OA\Property(property="contact", type="string", example="0986567467"),
      *                       @OA\Property(property="user_id", type="integer", example=2),
+     * @OA\Property(property="banner", type="string", example="anh1.jpg"),
      *                       @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                       @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                       @OA\Property(property="attendances_count", type="interger", example=3),
      *             )
      *         )
      *     ),
@@ -154,9 +169,14 @@ class eventController extends Controller
             if ($request->name == "" || $request->name == null) {
                 $request->name == "";
             }
-            $events = DB::table('events')->where('name', 'like', "%{$request->name}%")->get();
+            $event = event::where('name', 'like', "%{$request->name}%")->withCount('attendances')->get();
+            $returnData = $event->map(function ($event) {
+                $imageUrl = asset("Upload/{$event->banner}");
+                $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
+                return $event;
+            });
             return response()->json([
-                'metadata' => $events,
+                'metadata' => $returnData,
                 'message' => 'Lấy các bản ghi thành công',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
@@ -185,6 +205,7 @@ class eventController extends Controller
      * -name là tên sự kiện 
      * -location là nơi tổ chức sự kiện 
      * -contact là liên lạc bằng số điện thoại
+     * -banner là ảnh của sự kiện
      * -user_id là id của user tổ chức sự kiện này
      * -start_time là thời gian bắt đầu sự kiện
      * -end_time là thời gian kết thúc sự kiện
@@ -197,6 +218,7 @@ class eventController extends Controller
      *             @OA\Property(property="location", type="string", example="Hai Phong"),
      *             @OA\Property(property="contact", type="string", example="0983467584"),
      *             @OA\Property(property="user_id", type="integer", example=2),
+     *             @OA\Property(property="banner", type="string", example="anhsukien.jpg"),
      *             @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *             @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *         )
@@ -214,8 +236,10 @@ class eventController extends Controller
      *                           @OA\Property(property="location", type="string", example="Ha Noi"),
      *                           @OA\Property(property="contact", type="string", example="0986567467"),
      *                           @OA\Property(property="user_id", type="integer", example=2),
+     *                           @OA\Property(property="banner", type="string", example="anhsukien.jpg"),
      *                           @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                           @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                           @OA\Property(property="attendances_count", type="interger", example=3),
      *                  )
      *             )
      *         )
@@ -256,6 +280,7 @@ class eventController extends Controller
                     $query->whereIn('role', [1, 2]);
                 })
             ],
+            'banner'=>'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'start_time' => ['required'],
             'end_time' => ['required', 'after:start_time']
         ], [
@@ -264,6 +289,7 @@ class eventController extends Controller
             'contact.required' => 'Không được để trống phần liên lạc',
             'contact.regex' => 'Định dạng số điện thoại được nhập không đúng',
             'user_id.required' => 'User Id không được để trống',
+            'banner.required' =>'Ảnh sự kiện bắt buộc phải có',
             'start_time.required' => 'Ngày khởi đầu của event không được để trống',
             'end_time.required' => 'Ngày kết thúc của event không được để trống',
             'end_time.after' => 'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu'
@@ -279,9 +305,14 @@ class eventController extends Controller
         if ($logUserRole == 1 || $logUserRole == 2) {
             //Only staff and admin can make event
             try {
-                $event = event::create($request->all());
+                $imageName = time().'.'.$request->banner->extension();  
+                $request->banner->move(public_path('Upload'), $imageName);
+                $resourceData = $request->all();
+                $resourceData['banner'] = $imageName;
+                $event = event::create($resourceData);
+                $returnData = event::withCount('attendances')->findOrFail($event->id);
                 return response()->json([
-                    'metadata' => $event,
+                    'metadata' => $returnData,
                     'message' => 'Create Record Successfully',
                     'status' => 'success',
                     'statusCode' => Response::HTTP_OK
@@ -335,8 +366,10 @@ class eventController extends Controller
      *                           @OA\Property(property="location", type="string", example="Ha Noi"),
      *                           @OA\Property(property="contact", type="string", example="0986567467"),
      *                           @OA\Property(property="user_id", type="integer", example=2),
+     *                           @OA\Property(property="banner", type="string", example="anh.jpg"),
      *                           @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                           @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                           @OA\Property(property="attendances_count", type="interger", example=3),
      *             )
      *         )
      *     ),
@@ -365,7 +398,8 @@ class eventController extends Controller
     public function show($id)
     {
         try {
-            $event = event::findOrFail($id);
+            $event = event::withCount('attendances')->findOrFail($id);
+            $event->banner = url("Upload/{$event->banner}");
             return response()->json([
                 'metadata' => $event,
                 'message' => 'Get One Record Successfully',
@@ -423,6 +457,7 @@ class eventController extends Controller
      *                           @OA\Property(property="location", type="string", example="Ha Noi"),
      *                           @OA\Property(property="contact", type="string", example="0986567467"),
      *                           @OA\Property(property="user_id", type="integer", example=2),
+     * @OA\Property(property="banner", type="string", example="anh1.jpg"),
      *                           @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                           @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                           @OA\Property(property="attendances_count", type="integer", example=0),
@@ -482,18 +517,28 @@ class eventController extends Controller
             // Lấy thông tin về tuần và năm
             $weekNumber = $today->weekOfYear;
             $year = $today->year;
-            $dayOfWeekNumber = $today->dayOfWeek;
+            $dayOfWeekNumber = $today->dayOfWeek==0?7:$today->dayOfWeek;
 
             //Lấy ngày đầu tiên, cuối cùng của tuần đó
             $firstDayOfWeekNumber = $today->copy()->addDays(-$dayOfWeekNumber+1);
-            $lastDayOfWeekNumber = $today->copy()->addDays($dayOfWeekNumber+1);
+            $lastDayOfWeekNumber = $today->copy()->addDays(7-$dayOfWeekNumber);
             $eventInWeek = event::where('end_time','>=',$firstDayOfWeekNumber)
                                                 ->where('start_time','<=',$lastDayOfWeekNumber)
                                                 ->with('feedback')
                                                 ->withCount('attendances')
                                                 ->with('attendances')
                                                 ->get();
-            return $eventInWeek;
+            $eventInWeek->map(function ($event) {
+                $imageUrl = asset("Upload/{$event->banner}");
+                $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
+                return $event;
+            });                                    
+            return response()->json([
+                'metadata' => $eventInWeek,
+                'message' => 'Get One Record Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ], Response::HTTP_OK);
         }
         $validator = Validator::make($request->all(),[
             'start_time'=>'required',
@@ -515,8 +560,17 @@ class eventController extends Controller
         ->with('feedback')
         ->withCount('attendances')
         ->with('attendances')
-        ->get();
-        return $eventInStatistic;
+        ->get()->map(function ($event) {
+            $imageUrl = asset("Upload/{$event->banner}");
+            $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
+            return $event;
+        });      
+        return response()->json([
+            'metadata' => $eventInStatistic,
+            'message' => 'Get One Record Successfully',
+            'status' => 'success',
+            'statusCode' => Response::HTTP_OK
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -550,6 +604,7 @@ class eventController extends Controller
      *             @OA\Property(property="location", type="string", example="Hai Phong"),
      *             @OA\Property(property="contact", type="string", example="0983118678"),
      *             @OA\Property(property="status", type="integer", example=0),
+     * @OA\Property(property="banner", type="string", example="anh1.jpg"),
      *             @OA\Property(property="user_id", type="integer", example=2),
      *             @OA\Property(property="start_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
      *             @OA\Property(property="end_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
@@ -568,8 +623,10 @@ class eventController extends Controller
      *                 @OA\Property(property="contact", type="string", example="0983118678"),
      *                 @OA\Property(property="status", type="integer", example=0),
      *                 @OA\Property(property="user_id", type="integer", example=2),
+     * @OA\Property(property="banner", type="string", example="anh.jpg"),
      *                 @OA\Property(property="start_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
      *                 @OA\Property(property="end_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
+     * @OA\Property(property="attendances_count", type="integer", example=3),
      *             )
      *         )
      *     ),
@@ -615,6 +672,7 @@ class eventController extends Controller
                     $query->whereIn('role', [1, 2]);
                 })
             ],
+            'banner'=>'required',
             'start_time' => ['required'],
             'end_time' => ['required', 'after:start_time']
         ], [
@@ -626,6 +684,7 @@ class eventController extends Controller
             'user_id.required' => 'User Id không được để trống',
             'start_time.required' => 'Ngày khởi đầu của event không được để trống',
             'end_time.required' => 'Ngày kết thúc của event không được để trống',
+            'banner.required' => 'Không được để trống ảnh',
             'end_time.after' => 'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu'
         ]);
         if ($validate->fails()) {
@@ -641,7 +700,19 @@ class eventController extends Controller
             //Check role
             $event = event::findOrFail($id);
             try {
-                $event->update($request->all());
+                //Xóa ảnh
+                $imagePath = public_path('Upload/'.$event->banner);
+                File::delete($imagePath);
+
+                //Thêm ảnh mới 
+                $imageName = time().'.'.$request->banner->extension();  
+                $request->banner->move(public_path('Upload'), $imageName);
+
+                $resourceData = $request->all();
+                $resourceData['banner'] = $imageName;
+                $event->update($resourceData);
+                $event->event = url("Upload/{$event->banner}");
+
                 return response()->json([
                     'metadata' => $event,
                     'message' => 'Update One Record Successfully',
@@ -688,7 +759,20 @@ class eventController extends Controller
      *             type="object",
      *             @OA\Property(property="status", type="string", example="success"),
      *             @OA\Property(property="message", type="string", example="Xóa một bản ghi thành công"),
-     *             @OA\Property(property="statusCode", type="integer", example=200)
+     *             @OA\Property(property="statusCode", type="integer", example=200),
+     * @OA\Property(property="metadata",type="array",
+     *                  @OA\Items(
+     *                      type="object",
+     *                       @OA\Property(property="name", type="string", example="Event Name"),
+     *                       @OA\Property(property="location", type="string", example="Ha Noi"),
+     *                       @OA\Property(property="contact", type="string", example="0986567467"),
+     *                       @OA\Property(property="user_id", type="integer", example=2),
+     *                       @OA\Property(property="banner", type="string", example="anhsukien.jpg"),
+     *                       @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                       @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     * @OA\Property(property="attendances_count", type="interger", example=3),
+     *                  )
+     *              )
      *         )
      *     ),
      *     @OA\Response(
@@ -732,6 +816,10 @@ class eventController extends Controller
                     'statusCode' => Response::HTTP_CONFLICT
                 ], Response::HTTP_CONFLICT);
             }
+            //Xóa ảnh
+            $imagePath = public_path('Upload/'.$event->banner);
+            File::delete($imagePath);
+
             $event->delete();
             $restOfEvents = event::all();
             return response()->json([
