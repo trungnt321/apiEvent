@@ -78,7 +78,19 @@ class atendanceController extends Controller
     public function index(Request $request)
     {
         try {
+            $validator = Validator::make($request->all(),[
+                'id_user'=>'required'
 
+            ],[
+                'id_user.required' => 'id người truy vấn không được để trống',
+            ]);
+            if($validator->fails()){
+                return response([
+                    "status" => "error",
+                    "message" => $validator->errors(),
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
             $user = User::find($request->id_user);
             if($user->role == 0){
                 return response([

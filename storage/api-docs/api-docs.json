@@ -1200,7 +1200,7 @@
                     "Event"
                 ],
                 "summary": "Lấy tất cả các sự kiện",
-                "description": "\n     *      - Endpoint trả về thông tin của tất cả các sự kiện\n     *      - Role được sử dụng là role của tất cả \n     *      - Trả về thông tin của tất cả các sự kiện đã diễn ra\n     * ",
+                "description": "\n     *      - Endpoint trả về thông tin của tất cả các sự kiện\n     *      - Role được sử dụng là role của tất cả\n     *      - Trả về thông tin của tất cả các sự kiện đã diễn ra\n     * ",
                 "operationId": "1713890b60b4f32dcbc6113136f80b49",
                 "responses": {
                     "200": {
@@ -1324,7 +1324,7 @@
                     "Event"
                 ],
                 "summary": "Thêm mới bản ghi với dữ liệu được cung cấp",
-                "description": "\n     * - Endpoint trả về bản ghi mới được thêm vào \n     * -Role đước sử dụng là nhân viên, quản lí\n     * -name là tên sự kiện \n     * -location là nơi tổ chức sự kiện \n     * -contact là liên lạc bằng số điện thoại\n     * -banner là ảnh của sự kiện\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * ",
+                "description": "\n     * - Endpoint trả về bản ghi mới được thêm vào\n     * -Role đước sử dụng là nhân viên, quản lí\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -banner là ảnh của sự kiện\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * ",
                 "operationId": "storeEvent",
                 "requestBody": {
                     "required": true,
@@ -1424,6 +1424,202 @@
                                                     "attendances_count": {
                                                         "type": "interger",
                                                         "example": 3
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Sai validate",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sai validate"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 422
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi hệ thống",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lỗi hệ thống"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/event/notification": {
+            "post": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "lấy ra sự kiện sắp diễn ra  trước 24h ",
+                "description": "\n     * - Endpoint trả về các bản ghi sự kiện diễn ra trước 24h\n     * -Role được sử dụng quản lí, nhân viên\n     * -id_user_get là id của người thực hiện lấy thông báo\n     * - user trả về là thông tin của người tạo sự kiện\n     * ",
+                "operationId": "notificationEvent24h",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id_user_get": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Dữ liệu trả về thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lấy các sự kiện sắp diễn ra thành công"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "metadata": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Event Name"
+                                                    },
+                                                    "location": {
+                                                        "type": "string",
+                                                        "example": "Ha Noi"
+                                                    },
+                                                    "contact": {
+                                                        "type": "string",
+                                                        "example": "0986567467"
+                                                    },
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "banner": {
+                                                        "type": "string",
+                                                        "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
+                                                    },
+                                                    "start_time": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-23 11:20:22"
+                                                    },
+                                                    "end_time": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-23 11:20:22"
+                                                    },
+                                                    "user": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer",
+                                                                    "example": "1"
+                                                                },
+                                                                "name": {
+                                                                    "type": "string",
+                                                                    "example": "Mr. Stewart Boehm"
+                                                                },
+                                                                "email": {
+                                                                    "type": "integer",
+                                                                    "example": "upton.tessie@example.com"
+                                                                },
+                                                                "phone": {
+                                                                    "type": "integer",
+                                                                    "example": "2023-12-20T04:57:16.000000Z"
+                                                                },
+                                                                "role": {
+                                                                    "type": "integer",
+                                                                    "example": "205.840.6294"
+                                                                },
+                                                                "created_at": {
+                                                                    "type": "string",
+                                                                    "format": "date-time",
+                                                                    "example": "2023-11-28 17:02:29"
+                                                                },
+                                                                "updated_at": {
+                                                                    "type": "string",
+                                                                    "format": "date-time",
+                                                                    "example": "2023-11-28 17:02:29"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "attendances": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "interger",
+                                                                    "example": 1
+                                                                },
+                                                                "user_id": {
+                                                                    "type": "integer",
+                                                                    "example": 1
+                                                                },
+                                                                "event_id": {
+                                                                    "type": "integer",
+                                                                    "example": 2
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
                                                     }
                                                 },
                                                 "type": "object"
@@ -1781,7 +1977,7 @@
                     "Event"
                 ],
                 "summary": "Sửa dữ liệu của một sự kiện ",
-                "description": "\n     * -Endpoint trả về dữ liệu bản ghi mới được sửa đổi\n     * -Role quy định là role nhân viên, quản lí\n     * -name là tên sự kiện \n     * -location là nơi tổ chức sự kiện \n     * -contact là liên lạc bằng số điện thoại\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * ",
+                "description": "\n     * -Endpoint trả về dữ liệu bản ghi mới được sửa đổi\n     * -Role quy định là role nhân viên, quản lí\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * ",
                 "operationId": "updateEvent",
                 "parameters": [
                     {
@@ -1959,7 +2155,7 @@
                     "Event"
                 ],
                 "summary": "Xóa một bản ghi",
-                "description": "\n     *          - Endpoint này sẽ xóa 1 sự kiện \n     *          - Role được sử dụng là role Quản lí\n     *          - Xóa thành công sẽ trả lại data là của các sự kiện còn lại\n     *          - id là id của event cần xóa\n     *          ",
+                "description": "\n     *          - Endpoint này sẽ xóa 1 sự kiện\n     *          - Role được sử dụng là role Quản lí\n     *          - Xóa thành công sẽ trả lại data là của các sự kiện còn lại\n     *          - id là id của event cần xóa\n     *          ",
                 "operationId": "fcf20ee4d1deab33b151a91c0299ef50",
                 "parameters": [
                     {
@@ -2096,7 +2292,7 @@
                     "Event"
                 ],
                 "summary": "Thống kê sự kiện ",
-                "description": "\n     * - Endpoint trả về các bản ghi sự kiện\n     * -Role đước sử dụng quản lí, nhân viên\n     * -name là tên sự kiện \n     * -location là nơi tổ chức sự kiện \n     * -contact là liên lạc bằng số điện thoại\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * -attendances_count là số sinh viên tham gia\n     *  - attendances là thông tin của các sinh viên tham gia\n     *  - feedback là thông tin của các feedback của sinh viên\n     * - start_time có thể rỗng \n     * - end_time có thể rỗng\n     * - Nhưng nếu nhập start_time thì bắt buộc phải nhập end_time\n     * - Nếu không nhập cả start_time và end_time thì sẽ là thống kê của tuần hiện tại\n     * ",
+                "description": "\n     * - Endpoint trả về các bản ghi sự kiện\n     * -Role đước sử dụng quản lí, nhân viên\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * -attendances_count là số sinh viên tham gia\n     *  - attendances là thông tin của các sinh viên tham gia\n     *  - feedback là thông tin của các feedback của sinh viên\n     * - start_time có thể rỗng\n     * - end_time có thể rỗng\n     * - Nhưng nếu nhập start_time thì bắt buộc phải nhập end_time\n     * - Nếu không nhập cả start_time và end_time thì sẽ là thống kê của tuần hiện tại\n     * ",
                 "operationId": "eventStatistics",
                 "requestBody": {
                     "required": true,

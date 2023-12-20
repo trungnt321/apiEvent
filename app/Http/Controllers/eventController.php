@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\event;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -22,7 +23,7 @@ class eventController extends Controller
      *     tags={"Event"},
      *      description="
      *      - Endpoint trả về thông tin của tất cả các sự kiện
-     *      - Role được sử dụng là role của tất cả 
+     *      - Role được sử dụng là role của tất cả
      *      - Trả về thông tin của tất cả các sự kiện đã diễn ra
      * ",
      *     @OA\Response(
@@ -81,6 +82,133 @@ class eventController extends Controller
             });
             return response()->json([
                 'metadata' => $returnData,
+                'message' => 'Get All Records Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'status' => 'error',
+                'statusCode' => $e instanceof HttpException
+                    ? $e->getStatusCode()
+                    : Response::HTTP_INTERNAL_SERVER_ERROR
+            ],  $e instanceof HttpException
+                ? $e->getStatusCode()
+                : Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/event/notification",
+     *     tags={"Event"},
+     *     summary="lấy ra sự kiện sắp diễn ra  trước 24h ",
+     *     description="
+     * - Endpoint trả về các bản ghi sự kiện diễn ra trước 24h
+     * -Role được sử dụng quản lí, nhân viên
+     * -id_user_get là id của người thực hiện lấy thông báo
+     * - user trả về là thông tin của người tạo sự kiện
+     * ",
+     *     operationId="notificationEvent24h",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id_user_get", type="integer", example="1"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Dữ liệu trả về thành công",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Lấy các sự kiện sắp diễn ra thành công"),
+     *             @OA\Property(property="statusCode", type="int", example=200),
+     *             @OA\Property(property="metadata", type="array",
+     *                  @OA\Items(type="object",
+     *                           @OA\Property(property="name", type="string", example="Event Name"),
+     *                           @OA\Property(property="location", type="string", example="Ha Noi"),
+     *                           @OA\Property(property="contact", type="string", example="0986567467"),
+     *                           @OA\Property(property="user_id", type="integer", example=2),
+     * @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
+     *                           @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                           @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                           @OA\Property(property="user", type="array", @OA\Items(
+     *                              type="object",
+     *                      @OA\Property(property="id", type="integer", example="1"),
+     *                     @OA\Property(property="name", type="string", example="Mr. Stewart Boehm"),
+     *                     @OA\Property(property="email", type="integer", example="upton.tessie@example.com"),
+     *                     @OA\Property(property="phone", type="integer", example="2023-12-20T04:57:16.000000Z"),
+     *                     @OA\Property(property="role", type="integer", example="205.840.6294"),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-11-28 17:02:29"),
+     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-11-28 17:02:29"),
+     *                          )),
+     *                         @OA\Property(property="attendances", type="array", @OA\Items(
+     *                              type="object",
+     *                     @OA\Property(property="id", type="interger", example=1),
+     *                     @OA\Property(property="user_id", type="integer", example=1),
+     *                     @OA\Property(property="event_id", type="integer", example=2),
+     *                          )),
+     *                  )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Sai validate",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Sai validate"),
+     *             @OA\Property(property="statusCode", type="int", example=422),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Lỗi hệ thống",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
+     *             @OA\Property(property="statusCode", type="int", example=500),
+     *         )
+     *     )
+     * )
+     */
+    public function indexNotification(Request $request)
+    {
+        try {
+
+            $validator = Validator::make($request->all(),[
+                'id_user_get'=>'required'
+
+            ],[
+                'id_user_get.required' => 'id người lấy thông báo không được để trống',
+            ]);
+            if($validator->fails()){
+                return response([
+                    "status" => "error",
+                    "message" => $validator->errors(),
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+            $currentDateTime = \Illuminate\Support\Carbon::now();
+            $dateCr = $currentDateTime->toDateTimeString();
+            $fiveHoursAhead = $currentDateTime->addHours(24)->toDateTimeString();
+            $user = User::find($request->id_user_get);
+            if($user->role == 0){
+                return response([
+                    "status" => "error",
+                    "message" => "Role người dùng không hợp lệ",
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+            $events = event::where('start_time', '>=', $dateCr)
+                ->with(['attendances.user', 'user'])
+                ->where('start_time', '<', $fiveHoursAhead)
+                ->where('status', 1)
+                ->get();
+
+            return response()->json([
+                'metadata' => $events,
                 'message' => 'Get All Records Successfully',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
@@ -200,10 +328,10 @@ class eventController extends Controller
      *     tags={"Event"},
      *     summary="Thêm mới bản ghi với dữ liệu được cung cấp",
      *     description="
-     * - Endpoint trả về bản ghi mới được thêm vào 
+     * - Endpoint trả về bản ghi mới được thêm vào
      * -Role đước sử dụng là nhân viên, quản lí
-     * -name là tên sự kiện 
-     * -location là nơi tổ chức sự kiện 
+     * -name là tên sự kiện
+     * -location là nơi tổ chức sự kiện
      * -contact là liên lạc bằng số điện thoại
      * -banner là ảnh của sự kiện
      * -user_id là id của user tổ chức sự kiện này
@@ -305,7 +433,7 @@ class eventController extends Controller
         if ($logUserRole == 1 || $logUserRole == 2) {
             //Only staff and admin can make event
             try {
-                $imageName = time().'.'.$request->banner->extension();  
+                $imageName = time().'.'.$request->banner->extension();
                 $request->banner->move(public_path('Upload'), $imageName);
                 $resourceData = $request->all();
                 $resourceData['banner'] = $imageName;
@@ -422,8 +550,8 @@ class eventController extends Controller
      *     description="
      * - Endpoint trả về các bản ghi sự kiện
      * -Role đước sử dụng quản lí, nhân viên
-     * -name là tên sự kiện 
-     * -location là nơi tổ chức sự kiện 
+     * -name là tên sự kiện
+     * -location là nơi tổ chức sự kiện
      * -contact là liên lạc bằng số điện thoại
      * -user_id là id của user tổ chức sự kiện này
      * -start_time là thời gian bắt đầu sự kiện
@@ -431,7 +559,7 @@ class eventController extends Controller
      * -attendances_count là số sinh viên tham gia
      *  - attendances là thông tin của các sinh viên tham gia
      *  - feedback là thông tin của các feedback của sinh viên
-     * - start_time có thể rỗng 
+     * - start_time có thể rỗng
      * - end_time có thể rỗng
      * - Nhưng nếu nhập start_time thì bắt buộc phải nhập end_time
      * - Nếu không nhập cả start_time và end_time thì sẽ là thống kê của tuần hiện tại
@@ -532,7 +660,7 @@ class eventController extends Controller
                 $imageUrl = asset("Upload/{$event->banner}");
                 $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
                 return $event;
-            });                                    
+            });
             return response()->json([
                 'metadata' => $eventInWeek,
                 'message' => 'Get One Record Successfully',
@@ -564,7 +692,7 @@ class eventController extends Controller
             $imageUrl = asset("Upload/{$event->banner}");
             $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
             return $event;
-        });      
+        });
         return response()->json([
             'metadata' => $eventInStatistic,
             'message' => 'Get One Record Successfully',
@@ -583,8 +711,8 @@ class eventController extends Controller
      *     description="
      * -Endpoint trả về dữ liệu bản ghi mới được sửa đổi
      * -Role quy định là role nhân viên, quản lí
-     * -name là tên sự kiện 
-     * -location là nơi tổ chức sự kiện 
+     * -name là tên sự kiện
+     * -location là nơi tổ chức sự kiện
      * -contact là liên lạc bằng số điện thoại
      * -user_id là id của user tổ chức sự kiện này
      * -start_time là thời gian bắt đầu sự kiện
@@ -704,8 +832,8 @@ class eventController extends Controller
                 $imagePath = public_path('Upload/'.$event->banner);
                 File::delete($imagePath);
 
-                //Thêm ảnh mới 
-                $imageName = time().'.'.$request->banner->extension();  
+                //Thêm ảnh mới
+                $imageName = time().'.'.$request->banner->extension();
                 $request->banner->move(public_path('Upload'), $imageName);
 
                 $resourceData = $request->all();
@@ -740,7 +868,7 @@ class eventController extends Controller
      *     summary="Xóa một bản ghi",
      *     tags={"Event"},
      * description="
-     *          - Endpoint này sẽ xóa 1 sự kiện 
+     *          - Endpoint này sẽ xóa 1 sự kiện
      *          - Role được sử dụng là role Quản lí
      *          - Xóa thành công sẽ trả lại data là của các sự kiện còn lại
      *          - id là id của event cần xóa

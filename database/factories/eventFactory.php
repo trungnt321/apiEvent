@@ -20,8 +20,8 @@ class eventFactory extends Factory
         $end_time = Carbon::parse($start_time)->addDays(7);
         return [
             'name' => fake()->name(),
-            'date' => fake()->date(),
             'location' => fake()->unique()->address(),
+            'banner' => 'http://127.0.0.1:8000/Upload/1702785355.jpg',
             'contact'=>fake()->unique()->phoneNumber(),
             'status' => fake()->numberBetween(0,1),
             'user_id' => fake()->numberBetween(1,30),
