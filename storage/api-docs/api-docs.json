@@ -13,190 +13,36 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api/register": {
+        "/api/get-google-sign-in-url": {
             "post": {
                 "tags": [
                     "Authentication"
                 ],
-                "summary": "Đăng ký người dùng mới",
-                "description": "\n     *      - Endpoint này cho phép đăng ký người dùng mới vào hệ thống.\n     *      - Trả về thông tin của người dùng đã đăng ký.\n     *      - Role được sử dụng là nhân viên và sinh viên",
-                "operationId": "ab15e8b534800db0828c4efe3a6099fa",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "John Doe"
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "example": "john.doe@example.com"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "example": "password123"
-                                    },
-                                    "phone": {
-                                        "type": "string",
-                                        "example": "123456789"
-                                    },
-                                    "role": {
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
+                "summary": "Get Google Sign-In URL",
+                "operationId": "getGoogleSignInUrl",
                 "responses": {
                     "200": {
-                        "description": "Thành công",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "metadata": {
-                                            "type": "object",
-                                            "example": {
-                                                "id": 1,
-                                                "name": "John Doe",
-                                                "email": "john.doe@example.com",
-                                                "phone": "123456789",
-                                                "role": "user"
-                                            }
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Đăng ký người dùng thành công"
-                                        },
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Lỗi máy chủ nội bộ",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "object",
-                                            "example": {
-                                                "name": [
-                                                    "tên không thể để trống"
-                                                ],
-                                                "email": [
-                                                    "email không thể để trống"
-                                                ]
-                                            }
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/login": {
-            "post": {
-                "tags": [
-                    "Authentication"
-                ],
-                "summary": "Đăng nhập người dùng",
-                "description": "\n     *      - Endpoint này cho phép người dùng đăng nhập vào hệ thống.\n     *      - Trả về thông tin của người dùng đã đăng nhập, bao gồm cả token đăng nhập.\n     *      - Role được sử dụng là cả ba role nhân viên ,quản lí ,sinh viên",
-                "operationId": "306b0884672cb3eed691231729c47fbb",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "email": {
-                                        "type": "string",
-                                        "example": "john.doe@example.com"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "example": "password123"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Thành công",
+                        "description": "Successful operation",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "metadata": {
                                             "properties": {
-                                                "id": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                },
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "John Doe"
-                                                },
-                                                "email": {
-                                                    "type": "string",
-                                                    "example": "john.doe@example.com"
-                                                },
-                                                "phone": {
-                                                    "type": "string",
-                                                    "example": "123456789"
-                                                },
-                                                "role": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                },
-                                                "token": {
-                                                    "type": "string",
-                                                    "example": "api-token"
+                                                "url": {
+                                                    "type": "string"
                                                 }
                                             },
                                             "type": "object"
                                         },
                                         "message": {
-                                            "type": "string",
-                                            "example": "Đăng nhập người dùng thành công"
+                                            "type": "string"
                                         },
                                         "status": {
-                                            "type": "string",
-                                            "example": "success"
+                                            "type": "string"
                                         },
                                         "statusCode": {
-                                            "type": "integer",
-                                            "example": 200
+                                            "type": "integer"
                                         }
                                     },
                                     "type": "object"
@@ -205,22 +51,19 @@
                         }
                     },
                     "500": {
-                        "description": "Lỗi máy chủ nội bộ",
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "status": {
-                                            "type": "string",
-                                            "example": "error"
+                                            "type": "string"
                                         },
                                         "message": {
-                                            "type": "string",
-                                            "example": "Thông tin đăng nhập không chính xác. Vui lòng thử lại"
+                                            "type": "string"
                                         },
                                         "statusCode": {
-                                            "type": "integer",
-                                            "example": 500
+                                            "type": "integer"
                                         }
                                     },
                                     "type": "object"
