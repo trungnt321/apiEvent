@@ -1243,7 +1243,7 @@
                                                     },
                                                     "banner": {
                                                         "type": "string",
-                                                        "example": "anhsukien.jpg"
+                                                        "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
                                                     },
                                                     "start_time": {
                                                         "type": "string",
@@ -1385,7 +1385,7 @@
                                     },
                                     "banner": {
                                         "type": "string",
-                                        "example": "anhsukien.jpg"
+                                        "example": "anh1.jpg"
                                     },
                                     "start_time": {
                                         "type": "string",
@@ -1444,7 +1444,7 @@
                                                     },
                                                     "banner": {
                                                         "type": "string",
-                                                        "example": "anhsukien.jpg"
+                                                        "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
                                                     },
                                                     "start_time": {
                                                         "type": "string",
@@ -1815,7 +1815,7 @@
                                                 },
                                                 "banner": {
                                                     "type": "string",
-                                                    "example": "anh1.jpg"
+                                                    "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
                                                 },
                                                 "start_time": {
                                                     "type": "string",
@@ -2005,7 +2005,7 @@
                                                     },
                                                     "banner": {
                                                         "type": "string",
-                                                        "example": "anhsukien.jpg"
+                                                        "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
                                                     },
                                                     "start_time": {
                                                         "type": "string",
@@ -2171,7 +2171,7 @@
                                                 },
                                                 "banner": {
                                                     "type": "string",
-                                                    "example": "anh.jpg"
+                                                    "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
                                                 },
                                                 "start_time": {
                                                     "type": "string",
@@ -2384,7 +2384,7 @@
                                                 },
                                                 "banner": {
                                                     "type": "string",
-                                                    "example": "anh.jpg"
+                                                    "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
                                                 },
                                                 "start_time": {
                                                     "type": "string",
@@ -2553,7 +2553,7 @@
                                                     },
                                                     "banner": {
                                                         "type": "string",
-                                                        "example": "anhsukien.jpg"
+                                                        "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
                                                     },
                                                     "start_time": {
                                                         "type": "string",
@@ -2736,7 +2736,7 @@
                                                     },
                                                     "banner": {
                                                         "type": "string",
-                                                        "example": "anh1.jpg"
+                                                        "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
                                                     },
                                                     "start_time": {
                                                         "type": "string",
