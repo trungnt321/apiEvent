@@ -161,7 +161,7 @@ class participantsController extends Controller
             $validator = Validator::make($request->all(),[
                 'email'=>'required',
                 'phone'=> 'required'
-                
+
             ],[
                 'email.required' => 'Email không được để trống',
                 'phone.required' => 'Số điện thoại không được để trống'
@@ -169,7 +169,7 @@ class participantsController extends Controller
             if($validator->fails()){
                 return response([
                     "status" => "error",
-                    "message" => $validator->errors(),
+                    "message" => $validator->errors()->all(),
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
@@ -187,7 +187,7 @@ class participantsController extends Controller
                 'message' => 'Get All Records Successfully',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
-            ],Response::HTTP_OK); 
+            ],Response::HTTP_OK);
         }catch(\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -209,7 +209,7 @@ class participantsController extends Controller
      * -Endpoint trả về người dùng vừa được thêm
      * -Role người thêm phải lớn hơn hoặc bằng người được thêm
      * -Role là sinh viên thì không có quyền thêm
-     * 
+     *
      * ",
      *     operationId="storeParticipants",
      *     @OA\RequestBody(
@@ -292,7 +292,7 @@ class participantsController extends Controller
             if($validator->fails()){
                 return response([
                     "status" => "error",
-                    "message" => $validator->errors(),
+                    "message" => $validator->errors()->all(),
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
@@ -477,7 +477,7 @@ class participantsController extends Controller
                 'statusCode' => Response::HTTP_UNAUTHORIZED
             ],Response::HTTP_UNAUTHORIZED);
         }
-        
+
         $roleUpdate = $request->input('role');
         $canUpdate = false;
 
@@ -511,12 +511,12 @@ class participantsController extends Controller
         if($validator->fails()){
             return response([
                 "status" => "error",
-                "message" => $validator->errors(),
+                "message" => $validator->errors()->all(),
                 'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        //Check role của từng người 
+        //Check role của từng người
         if($logUserRole == 2){
             $canUpdate = true;
         }else if($logUserRole == 1){
@@ -626,6 +626,6 @@ class participantsController extends Controller
                 "message" => $e->getMessage(),
                 'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }   
+        }
     }
 }

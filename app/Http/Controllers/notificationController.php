@@ -247,7 +247,7 @@ class notificationController extends Controller
             if($validator->fails()){
                 return response([
                     "status" => "error",
-                    "message" => $validator->errors(),
+                    "message" => $validator->errors()->all(),
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
@@ -340,7 +340,7 @@ class notificationController extends Controller
             if ($validator->fails()) {
                 return response([
                     "status" => "error",
-                    "message" => $validator->errors(),
+                    "message" => $validator->errors()->all(),
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
@@ -549,7 +549,7 @@ class notificationController extends Controller
             if ($validator->fails()) {
                 return response([
                     "status" => "error",
-                    "message" => $validator->errors(),
+                    "message" => $validator->errors()->all(),
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
