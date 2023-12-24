@@ -613,6 +613,7 @@ class eventController extends Controller
             'content.required'=>'Không được để trống trường nội dung'
         ]);
         if ($validate->fails()) {
+//            dd($validate->errors());
             return response([
                 "status" => "error",
                 "message" => $validate->errors(),
