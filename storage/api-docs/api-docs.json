@@ -1503,28 +1503,6 @@
                                     "name": {
                                         "type": "string",
                                         "example": "Event Name"
-                                    },
-                                    "location": {
-                                        "type": "string",
-                                        "example": "Ha Noi"
-                                    },
-                                    "contact": {
-                                        "type": "string",
-                                        "example": "0986567467"
-                                    },
-                                    "user_id": {
-                                        "type": "integer",
-                                        "example": 2
-                                    },
-                                    "start_time": {
-                                        "type": "string",
-                                        "format": "date-time",
-                                        "example": "2023-11-23 11:20:22"
-                                    },
-                                    "end_time": {
-                                        "type": "string",
-                                        "format": "date-time",
-                                        "example": "2023-11-23 11:20:22"
                                     }
                                 },
                                 "type": "object"
@@ -1633,6 +1611,162 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Internal server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/recreateEvent": {
+            "post": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Thêm mới bản ghi với dữ liệu được cung cấp",
+                "description": "\n     * - Endpoint trả về bản ghi mới được thêm vào \n     * -Role đước sử dụng là nhân viên, quản lí\n     * -id là id của sự kiện cần được tạo lại\n     * -name là tên sự kiện \n     * -location là nơi tổ chức sự kiện \n     * -contact là liên lạc bằng số điện thoại\n     * -banner là ảnh của sự kiện\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * ",
+                "operationId": "recreateEvent",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id": {
+                                        "type": "interger",
+                                        "example": 1
+                                    },
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "start_time": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2023-11-23 11:20:22"
+                                    },
+                                    "end_time": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2023-11-23 11:20:22"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Thêm mới dữ liệu thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tạo mới bản ghi thành công"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "metadata": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Event Name"
+                                                    },
+                                                    "location": {
+                                                        "type": "string",
+                                                        "example": "Ha Noi"
+                                                    },
+                                                    "contact": {
+                                                        "type": "string",
+                                                        "example": "0986567467"
+                                                    },
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "banner": {
+                                                        "type": "string",
+                                                        "example": "anhsukien.jpg"
+                                                    },
+                                                    "start_time": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-23 11:20:22"
+                                                    },
+                                                    "end_time": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-23 11:20:22"
+                                                    },
+                                                    "attendances_count": {
+                                                        "type": "interger",
+                                                        "example": 3
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Sai validate",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sai validate"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 422
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi hệ thống",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lỗi hệ thống"
                                         },
                                         "statusCode": {
                                             "type": "integer",
