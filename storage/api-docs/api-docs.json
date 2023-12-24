@@ -1255,6 +1255,14 @@
                                                         "format": "date-time",
                                                         "example": "2023-11-23 11:20:22"
                                                     },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Sự kiện rất hoành tráng"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "Chào mừng tổng thống"
+                                                    },
                                                     "attendances_count": {
                                                         "type": "interger",
                                                         "example": 3
@@ -1396,6 +1404,14 @@
                                         "type": "string",
                                         "format": "date-time",
                                         "example": "2023-11-23 11:20:22"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Sự kiện rất hoành tráng"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "example": "Chào mừng tổng thống"
                                     }
                                 },
                                 "type": "object"
@@ -1455,6 +1471,14 @@
                                                         "type": "string",
                                                         "format": "date-time",
                                                         "example": "2023-11-23 11:20:22"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Sự kiện rất hoành tráng"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "Chào mừng tổng thống"
                                                     },
                                                     "attendances_count": {
                                                         "type": "interger",
@@ -1632,6 +1656,14 @@
                                                         "type": "string",
                                                         "format": "date-time",
                                                         "example": "2023-11-23 11:20:22"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Sự kiện rất hoành tráng"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "Chào mừng tổng thống"
                                                     },
                                                     "user": {
                                                         "type": "array",
@@ -1827,6 +1859,14 @@
                                                     "format": "date-time",
                                                     "example": "2023-11-23 11:20:22"
                                                 },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Sự kiện rất hoành tráng"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "Chào mừng tổng thống"
+                                                },
                                                 "attendances_count": {
                                                     "type": "interger",
                                                     "example": 3
@@ -2017,6 +2057,14 @@
                                                         "format": "date-time",
                                                         "example": "2023-11-23 11:20:22"
                                                     },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Sự kiện rất hoành tráng"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "Chào mừng tổng thống"
+                                                    },
                                                     "attendances_count": {
                                                         "type": "interger",
                                                         "example": 3
@@ -2183,6 +2231,14 @@
                                                     "format": "date-time",
                                                     "example": "2023-11-23 11:20:22"
                                                 },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Sự kiện rất hoành tráng"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "Chào mừng tổng thống"
+                                                },
                                                 "attendances_count": {
                                                     "type": "interger",
                                                     "example": 3
@@ -2338,6 +2394,14 @@
                                         "type": "string",
                                         "format": "date-time",
                                         "example": "2023-11-23 11:20:22"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Sự kiện rất hoành tráng"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "example": "Chào mừng tổng thống"
                                     }
                                 },
                                 "type": "object"
@@ -2395,6 +2459,14 @@
                                                     "type": "string",
                                                     "format": "date-time",
                                                     "example": "2023-11-23 11:20:22"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Sự kiện rất hoành tráng"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "Chào mừng tổng thống"
                                                 },
                                                 "attendances_count": {
                                                     "type": "integer",
@@ -2564,6 +2636,14 @@
                                                         "type": "string",
                                                         "format": "date-time",
                                                         "example": "2023-11-23 11:20:22"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Sự kiện rất hoành tráng"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "Chào mừng tổng thống"
                                                     },
                                                     "attendances_count": {
                                                         "type": "interger",
@@ -2747,6 +2827,14 @@
                                                         "type": "string",
                                                         "format": "date-time",
                                                         "example": "2023-11-23 11:20:22"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Sự kiện rất hoành tráng"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "Chào mừng tổng thống"
                                                     },
                                                     "attendances_count": {
                                                         "type": "integer",
