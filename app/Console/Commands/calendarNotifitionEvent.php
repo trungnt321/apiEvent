@@ -31,25 +31,26 @@ class calendarNotifitionEvent extends Command
      */
     public function handle()
     {
-        $currentDateTime = Carbon::now();
-        $fiveHoursAgo = $currentDateTime->subHours(5)->toDateTimeString();
-        $events = event::where('start_time', '>', $fiveHoursAgo)
+        $currentDateTime = \Illuminate\Support\Carbon::now();
+        $dateCr = $currentDateTime->toDateTimeString();
+        $fiveHoursAhead = $currentDateTime->addHours(5)->toDateTimeString();
+        $events = event::where('start_time', '>=', $dateCr)
             ->with(['attendances.user', 'user'])
-            ->whereDate('start_time', '=', $currentDateTime->toDateString())
+            ->where('start_time', '<', $fiveHoursAhead)
             ->where('status', 1)
             ->get();
         foreach ($events as $item) {
+            if (!empty($item->attendances)) {
+                foreach ($item->attendances as $userSend) {
+                    $data = [
+                        'title' => "EMAIL NHẮC NHỞ SỰ KIỆN " . $item->name,
+                        'message' => $item->user->receivedNotifications->last()->content,
+                    ];
 
-            foreach($item->attendances as $userSend){
-                $data = [
-                    'title' => "EMAIL NHẮC NHỞ SỰ KIỆN " . $item->name,
-                    'message' =>$item->user->receivedNotifications->last()->content,
-                ];
-
-                Mail::to($userSend->user->email)->send(new EmailApi($data,));
-                Log::info('Email sent successfully:' . $item->name);
+                    Mail::to($userSend->user->email)->send(new EmailApi($data,));
+                    Log::info('Email sent successfully:' . $item->name);
+                }
             }
-
         }
 
         return 0;
