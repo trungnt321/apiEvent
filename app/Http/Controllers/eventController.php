@@ -423,6 +423,7 @@ class eventController extends Controller
             'end_time.after' => 'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu'
         ]);
         if ($validate->fails()) {
+//            dd($validate->errors());
             return response([
                 "status" => "error",
                 "message" => $validate->errors(),
