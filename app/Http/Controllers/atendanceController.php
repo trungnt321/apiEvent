@@ -79,14 +79,14 @@ class atendanceController extends Controller
     {
         try {
             $user = User::find($id_user);
-            if( $user == null || $user->role == 0){
+            if($user == null || $user->role == 0){
                 return response([
                     "status" => "error",
-                    "message" => "Role người dùng không hợp lệ hoặc user không tồn tại",
+                    "message" => "Role người dùng không hợp lệ",
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-            $atendance = atendance::where('event_id',$id_event)->with('user')->paginate(10);
+            $atendance = atendance::where('event_id',$id_event)->with('user')->get();
             return response()->json([
                 'metadata' => $atendance,
                 'message' => 'Lấy thành công tất cả các bản ghi',
@@ -103,6 +103,7 @@ class atendanceController extends Controller
             ], $e instanceof HttpException
                 ? $e->getStatusCode()
                 : Response::HTTP_INTERNAL_SERVER_ERROR);
+
         }
     }
 
@@ -180,7 +181,6 @@ class atendanceController extends Controller
 
             if ($validator->fails()) {
 //                return response(['status' => 'error', 'message' => $validator->errors()], 500);
-//                dd($validator->errors());
                 return response([
                     "status" => "error",
                     "message" => $validator->errors(),
