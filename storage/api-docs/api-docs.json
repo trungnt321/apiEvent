@@ -1258,6 +1258,41 @@
                                                     "attendances_count": {
                                                         "type": "interger",
                                                         "example": 3
+                                                    },
+                                                    "user": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Kurtis Legros IV"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "haudvph20519@fpt.edu.vn"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string",
+                                                                "example": "+1 (564) 267-3494"
+                                                            },
+                                                            "role": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     }
                                                 },
                                                 "type": "object"
@@ -1424,6 +1459,41 @@
                                                     "attendances_count": {
                                                         "type": "interger",
                                                         "example": 3
+                                                    },
+                                                    "user": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Kurtis Legros IV"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "haudvph20519@fpt.edu.vn"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string",
+                                                                "example": "+1 (564) 267-3494"
+                                                            },
+                                                            "role": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     }
                                                 },
                                                 "type": "object"
@@ -1564,6 +1634,41 @@
                                                 "attendances_count": {
                                                     "type": "interger",
                                                     "example": 3
+                                                },
+                                                "user": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": "1"
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Kurtis Legros IV"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "haudvph20519@fpt.edu.vn"
+                                                        },
+                                                        "phone": {
+                                                            "type": "string",
+                                                            "example": "+1 (564) 267-3494"
+                                                        },
+                                                        "role": {
+                                                            "type": "integer",
+                                                            "example": "1"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-12-02T08:55:45.000000Z"
+                                                        },
+                                                        "updated_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-12-02T08:55:45.000000Z"
+                                                        }
+                                                    },
+                                                    "type": "object"
                                                 }
                                             },
                                             "type": "object"
@@ -1719,6 +1824,41 @@
                                                     "attendances_count": {
                                                         "type": "interger",
                                                         "example": 3
+                                                    },
+                                                    "user": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Kurtis Legros IV"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "haudvph20519@fpt.edu.vn"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string",
+                                                                "example": "+1 (564) 267-3494"
+                                                            },
+                                                            "role": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     }
                                                 },
                                                 "type": "object"
@@ -1850,6 +1990,41 @@
                                                 "attendances_count": {
                                                     "type": "interger",
                                                     "example": 3
+                                                },
+                                                "user": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": "1"
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Kurtis Legros IV"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "haudvph20519@fpt.edu.vn"
+                                                        },
+                                                        "phone": {
+                                                            "type": "string",
+                                                            "example": "+1 (564) 267-3494"
+                                                        },
+                                                        "role": {
+                                                            "type": "integer",
+                                                            "example": "1"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-12-02T08:55:45.000000Z"
+                                                        },
+                                                        "updated_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-12-02T08:55:45.000000Z"
+                                                        }
+                                                    },
+                                                    "type": "object"
                                                 }
                                             },
                                             "type": "object"
@@ -2028,6 +2203,41 @@
                                                 "attendances_count": {
                                                     "type": "integer",
                                                     "example": 3
+                                                },
+                                                "user": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": "1"
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Kurtis Legros IV"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "haudvph20519@fpt.edu.vn"
+                                                        },
+                                                        "phone": {
+                                                            "type": "string",
+                                                            "example": "+1 (564) 267-3494"
+                                                        },
+                                                        "role": {
+                                                            "type": "integer",
+                                                            "example": "1"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-12-02T08:55:45.000000Z"
+                                                        },
+                                                        "updated_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-12-02T08:55:45.000000Z"
+                                                        }
+                                                    },
+                                                    "type": "object"
                                                 }
                                             },
                                             "type": "object"
@@ -2162,6 +2372,41 @@
                                                     "attendances_count": {
                                                         "type": "interger",
                                                         "example": 3
+                                                    },
+                                                    "user": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Kurtis Legros IV"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "haudvph20519@fpt.edu.vn"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string",
+                                                                "example": "+1 (564) 267-3494"
+                                                            },
+                                                            "role": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     }
                                                 },
                                                 "type": "object"
@@ -2364,6 +2609,41 @@
                                                             },
                                                             "type": "object"
                                                         }
+                                                    },
+                                                    "user": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Kurtis Legros IV"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "haudvph20519@fpt.edu.vn"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string",
+                                                                "example": "+1 (564) 267-3494"
+                                                            },
+                                                            "role": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     }
                                                 },
                                                 "type": "object"
