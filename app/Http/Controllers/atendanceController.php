@@ -86,7 +86,7 @@ class atendanceController extends Controller
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-            $atendance = atendance::where('event_id',$id_event)->with('user')->get();
+            $atendance = atendance::where('event_id',$id_event)->with('user')->paginate(10);
             return response()->json([
                 'metadata' => $atendance,
                 'message' => 'Lấy thành công tất cả các bản ghi',
@@ -180,6 +180,7 @@ class atendanceController extends Controller
 
             if ($validator->fails()) {
 //                return response(['status' => 'error', 'message' => $validator->errors()], 500);
+//                dd($validator->errors());
                 return response([
                     "status" => "error",
                     "message" => $validator->errors(),
