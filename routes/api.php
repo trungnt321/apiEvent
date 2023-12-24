@@ -59,6 +59,7 @@ Route::post('/event/notification',[eventController::class,'indexNotification']);
 //Test api in swagger donn't need token
 Route::apiResource('participants',participantsController::class)->middleware('auth:api');
 Route::apiResource('event',eventController::class)->middleware('auth:api');
+Route::post('recreateEvent',[eventController::class,'recreateEvent'])->middleware('auth:api');
 Route::get('resourceByEventID/{event_id}',[resourceController::class,'GetRecordByEventId'])->middleware('auth:api');
 Route::apiResource('resource',resourceController::class)->middleware('auth:api');
 
@@ -67,8 +68,7 @@ Route::post('searchUser',[participantsController::class,'getUserByEmailAndPhone'
 Route::post('searchEvent',[eventController::class,'searchEvent'])->middleware('auth:api');
 
 //Real Time
-Route::get('/websocket/token', [chatController::class, 'authenticate']);
-Route::get('/websocket/event', [chatController::class, 'chatRealTimeAction']);
+Route::post('chat', [chatController::class, 'sendMessage']);
 
 //Event statistics
 Route::post('eventStatistics',[eventController::class,'eventStatistics'])->middleware('auth:api');

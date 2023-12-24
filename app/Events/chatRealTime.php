@@ -19,10 +19,11 @@ class chatRealTime implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public $requestData;
-    public function __construct(Request $request)
+    //public $requestData;
+    public $message;
+    public function __construct($message)
     {
-        $this->requestData = $request->all();
+        $this->message = $message;
     }
 
     /**
@@ -33,7 +34,8 @@ class chatRealTime implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel("Event_{$this->requestData['event_id']}"),
+            //new PrivateChannel("Event_{$this->requestData['event_id']}"),
+            new Channel('chat')
         ];
     }
 }
