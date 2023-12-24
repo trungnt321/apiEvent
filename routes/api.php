@@ -29,7 +29,7 @@ Route::post('login',[UserAuthController::class,'login']);
 //Route::apiResource('employees',EmployeeController::class)->middleware('auth:api');
 
 //Route::apiResource('atendances',atendanceController::class)->middleware('auth:api');
-Route::prefix('atendances')->group(function() {
+Route::prefix('attendances')->group(function() {
     Route::get('/join/{id_event}/{id_user}',[atendanceController::class,'index']);
     Route::post('/add',[atendanceController::class,'addEmail']);
     Route::post('/',[atendanceController::class,'store']);
