@@ -44,6 +44,8 @@ class eventController extends Controller
      *                       @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
      *                       @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                       @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                             @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
+     *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
      *                       @OA\Property(property="attendances_count", type="interger", example=3),
      *                       @OA\Property(
      *                     property="user",
@@ -144,6 +146,8 @@ class eventController extends Controller
      * @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
      *                           @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                           @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                                  @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
+     *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
      *                           @OA\Property(property="user", type="array", @OA\Items(
      *                              type="object",
      *                      @OA\Property(property="id", type="integer", example="1"),
@@ -272,6 +276,8 @@ class eventController extends Controller
      * @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
      *                       @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                       @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                                   @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
+     *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
      *                       @OA\Property(property="attendances_count", type="interger", example=3),
      * @OA\Property(
      *                     property="user",
@@ -382,6 +388,8 @@ class eventController extends Controller
      *                           @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
      *                           @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                           @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                                  @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
+     *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
      *                           @OA\Property(property="attendances_count", type="interger", example=3),
      * @OA\Property(
      *                     property="user",
@@ -512,6 +520,8 @@ class eventController extends Controller
      *             @OA\Property(property="banner", type="string", example="anh1.jpg"),
      *             @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *             @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                                   @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
+     *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
      *         )
      *     ),
      *     @OA\Response(
@@ -530,6 +540,8 @@ class eventController extends Controller
      *                           @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
      *                           @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                           @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                                   @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
+     *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
      *                           @OA\Property(property="attendances_count", type="interger", example=3),
      * @OA\Property(
      *                     property="user",
@@ -584,7 +596,9 @@ class eventController extends Controller
             ],
             'banner'=>'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'start_time' => ['required'],
-            'end_time' => ['required', 'after:start_time']
+            'end_time' => ['required', 'after:start_time'],
+            'description'=>'required',
+            'content'=>'required'
         ], [
             'name.required' => 'Không để trống name của của sự kiện nhập',
             'location.required' => 'Không được để trống địa điểm của sự kiện',
@@ -594,7 +608,9 @@ class eventController extends Controller
             'banner.required' =>'Ảnh sự kiện bắt buộc phải có',
             'start_time.required' => 'Ngày khởi đầu của event không được để trống',
             'end_time.required' => 'Ngày kết thúc của event không được để trống',
-            'end_time.after' => 'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu'
+            'end_time.after' => 'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu',
+            'description.required' => 'Không được để trống trường mô tả',
+            'content.required'=>'Không được để trống trường nội dung'
         ]);
         if ($validate->fails()) {
 //            dd($validate->errors());
@@ -673,6 +689,8 @@ class eventController extends Controller
      *                           @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
      *                           @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                           @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                                  @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
+     *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
      *                           @OA\Property(property="attendances_count", type="interger", example=3),
      * @OA\Property(
      *                     property="user",
@@ -775,6 +793,8 @@ class eventController extends Controller
      * @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
      *                           @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                           @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                                   @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
+     *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
      *                           @OA\Property(property="attendances_count", type="integer", example=0),
      *                           @OA\Property(property="feedback", type="array", @OA\Items(
      *                              type="object",
@@ -936,6 +956,8 @@ class eventController extends Controller
      *             @OA\Property(property="user_id", type="integer", example=2),
      *             @OA\Property(property="start_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
      *             @OA\Property(property="end_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
+     *                                   @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
+     *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
      *         )
      *     ),
      *     @OA\Response(
@@ -954,6 +976,8 @@ class eventController extends Controller
      * @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
      *                 @OA\Property(property="start_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
      *                 @OA\Property(property="end_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
+     *                                   @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
+     *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
      * @OA\Property(property="attendances_count", type="integer", example=3),
      * @OA\Property(
      *                     property="user",
@@ -1013,7 +1037,9 @@ class eventController extends Controller
             ],
             'banner'=>'required',
             'start_time' => ['required'],
-            'end_time' => ['required', 'after:start_time']
+            'end_time' => ['required', 'after:start_time'],
+            'description' => ['required'],
+            'content' => ['required'],
         ], [
             'name.required' => 'Không để trống name của của sự kiện nhập',
             'location.required' => 'Không được để trống địa điểm của sự kiện',
@@ -1024,7 +1050,9 @@ class eventController extends Controller
             'start_time.required' => 'Ngày khởi đầu của event không được để trống',
             'end_time.required' => 'Ngày kết thúc của event không được để trống',
             'banner.required' => 'Không được để trống ảnh',
-            'end_time.after' => 'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu'
+            'end_time.after' => 'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu',
+            'description.required' => 'Không được để trống trường mô tả',
+            'content.required'=>'Không được để trống trường nội dung'
         ]);
         if ($validate->fails()) {
             return response([
@@ -1109,6 +1137,8 @@ class eventController extends Controller
      *                       @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
      *                       @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                       @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                                   @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
+     *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
      * @OA\Property(property="attendances_count", type="interger", example=3),
      * @OA\Property(
      *                     property="user",
