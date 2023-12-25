@@ -68,12 +68,23 @@ class feedbackController extends Controller
      * )
      */
 
-    public function index($id_event)
+    public function index($id_event,Request $request)
     {
         try {
-            $feedback = feedback::where('event_id',$id_event)->with('user')->get();
+            $page = $request->query('page', 1);
+            $limit = $request->query('limit', 10);
+            $feedback = feedback::where('event_id',$id_event)->with('user')->paginate($limit, ['*'], 'page', $page);
             return response()->json([
-                'metadata' => $feedback,
+                'metadata' => [
+                    'docs' => $feedback->items(),
+                    'totalDocs' => $feedback->total(),
+                    'limit' => $feedback->perPage(),
+                    'totalPages' => $feedback->lastPage(),
+                    'page' => $feedback->currentPage(),
+                    'pagingCounter' => $feedback->currentPage(),
+                    'hasPrevPage' => $feedback->previousPageUrl() != null,
+                    'hasNextPage' => $feedback->nextPageUrl() != null
+                ],
                 'message' => 'Lấy tất cả phản hồi thành công',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK

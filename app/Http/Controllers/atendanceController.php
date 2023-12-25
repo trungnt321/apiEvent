@@ -75,9 +75,11 @@ class atendanceController extends Controller
      *     )
      * )
      */
-    public function index($id_event,$id_user)
+    public function index($id_event,$id_user,Request $request)
     {
         try {
+            $page = $request->query('page', 1);
+            $limit = $request->query('limit', 10);
             $user = User::find($id_user);
             if($user == null || $user->role == 0){
                 return response([
@@ -86,9 +88,23 @@ class atendanceController extends Controller
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-            $atendance = atendance::where('event_id',$id_event)->with('user')->get();
+            $atendance = atendance::where('event_id',$id_event)->with('user')->paginate($limit, ['*'], 'page', $page);
+
+            $nextPageUrl = $atendance->nextPageUrl();
+
             return response()->json([
-                'metadata' => $atendance,
+                'metadata' => [
+                    'docs' => $atendance->items(),
+                    'totalDocs' => $atendance->total(),
+                    'limit' => $atendance->perPage(),
+                    'totalPages' => $atendance->lastPage(),
+                    'page' => $atendance->currentPage(),
+                    'pagingCounter' => $atendance->currentPage(), // Bạn có thể sử dụng currentPage hoặc số khác nếu cần
+                    'hasPrevPage' => $atendance->previousPageUrl() != null,
+                    'hasNextPage' => $atendance->nextPageUrl() != null
+//                    'prevPage' => $atendance->previousPageUrl(),
+//                    'nextPage' =>$atendance->nextPageUrl(),
+                ],
                 'message' => 'Lấy thành công tất cả các bản ghi',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
