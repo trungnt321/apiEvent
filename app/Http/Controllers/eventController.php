@@ -55,6 +55,8 @@ class eventController extends Controller
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
      *                     @OA\Property(property="role", type="integer", example="1"),
+     *                     @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
      *                 )
@@ -155,6 +157,8 @@ class eventController extends Controller
      *                     @OA\Property(property="email", type="integer", example="upton.tessie@example.com"),
      *                     @OA\Property(property="phone", type="integer", example="2023-12-20T04:57:16.000000Z"),
      *                     @OA\Property(property="role", type="integer", example="205.840.6294"),
+     *                         @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-11-28 17:02:29"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-11-28 17:02:29"),
      *                          )),
@@ -399,6 +403,8 @@ class eventController extends Controller
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
      *                     @OA\Property(property="role", type="integer", example="1"),
+     *                           @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
      *                 )
@@ -550,7 +556,9 @@ class eventController extends Controller
      *                     @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
-     *                     @OA\Property(property="role", type="integer", example="1"),
+     *                     @OA\Property(property="role", type="integer", example="1"),     
+     *                     @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
      *                 )
@@ -699,7 +707,9 @@ class eventController extends Controller
      *                     @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
-     *                     @OA\Property(property="role", type="integer", example="1"),
+     *                     @OA\Property(property="role", type="integer", example="1"),     
+     *                     @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
      *                 )
@@ -819,6 +829,8 @@ class eventController extends Controller
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
      *                     @OA\Property(property="role", type="integer", example="1"),
+     *                          @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
      *                 )
@@ -986,7 +998,9 @@ class eventController extends Controller
      *                     @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
-     *                     @OA\Property(property="role", type="integer", example="1"),
+     *                     @OA\Property(property="role", type="integer", example="1"),     
+     *                      @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
      *                 )
@@ -1147,7 +1161,9 @@ class eventController extends Controller
      *                     @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
-     *                     @OA\Property(property="role", type="integer", example="1"),
+     *                     @OA\Property(property="role", type="integer", example="1"),     
+     *                      @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
      *                 )

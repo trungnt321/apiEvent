@@ -77,6 +77,7 @@
         "/": {
             "get": {
                 "description": "Home page",
+                "operationId": "58658e34a5c8bd71c4a0afed6de10d20",
                 "responses": {
                     "default": {
                         "description": "Welcome Page"
@@ -1132,6 +1133,14 @@
                                                                 "type": "integer",
                                                                 "example": "1"
                                                             },
+                                                            "google_id": {
+                                                                "type": "string",
+                                                                "example": "137518716745268"
+                                                            },
+                                                            "avatar": {
+                                                                "type": "string",
+                                                                "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
+                                                            },
                                                             "created_at": {
                                                                 "type": "string",
                                                                 "format": "date-time",
@@ -1349,6 +1358,14 @@
                                                                 "type": "integer",
                                                                 "example": "1"
                                                             },
+                                                            "google_id": {
+                                                                "type": "string",
+                                                                "example": "137518716745268"
+                                                            },
+                                                            "avatar": {
+                                                                "type": "string",
+                                                                "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
+                                                            },
                                                             "created_at": {
                                                                 "type": "string",
                                                                 "format": "date-time",
@@ -1531,6 +1548,14 @@
                                                                 "role": {
                                                                     "type": "integer",
                                                                     "example": "205.840.6294"
+                                                                },
+                                                                "google_id": {
+                                                                    "type": "string",
+                                                                    "example": "137518716745268"
+                                                                },
+                                                                "avatar": {
+                                                                    "type": "string",
+                                                                    "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
                                                                 },
                                                                 "created_at": {
                                                                     "type": "string",
@@ -1934,6 +1959,14 @@
                                                                 "type": "integer",
                                                                 "example": "1"
                                                             },
+                                                            "google_id": {
+                                                                "type": "string",
+                                                                "example": "137518716745268"
+                                                            },
+                                                            "avatar": {
+                                                                "type": "string",
+                                                                "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
+                                                            },
                                                             "created_at": {
                                                                 "type": "string",
                                                                 "format": "date-time",
@@ -2107,6 +2140,14 @@
                                                         "role": {
                                                             "type": "integer",
                                                             "example": "1"
+                                                        },
+                                                        "google_id": {
+                                                            "type": "string",
+                                                            "example": "137518716745268"
+                                                        },
+                                                        "avatar": {
+                                                            "type": "string",
+                                                            "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
                                                         },
                                                         "created_at": {
                                                             "type": "string",
@@ -2337,6 +2378,14 @@
                                                             "type": "integer",
                                                             "example": "1"
                                                         },
+                                                        "google_id": {
+                                                            "type": "string",
+                                                            "example": "137518716745268"
+                                                        },
+                                                        "avatar": {
+                                                            "type": "string",
+                                                            "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
+                                                        },
                                                         "created_at": {
                                                             "type": "string",
                                                             "format": "date-time",
@@ -2513,6 +2562,14 @@
                                                             "role": {
                                                                 "type": "integer",
                                                                 "example": "1"
+                                                            },
+                                                            "google_id": {
+                                                                "type": "string",
+                                                                "example": "137518716745268"
+                                                            },
+                                                            "avatar": {
+                                                                "type": "string",
+                                                                "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
                                                             },
                                                             "created_at": {
                                                                 "type": "string",
@@ -2758,6 +2815,14 @@
                                                             "role": {
                                                                 "type": "integer",
                                                                 "example": "1"
+                                                            },
+                                                            "google_id": {
+                                                                "type": "string",
+                                                                "example": "137518716745268"
+                                                            },
+                                                            "avatar": {
+                                                                "type": "string",
+                                                                "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
                                                             },
                                                             "created_at": {
                                                                 "type": "string",
