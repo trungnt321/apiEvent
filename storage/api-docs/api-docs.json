@@ -94,7 +94,7 @@
                 "operationId": "2ae0c3a5ddc429cdf3e4115b2d673da3",
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
+                        "description": "Successful response with feedback data",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -105,76 +105,99 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Lấy thành công nhân viên tham gia sự kiện"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 200
+                                            "example": "Successfully retrieved all feedback"
                                         },
                                         "metadata": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "string",
-                                                        "example": "1"
-                                                    },
-                                                    "user_id": {
-                                                        "type": "integer",
-                                                        "example": 1
-                                                    },
-                                                    "event_id": {
-                                                        "type": "integer",
-                                                        "example": 2
-                                                    },
-                                                    "user": {
+                                            "properties": {
+                                                "docs": {
+                                                    "type": "array",
+                                                    "items": {
                                                         "properties": {
                                                             "id": {
                                                                 "type": "integer",
-                                                                "example": 1
+                                                                "example": "1"
                                                             },
-                                                            "name": {
-                                                                "type": "string",
-                                                                "example": "John Doe"
-                                                            },
-                                                            "email": {
-                                                                "type": "string",
-                                                                "example": "john.doe@example.com"
-                                                            },
-                                                            "phone": {
-                                                                "type": "string",
-                                                                "example": "123456789"
-                                                            },
-                                                            "role": {
+                                                            "user_id": {
                                                                 "type": "integer",
-                                                                "example": 1
+                                                                "example": "2"
                                                             },
-                                                            "created_at": {
-                                                                "type": "string",
-                                                                "format": "date-time",
-                                                                "example": "2023-11-23 11:20:22"
+                                                            "event_id": {
+                                                                "type": "integer",
+                                                                "example": "2"
                                                             },
-                                                            "updated_at": {
-                                                                "type": "string",
-                                                                "format": "date-time",
-                                                                "example": "2023-11-23 11:20:22"
+                                                            "user": {
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "type": "integer",
+                                                                        "example": "1"
+                                                                    },
+                                                                    "name": {
+                                                                        "type": "string",
+                                                                        "example": "Emil Macejkovic"
+                                                                    },
+                                                                    "email": {
+                                                                        "type": "string",
+                                                                        "example": "dwalker@example.com"
+                                                                    },
+                                                                    "phone": {
+                                                                        "type": "string",
+                                                                        "example": "(838) 979-6792"
+                                                                    },
+                                                                    "role": {
+                                                                        "type": "integer",
+                                                                        "example": "2"
+                                                                    },
+                                                                    "created_at": {
+                                                                        "type": "string",
+                                                                        "format": "date-time",
+                                                                        "example": "2023-12-24T04:26:59.000000Z"
+                                                                    },
+                                                                    "updated_at": {
+                                                                        "type": "string",
+                                                                        "format": "date-time",
+                                                                        "example": "2023-12-24T04:26:59.000000Z"
+                                                                    },
+                                                                    "avatar": {
+                                                                        "type": "string",
+                                                                        "example": "https://www.elle.vn/wp-content/uploads/2017/07/25/hinh-anh-dep-1.jpg"
+                                                                    }
+                                                                },
+                                                                "type": "object"
                                                             }
                                                         },
                                                         "type": "object"
-                                                    },
-                                                    "created_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2023-11-23 11:20:22"
-                                                    },
-                                                    "updated_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2023-11-23 11:20:22"
                                                     }
                                                 },
-                                                "type": "object"
-                                            }
+                                                "totalDocs": {
+                                                    "type": "integer",
+                                                    "example": 16
+                                                },
+                                                "limit": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "totalPages": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "page": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "pagingCounter": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "hasPrevPage": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "hasNextPage": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -1815,7 +1838,7 @@
                     "Event"
                 ],
                 "summary": "Thêm mới bản ghi với dữ liệu được cung cấp",
-                "description": "\n     * - Endpoint trả về bản ghi mới được thêm vào \n     * -Role đước sử dụng là nhân viên, quản lí\n     * -id là id của sự kiện cần được tạo lại\n     * -name là tên sự kiện \n     * -location là nơi tổ chức sự kiện \n     * -contact là liên lạc bằng số điện thoại\n     * -banner là ảnh của sự kiện\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * ",
+                "description": "\n     * - Endpoint trả về bản ghi mới được thêm vào\n     * -Role đước sử dụng là nhân viên, quản lí\n     * -id là id của sự kiện cần được tạo lại\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -banner là ảnh của sự kiện\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * ",
                 "operationId": "recreateEvent",
                 "requestBody": {
                     "required": true,
@@ -2841,9 +2864,20 @@
                 "summary": "Lấy ra tất cả phản hồi từ người dùng gửi đến theo sự kiện",
                 "description": "\n     *      - Endpoint này cho phép lấy ra thông tin phản hồi theo sự kiện.\n     *      - Trả về thông tin của các user được cài đặt.\n     *      - Role được sử dụng quản quản lí, nhân viên, sinh viên\n     *      - id_event là id sự kiện ",
                 "operationId": "9d2f400cbd177f419d6d94af06142ae4",
+                "parameters": [
+                    {
+                        "name": "id_event",
+                        "in": "path",
+                        "description": "ID of the event",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Dữ liệu trả về thành công",
+                        "description": "Successful response with feedback data",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2854,76 +2888,113 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Lấy tất cả phản hồi thành công"
+                                            "example": "Successfully retrieved all feedback"
                                         },
                                         "metadata": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": "1"
-                                                    },
-                                                    "content": {
-                                                        "type": "string",
-                                                        "example": "hậu đặng vippro max"
-                                                    },
-                                                    "user_id": {
-                                                        "type": "integer",
-                                                        "example": "1"
-                                                    },
-                                                    "event_id": {
-                                                        "type": "integer",
-                                                        "example": "2"
-                                                    },
-                                                    "created_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2023-11-28 17:02:29"
-                                                    },
-                                                    "updated_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2023-11-28 17:02:29"
-                                                    },
-                                                    "user": {
+                                            "properties": {
+                                                "docs": {
+                                                    "type": "array",
+                                                    "items": {
                                                         "properties": {
                                                             "id": {
                                                                 "type": "integer",
                                                                 "example": "1"
                                                             },
-                                                            "name": {
+                                                            "content": {
                                                                 "type": "string",
-                                                                "example": "Kurtis Legros IV"
+                                                                "example": "Nội dung"
                                                             },
-                                                            "email": {
-                                                                "type": "string",
-                                                                "example": "haudvph20519@fpt.edu.vn"
-                                                            },
-                                                            "phone": {
-                                                                "type": "string",
-                                                                "example": "+1 (564) 267-3494"
-                                                            },
-                                                            "role": {
+                                                            "user_id": {
                                                                 "type": "integer",
-                                                                "example": "1"
+                                                                "example": "2"
+                                                            },
+                                                            "event_id": {
+                                                                "type": "integer",
+                                                                "example": "2"
                                                             },
                                                             "created_at": {
                                                                 "type": "string",
                                                                 "format": "date-time",
-                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                                "example": "2023-11-28 17:02:29"
                                                             },
                                                             "updated_at": {
                                                                 "type": "string",
                                                                 "format": "date-time",
-                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                                "example": "2023-11-28 17:02:29"
+                                                            },
+                                                            "user": {
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "type": "integer",
+                                                                        "example": "1"
+                                                                    },
+                                                                    "name": {
+                                                                        "type": "string",
+                                                                        "example": "Emil Macejkovic"
+                                                                    },
+                                                                    "email": {
+                                                                        "type": "string",
+                                                                        "example": "dwalker@example.com"
+                                                                    },
+                                                                    "phone": {
+                                                                        "type": "string",
+                                                                        "example": "(838) 979-6792"
+                                                                    },
+                                                                    "role": {
+                                                                        "type": "integer",
+                                                                        "example": "2"
+                                                                    },
+                                                                    "created_at": {
+                                                                        "type": "string",
+                                                                        "format": "date-time",
+                                                                        "example": "2023-12-24T04:26:59.000000Z"
+                                                                    },
+                                                                    "updated_at": {
+                                                                        "type": "string",
+                                                                        "format": "date-time",
+                                                                        "example": "2023-12-24T04:26:59.000000Z"
+                                                                    },
+                                                                    "avatar": {
+                                                                        "type": "string",
+                                                                        "example": "https://www.elle.vn/wp-content/uploads/2017/07/25/hinh-anh-dep-1.jpg"
+                                                                    }
+                                                                },
+                                                                "type": "object"
                                                             }
                                                         },
                                                         "type": "object"
                                                     }
                                                 },
-                                                "type": "object"
-                                            }
+                                                "totalDocs": {
+                                                    "type": "integer",
+                                                    "example": 16
+                                                },
+                                                "limit": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "totalPages": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "page": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "pagingCounter": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "hasPrevPage": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "hasNextPage": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -3559,9 +3630,20 @@
                 "tags": [
                     "notification"
                 ],
-                "summary": "Lấy hết tất cả các thông báo đang được SET",
-                "description": "\n     *      - Endpoint này cho phép lấy ra thông tin các thông báo được cài đặt sẵn.\n     *      - Trả về thông tin của các user được cài đặt.\n     *      - Role được sử dụng là cả hai role quản lí ,sinh viên\n     *      - id là id người thực hiện yêu cầu get",
+                "summary": "Get all set notifications",
+                "description": "\n     *      - This endpoint retrieves information about all pre-set notifications.\n     *      - Returns information about users who have set notifications.\n     *      - Roles: Both Administrator and Student\n     *      - id is the ID of the user making the request.",
                 "operationId": "6e9018b922157c1b7864903e27267049",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -3575,7 +3657,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Lấy ra tất cả bản ghi thành công"
+                                            "example": "Successfully retrieved all records"
                                         },
                                         "metadata": {
                                             "type": "array",
@@ -3656,57 +3738,33 @@
                                                 "type": "object"
                                             }
                                         },
-                                        "statusCode": {
+                                        "totalDocs": {
                                             "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Bản ghi không tồn tại",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
+                                            "example": 16
                                         },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Bản ghi không tồn tại"
-                                        },
-                                        "statusCode": {
+                                        "limit": {
                                             "type": "integer",
-                                            "example": 404
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Lỗi hệ thống",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
+                                            "example": 10
                                         },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Lỗi hệ thống"
-                                        },
-                                        "statusCode": {
+                                        "totalPages": {
                                             "type": "integer",
-                                            "example": 500
+                                            "example": 2
+                                        },
+                                        "page": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "pagingCounter": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "hasPrevPage": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "hasNextPage": {
+                                            "type": "boolean",
+                                            "example": false
                                         }
                                     },
                                     "type": "object"
@@ -5902,6 +5960,58 @@
                                     "type": "object"
                                 }
                             }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "responses": {
+            "404": {
+                "description": "Record not found",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "example": "error"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "example": "Record not found"
+                                },
+                                "statusCode": {
+                                    "type": "integer",
+                                    "example": 404
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "500": {
+                "description": "System error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "example": "error"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "example": "System error"
+                                },
+                                "statusCode": {
+                                    "type": "integer",
+                                    "example": 500
+                                }
+                            },
+                            "type": "object"
                         }
                     }
                 }
