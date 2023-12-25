@@ -22,36 +22,53 @@ class feedbackController extends Controller
      *      - Trả về thông tin của các user được cài đặt.
      *      - Role được sử dụng quản quản lí, nhân viên, sinh viên
      *      - id_event là id sự kiện ",
+     *     @OA\Parameter(
+     *         name="id_event",
+     *         in="path",
+     *         description="ID of the event",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Dữ liệu trả về thành công",
+     *         description="Successful response with feedback data",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="Lấy tất cả phản hồi thành công"),
+     *             @OA\Property(property="message", type="string", example="Successfully retrieved all feedback"),
      *             @OA\Property(
      *                 property="metadata",
-     *                 type="array",
-     *                 @OA\Items(
-     *                     type="object",
-     *                     @OA\Property(property="id", type="integer", example="1"),
-     *                     @OA\Property(property="content", type="string", example="hậu đặng vippro max"),
-     *                     @OA\Property(property="user_id", type="integer", example="1"),
-     *                     @OA\Property(property="event_id", type="integer", example="2"),
-     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-11-28 17:02:29"),
-     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-11-28 17:02:29"),
-     *                     @OA\Property(
-     *                         property="user",
+     *                 type="object",
+     *                 @OA\Property(property="docs", type="array",
+     *                     @OA\Items(
      *                         type="object",
      *                         @OA\Property(property="id", type="integer", example="1"),
-     *                         @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
-     *                         @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
-     *                         @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
-     *                         @OA\Property(property="role", type="integer", example="1"),
-     *                         @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
-     *                         @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
+     *                         @OA\Property(property="content", type="string", example="Nội dung"),
+     *                         @OA\Property(property="user_id", type="integer", example="2"),
+     *                         @OA\Property(property="event_id", type="integer", example="2"),
+     *                         @OA\Property(property="created_at", type="string", format="date-time", example="2023-11-28 17:02:29"),
+     *                         @OA\Property(property="updated_at", type="string", format="date-time", example="2023-11-28 17:02:29"),
+     *                         @OA\Property(
+     *                             property="user",
+     *                             type="object",
+     *                             @OA\Property(property="id", type="integer", example="1"),
+     *                             @OA\Property(property="name", type="string", example="Emil Macejkovic"),
+     *                             @OA\Property(property="email", type="string", example="dwalker@example.com"),
+     *                             @OA\Property(property="phone", type="string", example="(838) 979-6792"),
+     *                             @OA\Property(property="role", type="integer", example="2"),
+     *                             @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-24T04:26:59.000000Z"),
+     *                             @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-24T04:26:59.000000Z"),
+     *                             @OA\Property(property="avatar", type="string", example="https://www.elle.vn/wp-content/uploads/2017/07/25/hinh-anh-dep-1.jpg")
+     *                         )
      *                     )
-     *                 )
+     *                 ),
+     *                 @OA\Property(property="totalDocs", type="integer", example=16),
+     *                 @OA\Property(property="limit", type="integer", example=10),
+     *                 @OA\Property(property="totalPages", type="integer", example=2),
+     *                 @OA\Property(property="page", type="integer", example=2),
+     *                 @OA\Property(property="pagingCounter", type="integer", example=2),
+     *                 @OA\Property(property="hasPrevPage", type="boolean", example=true),
+     *                 @OA\Property(property="hasNextPage", type="boolean", example=false)
      *             )
      *         )
      *     ),
@@ -62,18 +79,29 @@ class feedbackController extends Controller
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
      *             @OA\Property(property="message", type="string", example="Internal server error"),
-     *             @OA\Property(property="statusCode", type="int", example=500)
+     *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
      * )
      */
 
-    public function index($id_event)
+    public function index($id_event,Request $request)
     {
         try {
-            $feedback = feedback::where('event_id',$id_event)->with('user')->get();
+            $page = $request->query('page', 1);
+            $limit = $request->query('limit', 10);
+            $feedback = feedback::where('event_id',$id_event)->with('user')->paginate($limit, ['*'], 'page', $page);
             return response()->json([
-                'metadata' => $feedback,
+                'metadata' => [
+                    'docs' => $feedback->items(),
+                    'totalDocs' => $feedback->total(),
+                    'limit' => $feedback->perPage(),
+                    'totalPages' => $feedback->lastPage(),
+                    'page' => $feedback->currentPage(),
+                    'pagingCounter' => $feedback->currentPage(),
+                    'hasPrevPage' => $feedback->previousPageUrl() != null,
+                    'hasNextPage' => $feedback->nextPageUrl() != null
+                ],
                 'message' => 'Lấy tất cả phản hồi thành công',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
