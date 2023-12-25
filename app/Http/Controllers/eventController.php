@@ -34,7 +34,8 @@ class eventController extends Controller
      *              @OA\Property(property="status", type="string", example="success"),
      *              @OA\Property(property="message", type="string", example="Lấy dữ liệu thành công"),
      *              @OA\Property(property="statusCode", type="integer", example=200),
-     *              @OA\Property(property="metadata",type="array",
+     *              @OA\Property(property="metadata",type="object", 
+     *              @OA\Property(property="docs", type="array",
      *                  @OA\Items(
      *                      type="object",
      *                       @OA\Property(property="name", type="string", example="Event Name"),
@@ -44,22 +45,33 @@ class eventController extends Controller
      *                       @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
      *                       @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                       @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
-     *                             @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
+     *                       @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
      *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
      *                       @OA\Property(property="attendances_count", type="interger", example=3),
      *                       @OA\Property(
-     *                     property="user",
-     *                     type="object",
-     *                     @OA\Property(property="id", type="integer", example="1"),
-     *                     @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
-     *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
-     *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
-     *                     @OA\Property(property="role", type="integer", example="1"),
-     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
-     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
-     *                 )
-     *                  )
+     *                          property="user",
+     *                          type="object",
+     *                          @OA\Property(property="id", type="integer", example="1"),
+     *                          @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
+     *                          @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
+     *                          @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
+     *                          @OA\Property(property="role", type="integer", example="1"),
+     *                          @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                          @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
+     *                          @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
+     *                          @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
+     *                      )
+     *                    )
+     *                  ),
+     * @OA\Property(property="totalDocs", type="integer", example=16),
+     *                 @OA\Property(property="limit", type="integer", example=10),
+     *                 @OA\Property(property="totalPages", type="integer", example=2),
+     *                 @OA\Property(property="page", type="integer", example=2),
+     *                 @OA\Property(property="pagingCounter", type="integer", example=2),
+     *                 @OA\Property(property="hasPrevPage", type="boolean", example=true),
+     *                 @OA\Property(property="hasNextPage", type="boolean", example=false)
      *              )
+     *                 
      *         )
      *     ),
      *     @OA\Response(
@@ -84,17 +96,30 @@ class eventController extends Controller
      *     )
      * )
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $event = event::withCount('attendances')->with('user')->get();
-            $returnData = $event->map(function ($event) {
+            $page = $request->query('page', 1);
+            $limit = $request->query('limit', 10);
+            //return $page;
+
+            $event = event::withCount('attendances')->with('user')->paginate($limit, ['*'], 'page', $page);
+            $event->map(function ($event) {
                 $imageUrl = asset("Upload/{$event->banner}");
                 $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
                 return $event;
             });
             return response()->json([
-                'metadata' => $returnData,
+                'metadata' => [
+                    'docs' => $event->items(),
+                    'totalDocs' => $event->total(),
+                    'limit' => $event->perPage(),
+                    'totalPages' =>$event->lastPage(),
+                    'page' => $event->currentPage(),
+                    'pagingCounter' => $event->currentPage(), // Bạn có thể sử dụng currentPage hoặc số khác nếu cần
+                    'hasPrevPage' => $event->previousPageUrl() != null,
+                    'hasNextPage' => $event->nextPageUrl() != null
+                ],
                 'message' => 'Get All Records Successfully',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
@@ -155,6 +180,8 @@ class eventController extends Controller
      *                     @OA\Property(property="email", type="integer", example="upton.tessie@example.com"),
      *                     @OA\Property(property="phone", type="integer", example="2023-12-20T04:57:16.000000Z"),
      *                     @OA\Property(property="role", type="integer", example="205.840.6294"),
+     *                         @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-11-28 17:02:29"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-11-28 17:02:29"),
      *                          )),
@@ -240,94 +267,111 @@ class eventController extends Controller
         }
     }
 
-    /**
-     * @OA\Post(
-     *     path="/api/searchEvent",
-     *     summary="Tìm kiếm sự kiện theo tên ",
-     *     tags={"Event"},
-     *     operationId="Tìm kiếm sự kiện",
-     *  description="
-     * - Request cần nhập vào là tên sự kiện
-     * - Tên sự kiện chỉ cần nhập gần giống, không nhất thiết phải giống hẳn
-     * - Endpoit trả ra là những sự kiện có tên dạng vậy",
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="name", type="string", example="Event Name"),
-     *
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Successful operation",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="EVent information retrieved successfully"),
-     *             @OA\Property(property="statusCode", type="integer", example=200),
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="object",
-     *                       @OA\Property(property="name", type="string", example="Event Name"),
-     *                       @OA\Property(property="location", type="string", example="Ha Noi"),
-     *                       @OA\Property(property="contact", type="string", example="0986567467"),
-     *                       @OA\Property(property="user_id", type="integer", example=2),
-     * @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
-     *                       @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
-     *                       @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
-     *                                   @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
-     *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
-     *                       @OA\Property(property="attendances_count", type="interger", example=3),
-     * @OA\Property(
-     *                     property="user",
-     *                     type="object",
-     *                     @OA\Property(property="id", type="integer", example="1"),
-     *                     @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
-     *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
-     *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
-     *                     @OA\Property(property="role", type="integer", example="1"),
-     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
-     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Event not found",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="User not found"),
-     *             @OA\Property(property="statusCode", type="integer", example=404)
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Server error",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Internal server error"),
-     *             @OA\Property(property="statusCode", type="integer", example=500)
-     *         )
-     *     )
-     * )
-     */
+/**
+ * @OA\Post(
+ *     path="/api/searchEvent",
+ *     summary="Tìm kiếm sự kiện theo tên",
+ *     tags={"Event"},
+ *     operationId="Tìm kiếm sự kiện",
+ *     description="Request cần nhập vào là tên sự kiện. Tên sự kiện chỉ cần nhập gần giống, không nhất thiết phải giống hẳn. Endpoint trả ra là những sự kiện có tên dạng vậy",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             @OA\Property(property="name", type="string", example="Event Name")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Successful operation",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="success"),
+ *             @OA\Property(property="message", type="string", example="Event information retrieved successfully"),
+ *             @OA\Property(property="statusCode", type="integer", example=200),
+ *             @OA\Property(property="metadata", type="object",
+ *                 @OA\Property(property="docs", type="array",
+ *                     @OA\Items(
+ *                         type="object",
+ *                         @OA\Property(property="name", type="string", example="Event Name"),
+ *                         @OA\Property(property="location", type="string", example="Ha Noi"),
+ *                         @OA\Property(property="contact", type="string", example="0986567467"),
+ *                         @OA\Property(property="user_id", type="integer", example=2),
+ *                         @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
+ *                         @OA\Property(property="start_time", type="string", format="date-time", example="2023-11-23T11:20:22"),
+ *                         @OA\Property(property="end_time", type="string", format="date-time", example="2023-11-23T11:20:22"),
+ *                         @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
+ *                         @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
+ *                         @OA\Property(property="attendances_count", type="integer", example=3),
+ *                         @OA\Property(
+ *                             property="user",
+ *                             type="object",
+ *                             @OA\Property(property="id", type="integer", example=1),
+ *                             @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
+ *                             @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
+ *                             @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
+ *                             @OA\Property(property="role", type="integer", example=1),
+ *                             @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
+ *                             @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
+ *                         )
+ *                     )
+ *                 ),
+ *                 @OA\Property(property="totalDocs", type="integer", example=16),
+ *                 @OA\Property(property="limit", type="integer", example=10),
+ *                 @OA\Property(property="totalPages", type="integer", example=2),
+ *                 @OA\Property(property="page", type="integer", example=2),
+ *                 @OA\Property(property="pagingCounter", type="integer", example=2),
+ *                 @OA\Property(property="hasPrevPage", type="boolean", example=true),
+ *                 @OA\Property(property="hasNextPage", type="boolean", example=false)
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Event not found",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Event not found"),
+ *             @OA\Property(property="statusCode", type="integer", example=404)
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Server error",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Internal server error"),
+ *             @OA\Property(property="statusCode", type="integer", example=500)
+ *         )
+ *     )
+ * )
+ */
     public function searchEvent(Request $request)
     {
         try {
             if ($request->name == "" || $request->name == null) {
                 $request->name == "";
             }
-            $event = event::where('name', 'like', "%{$request->name}%")->withCount('attendances')->with('user')->get();
-            $returnData = $event->map(function ($event) {
+            $page = $request->query('page',1);
+            $limit = $request->query('limit',10);
+            $event = event::where('name', 'like', "%{$request->name}%")->withCount('attendances')->with('user')->paginate($limit, ['*'], 'page', $page);
+            $event->map(function ($event) {
                 $imageUrl = asset("Upload/{$event->banner}");
                 $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
                 return $event;
             });
             return response()->json([
-                'metadata' => $returnData,
+                'metadata' => [
+                    'docs' => $event->items(),
+                    'totalDocs' => $event->total(),
+                    'limit' => $event->perPage(),
+                    'totalPages' => $event->lastPage(),
+                    'page' => $event->currentPage(),
+                    'pagingCounter' => $event->currentPage(), 
+                    'hasPrevPage' => $event->previousPageUrl() != null,
+                    'hasNextPage' => $event->nextPageUrl() != null
+                ],
                 'message' => 'Lấy các bản ghi thành công',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
@@ -398,6 +442,8 @@ class eventController extends Controller
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
      *                     @OA\Property(property="role", type="integer", example="1"),
+     *                           @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
      *                 )
@@ -516,7 +562,7 @@ class eventController extends Controller
      *             @OA\Property(property="location", type="string", example="Hai Phong"),
      *             @OA\Property(property="contact", type="string", example="0983467584"),
      *             @OA\Property(property="user_id", type="integer", example=2),
-     *             @OA\Property(property="banner", type="string", example="anh1.jpg"),
+     *             @OA\Property(property="banner", type="string",format = "binary", example="anh1.jpg"),
      *             @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *             @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                                   @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
@@ -549,7 +595,9 @@ class eventController extends Controller
      *                     @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
-     *                     @OA\Property(property="role", type="integer", example="1"),
+     *                     @OA\Property(property="role", type="integer", example="1"),     
+     *                     @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
      *                 )
@@ -698,7 +746,9 @@ class eventController extends Controller
      *                     @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
-     *                     @OA\Property(property="role", type="integer", example="1"),
+     *                     @OA\Property(property="role", type="integer", example="1"),     
+     *                     @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
      *                 )
@@ -783,7 +833,8 @@ class eventController extends Controller
      *             @OA\Property(property="status", type="string", example="success"),
      *             @OA\Property(property="message", type="string", example="Tạo mới bản ghi thành công"),
      *             @OA\Property(property="statusCode", type="int", example=200),
-     *             @OA\Property(property="metadata", type="array",
+     *             @OA\Property(property="metadata", type="object",
+     * @OA\Property(property="docs", type="array",
      *                  @OA\Items(type="object",
      *                           @OA\Property(property="name", type="string", example="Event Name"),
      *                           @OA\Property(property="location", type="string", example="Ha Noi"),
@@ -818,10 +869,19 @@ class eventController extends Controller
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
      *                     @OA\Property(property="role", type="integer", example="1"),
+     *                          @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
-     *                 )
-     *                  )
+     *                 ))
+     *                  ),
+     *  @OA\Property(property="totalDocs", type="integer", example=16),
+     *                 @OA\Property(property="limit", type="integer", example=10),
+     *                 @OA\Property(property="totalPages", type="integer", example=2),
+     *                 @OA\Property(property="page", type="integer", example=2),
+     *                 @OA\Property(property="pagingCounter", type="integer", example=2),
+     *                 @OA\Property(property="hasPrevPage", type="boolean", example=true),
+     *                 @OA\Property(property="hasNextPage", type="boolean", example=false)
      *             )
      *         )
      *     ),
@@ -848,6 +908,8 @@ class eventController extends Controller
     public function eventStatistics(Request $request)
     {
         $logUser = auth()->user()->role;
+        $page = $request->query('page', 1);
+        $limit = $request->query('limit', 10);
         if($logUser == 0){
             return response([
                 "status" => "error",
@@ -873,14 +935,23 @@ class eventController extends Controller
                                                 ->withCount('attendances')
                                                 ->with('attendances')
                                                 ->with('user')
-                                                ->get();
+                                                ->paginate($limit, ['*'], 'page', $page);
             $eventInWeek->map(function ($event) {
                 $imageUrl = asset("Upload/{$event->banner}");
                 $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
                 return $event;
             });
             return response()->json([
-                'metadata' => $eventInWeek,
+                'metadata' => [
+                    'docs' => $eventInWeek->items(),
+                    'totalDocs' => $eventInWeek->total(),
+                    'limit' => $eventInWeek->perPage(),
+                    'totalPages' => $eventInWeek->lastPage(),
+                    'page' => $eventInWeek->currentPage(),
+                    'pagingCounter' => $eventInWeek->currentPage(), // Bạn có thể sử dụng currentPage hoặc số khác nếu cần
+                    'hasPrevPage' => $eventInWeek->previousPageUrl() != null,
+                    'hasNextPage' => $eventInWeek->nextPageUrl() != null
+                ],
                 'message' => 'Get One Record Successfully',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
@@ -907,13 +978,23 @@ class eventController extends Controller
         ->withCount('attendances')
         ->with('attendances')
         ->with('user')
-        ->get()->map(function ($event) {
+        ->paginate($limit, ['*'], 'page', $page);
+        $eventInStatistic->map(function ($event) {
             $imageUrl = asset("Upload/{$event->banner}");
             $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
             return $event;
         });
         return response()->json([
-            'metadata' => $eventInStatistic,
+            'metadata' => [
+                'docs' => $eventInStatistic->items(),
+                'totalDocs' => $eventInStatistic->total(),
+                'limit' => $eventInStatistic->perPage(),
+                'totalPages' => $eventInStatistic->lastPage(),
+                'page' => $eventInStatistic->currentPage(),
+                'pagingCounter' => $eventInStatistic->currentPage(), // Bạn có thể sử dụng currentPage hoặc số khác nếu cần
+                'hasPrevPage' => $eventInStatistic->previousPageUrl() != null,
+                'hasNextPage' => $eventInStatistic->nextPageUrl() != null
+            ],
             'message' => 'Get One Record Successfully',
             'status' => 'success',
             'statusCode' => Response::HTTP_OK
@@ -985,7 +1066,9 @@ class eventController extends Controller
      *                     @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
-     *                     @OA\Property(property="role", type="integer", example="1"),
+     *                     @OA\Property(property="role", type="integer", example="1"),     
+     *                      @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
      *                 )
@@ -1146,7 +1229,9 @@ class eventController extends Controller
      *                     @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
-     *                     @OA\Property(property="role", type="integer", example="1"),
+     *                     @OA\Property(property="role", type="integer", example="1"),     
+     *                      @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
      *                 )

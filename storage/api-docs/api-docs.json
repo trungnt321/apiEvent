@@ -77,6 +77,7 @@
         "/": {
             "get": {
                 "description": "Home page",
+                "operationId": "58658e34a5c8bd71c4a0afed6de10d20",
                 "responses": {
                     "default": {
                         "description": "Welcome Page"
@@ -1088,89 +1089,130 @@
                                             "example": 200
                                         },
                                         "metadata": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string",
-                                                        "example": "Event Name"
-                                                    },
-                                                    "location": {
-                                                        "type": "string",
-                                                        "example": "Ha Noi"
-                                                    },
-                                                    "contact": {
-                                                        "type": "string",
-                                                        "example": "0986567467"
-                                                    },
-                                                    "user_id": {
-                                                        "type": "integer",
-                                                        "example": 2
-                                                    },
-                                                    "banner": {
-                                                        "type": "string",
-                                                        "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
-                                                    },
-                                                    "start_time": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2023-11-23 11:20:22"
-                                                    },
-                                                    "end_time": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2023-11-23 11:20:22"
-                                                    },
-                                                    "description": {
-                                                        "type": "string",
-                                                        "example": "Sự kiện rất hoành tráng"
-                                                    },
-                                                    "content": {
-                                                        "type": "string",
-                                                        "example": "Chào mừng tổng thống"
-                                                    },
-                                                    "attendances_count": {
-                                                        "type": "interger",
-                                                        "example": 3
-                                                    },
-                                                    "user": {
+                                            "properties": {
+                                                "docs": {
+                                                    "type": "array",
+                                                    "items": {
                                                         "properties": {
-                                                            "id": {
-                                                                "type": "integer",
-                                                                "example": "1"
-                                                            },
                                                             "name": {
                                                                 "type": "string",
-                                                                "example": "Kurtis Legros IV"
+                                                                "example": "Event Name"
                                                             },
-                                                            "email": {
+                                                            "location": {
                                                                 "type": "string",
-                                                                "example": "haudvph20519@fpt.edu.vn"
+                                                                "example": "Ha Noi"
                                                             },
-                                                            "phone": {
+                                                            "contact": {
                                                                 "type": "string",
-                                                                "example": "+1 (564) 267-3494"
+                                                                "example": "0986567467"
                                                             },
-                                                            "role": {
+                                                            "user_id": {
                                                                 "type": "integer",
-                                                                "example": "1"
+                                                                "example": 2
                                                             },
-                                                            "created_at": {
+                                                            "banner": {
+                                                                "type": "string",
+                                                                "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
+                                                            },
+                                                            "start_time": {
                                                                 "type": "string",
                                                                 "format": "date-time",
-                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                                "example": "2023-11-23 11:20:22"
                                                             },
-                                                            "updated_at": {
+                                                            "end_time": {
                                                                 "type": "string",
                                                                 "format": "date-time",
-                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                                "example": "2023-11-23 11:20:22"
+                                                            },
+                                                            "description": {
+                                                                "type": "string",
+                                                                "example": "Sự kiện rất hoành tráng"
+                                                            },
+                                                            "content": {
+                                                                "type": "string",
+                                                                "example": "Chào mừng tổng thống"
+                                                            },
+                                                            "attendances_count": {
+                                                                "type": "interger",
+                                                                "example": 3
+                                                            },
+                                                            "user": {
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "type": "integer",
+                                                                        "example": "1"
+                                                                    },
+                                                                    "name": {
+                                                                        "type": "string",
+                                                                        "example": "Kurtis Legros IV"
+                                                                    },
+                                                                    "email": {
+                                                                        "type": "string",
+                                                                        "example": "haudvph20519@fpt.edu.vn"
+                                                                    },
+                                                                    "phone": {
+                                                                        "type": "string",
+                                                                        "example": "+1 (564) 267-3494"
+                                                                    },
+                                                                    "role": {
+                                                                        "type": "integer",
+                                                                        "example": "1"
+                                                                    },
+                                                                    "google_id": {
+                                                                        "type": "string",
+                                                                        "example": "137518716745268"
+                                                                    },
+                                                                    "avatar": {
+                                                                        "type": "string",
+                                                                        "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
+                                                                    },
+                                                                    "created_at": {
+                                                                        "type": "string",
+                                                                        "format": "date-time",
+                                                                        "example": "2023-12-02T08:55:45.000000Z"
+                                                                    },
+                                                                    "updated_at": {
+                                                                        "type": "string",
+                                                                        "format": "date-time",
+                                                                        "example": "2023-12-02T08:55:45.000000Z"
+                                                                    }
+                                                                },
+                                                                "type": "object"
                                                             }
                                                         },
                                                         "type": "object"
                                                     }
                                                 },
-                                                "type": "object"
-                                            }
+                                                "totalDocs": {
+                                                    "type": "integer",
+                                                    "example": 16
+                                                },
+                                                "limit": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "totalPages": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "page": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "pagingCounter": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "hasPrevPage": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "hasNextPage": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -1259,6 +1301,7 @@
                                     },
                                     "banner": {
                                         "type": "string",
+                                        "format": "binary",
                                         "example": "anh1.jpg"
                                     },
                                     "start_time": {
@@ -1371,6 +1414,14 @@
                                                             "role": {
                                                                 "type": "integer",
                                                                 "example": "1"
+                                                            },
+                                                            "google_id": {
+                                                                "type": "string",
+                                                                "example": "137518716745268"
+                                                            },
+                                                            "avatar": {
+                                                                "type": "string",
+                                                                "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
                                                             },
                                                             "created_at": {
                                                                 "type": "string",
@@ -1555,6 +1606,14 @@
                                                                     "type": "integer",
                                                                     "example": "205.840.6294"
                                                                 },
+                                                                "google_id": {
+                                                                    "type": "string",
+                                                                    "example": "137518716745268"
+                                                                },
+                                                                "avatar": {
+                                                                    "type": "string",
+                                                                    "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
+                                                                },
                                                                 "created_at": {
                                                                     "type": "string",
                                                                     "format": "date-time",
@@ -1655,8 +1714,8 @@
                 "tags": [
                     "Event"
                 ],
-                "summary": "Tìm kiếm sự kiện theo tên ",
-                "description": "\n     * - Request cần nhập vào là tên sự kiện\n     * - Tên sự kiện chỉ cần nhập gần giống, không nhất thiết phải giống hẳn\n     * - Endpoit trả ra là những sự kiện có tên dạng vậy",
+                "summary": "Tìm kiếm sự kiện theo tên",
+                "description": "Request cần nhập vào là tên sự kiện. Tên sự kiện chỉ cần nhập gần giống, không nhất thiết phải giống hẳn. Endpoint trả ra là những sự kiện có tên dạng vậy",
                 "operationId": "Tìm kiếm sự kiện",
                 "requestBody": {
                     "required": true,
@@ -1687,90 +1746,126 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "EVent information retrieved successfully"
+                                            "example": "Event information retrieved successfully"
                                         },
                                         "statusCode": {
                                             "type": "integer",
                                             "example": 200
                                         },
-                                        "data": {
+                                        "metadata": {
                                             "properties": {
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "Event Name"
+                                                "docs": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Event Name"
+                                                            },
+                                                            "location": {
+                                                                "type": "string",
+                                                                "example": "Ha Noi"
+                                                            },
+                                                            "contact": {
+                                                                "type": "string",
+                                                                "example": "0986567467"
+                                                            },
+                                                            "user_id": {
+                                                                "type": "integer",
+                                                                "example": 2
+                                                            },
+                                                            "banner": {
+                                                                "type": "string",
+                                                                "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
+                                                            },
+                                                            "start_time": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-23T11:20:22"
+                                                            },
+                                                            "end_time": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-23T11:20:22"
+                                                            },
+                                                            "description": {
+                                                                "type": "string",
+                                                                "example": "Sự kiện rất hoành tráng"
+                                                            },
+                                                            "content": {
+                                                                "type": "string",
+                                                                "example": "Chào mừng tổng thống"
+                                                            },
+                                                            "attendances_count": {
+                                                                "type": "integer",
+                                                                "example": 3
+                                                            },
+                                                            "user": {
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "type": "integer",
+                                                                        "example": 1
+                                                                    },
+                                                                    "name": {
+                                                                        "type": "string",
+                                                                        "example": "Kurtis Legros IV"
+                                                                    },
+                                                                    "email": {
+                                                                        "type": "string",
+                                                                        "example": "haudvph20519@fpt.edu.vn"
+                                                                    },
+                                                                    "phone": {
+                                                                        "type": "string",
+                                                                        "example": "+1 (564) 267-3494"
+                                                                    },
+                                                                    "role": {
+                                                                        "type": "integer",
+                                                                        "example": 1
+                                                                    },
+                                                                    "created_at": {
+                                                                        "type": "string",
+                                                                        "format": "date-time",
+                                                                        "example": "2023-12-02T08:55:45.000000Z"
+                                                                    },
+                                                                    "updated_at": {
+                                                                        "type": "string",
+                                                                        "format": "date-time",
+                                                                        "example": "2023-12-02T08:55:45.000000Z"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
                                                 },
-                                                "location": {
-                                                    "type": "string",
-                                                    "example": "Ha Noi"
+                                                "totalDocs": {
+                                                    "type": "integer",
+                                                    "example": 16
                                                 },
-                                                "contact": {
-                                                    "type": "string",
-                                                    "example": "0986567467"
+                                                "limit": {
+                                                    "type": "integer",
+                                                    "example": 10
                                                 },
-                                                "user_id": {
+                                                "totalPages": {
                                                     "type": "integer",
                                                     "example": 2
                                                 },
-                                                "banner": {
-                                                    "type": "string",
-                                                    "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
+                                                "page": {
+                                                    "type": "integer",
+                                                    "example": 2
                                                 },
-                                                "start_time": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2023-11-23 11:20:22"
+                                                "pagingCounter": {
+                                                    "type": "integer",
+                                                    "example": 2
                                                 },
-                                                "end_time": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2023-11-23 11:20:22"
+                                                "hasPrevPage": {
+                                                    "type": "boolean",
+                                                    "example": true
                                                 },
-                                                "description": {
-                                                    "type": "string",
-                                                    "example": "Sự kiện rất hoành tráng"
-                                                },
-                                                "content": {
-                                                    "type": "string",
-                                                    "example": "Chào mừng tổng thống"
-                                                },
-                                                "attendances_count": {
-                                                    "type": "interger",
-                                                    "example": 3
-                                                },
-                                                "user": {
-                                                    "properties": {
-                                                        "id": {
-                                                            "type": "integer",
-                                                            "example": "1"
-                                                        },
-                                                        "name": {
-                                                            "type": "string",
-                                                            "example": "Kurtis Legros IV"
-                                                        },
-                                                        "email": {
-                                                            "type": "string",
-                                                            "example": "haudvph20519@fpt.edu.vn"
-                                                        },
-                                                        "phone": {
-                                                            "type": "string",
-                                                            "example": "+1 (564) 267-3494"
-                                                        },
-                                                        "role": {
-                                                            "type": "integer",
-                                                            "example": "1"
-                                                        },
-                                                        "created_at": {
-                                                            "type": "string",
-                                                            "format": "date-time",
-                                                            "example": "2023-12-02T08:55:45.000000Z"
-                                                        },
-                                                        "updated_at": {
-                                                            "type": "string",
-                                                            "format": "date-time",
-                                                            "example": "2023-12-02T08:55:45.000000Z"
-                                                        }
-                                                    },
-                                                    "type": "object"
+                                                "hasNextPage": {
+                                                    "type": "boolean",
+                                                    "example": false
                                                 }
                                             },
                                             "type": "object"
@@ -1793,7 +1888,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "User not found"
+                                            "example": "Event not found"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -1956,6 +2051,14 @@
                                                             "role": {
                                                                 "type": "integer",
                                                                 "example": "1"
+                                                            },
+                                                            "google_id": {
+                                                                "type": "string",
+                                                                "example": "137518716745268"
+                                                            },
+                                                            "avatar": {
+                                                                "type": "string",
+                                                                "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
                                                             },
                                                             "created_at": {
                                                                 "type": "string",
@@ -2130,6 +2233,14 @@
                                                         "role": {
                                                             "type": "integer",
                                                             "example": "1"
+                                                        },
+                                                        "google_id": {
+                                                            "type": "string",
+                                                            "example": "137518716745268"
+                                                        },
+                                                        "avatar": {
+                                                            "type": "string",
+                                                            "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
                                                         },
                                                         "created_at": {
                                                             "type": "string",
@@ -2360,6 +2471,14 @@
                                                             "type": "integer",
                                                             "example": "1"
                                                         },
+                                                        "google_id": {
+                                                            "type": "string",
+                                                            "example": "137518716745268"
+                                                        },
+                                                        "avatar": {
+                                                            "type": "string",
+                                                            "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
+                                                        },
                                                         "created_at": {
                                                             "type": "string",
                                                             "format": "date-time",
@@ -2537,6 +2656,14 @@
                                                                 "type": "integer",
                                                                 "example": "1"
                                                             },
+                                                            "google_id": {
+                                                                "type": "string",
+                                                                "example": "137518716745268"
+                                                            },
+                                                            "avatar": {
+                                                                "type": "string",
+                                                                "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
+                                                            },
                                                             "created_at": {
                                                                 "type": "string",
                                                                 "format": "date-time",
@@ -2661,143 +2788,184 @@
                                             "example": 200
                                         },
                                         "metadata": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string",
-                                                        "example": "Event Name"
-                                                    },
-                                                    "location": {
-                                                        "type": "string",
-                                                        "example": "Ha Noi"
-                                                    },
-                                                    "contact": {
-                                                        "type": "string",
-                                                        "example": "0986567467"
-                                                    },
-                                                    "user_id": {
-                                                        "type": "integer",
-                                                        "example": 2
-                                                    },
-                                                    "banner": {
-                                                        "type": "string",
-                                                        "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
-                                                    },
-                                                    "start_time": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2023-11-23 11:20:22"
-                                                    },
-                                                    "end_time": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2023-11-23 11:20:22"
-                                                    },
-                                                    "description": {
-                                                        "type": "string",
-                                                        "example": "Sự kiện rất hoành tráng"
-                                                    },
-                                                    "content": {
-                                                        "type": "string",
-                                                        "example": "Chào mừng tổng thống"
-                                                    },
-                                                    "attendances_count": {
-                                                        "type": "integer",
-                                                        "example": 0
-                                                    },
-                                                    "feedback": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "properties": {
-                                                                "id": {
-                                                                    "type": "integer",
-                                                                    "example": "1"
-                                                                },
-                                                                "content": {
-                                                                    "type": "string",
-                                                                    "example": "Phucla DepZai"
-                                                                },
-                                                                "user_id": {
-                                                                    "type": "integer",
-                                                                    "example": "1"
-                                                                },
-                                                                "event_id": {
-                                                                    "type": "integer",
-                                                                    "example": "2"
-                                                                },
-                                                                "created_at": {
-                                                                    "type": "string",
-                                                                    "format": "date-time",
-                                                                    "example": "2023-11-28 17:02:29"
-                                                                },
-                                                                "updated_at": {
-                                                                    "type": "string",
-                                                                    "format": "date-time",
-                                                                    "example": "2023-11-28 17:02:29"
-                                                                }
-                                                            },
-                                                            "type": "object"
-                                                        }
-                                                    },
-                                                    "attendances": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "properties": {
-                                                                "id": {
-                                                                    "type": "interger",
-                                                                    "example": 1
-                                                                },
-                                                                "user_id": {
-                                                                    "type": "integer",
-                                                                    "example": 1
-                                                                },
-                                                                "event_id": {
-                                                                    "type": "integer",
-                                                                    "example": 2
-                                                                }
-                                                            },
-                                                            "type": "object"
-                                                        }
-                                                    },
-                                                    "user": {
+                                            "properties": {
+                                                "docs": {
+                                                    "type": "array",
+                                                    "items": {
                                                         "properties": {
-                                                            "id": {
-                                                                "type": "integer",
-                                                                "example": "1"
-                                                            },
                                                             "name": {
                                                                 "type": "string",
-                                                                "example": "Kurtis Legros IV"
+                                                                "example": "Event Name"
                                                             },
-                                                            "email": {
+                                                            "location": {
                                                                 "type": "string",
-                                                                "example": "haudvph20519@fpt.edu.vn"
+                                                                "example": "Ha Noi"
                                                             },
-                                                            "phone": {
+                                                            "contact": {
                                                                 "type": "string",
-                                                                "example": "+1 (564) 267-3494"
+                                                                "example": "0986567467"
                                                             },
-                                                            "role": {
+                                                            "user_id": {
                                                                 "type": "integer",
-                                                                "example": "1"
+                                                                "example": 2
                                                             },
-                                                            "created_at": {
+                                                            "banner": {
+                                                                "type": "string",
+                                                                "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
+                                                            },
+                                                            "start_time": {
                                                                 "type": "string",
                                                                 "format": "date-time",
-                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                                "example": "2023-11-23 11:20:22"
                                                             },
-                                                            "updated_at": {
+                                                            "end_time": {
                                                                 "type": "string",
                                                                 "format": "date-time",
-                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                                "example": "2023-11-23 11:20:22"
+                                                            },
+                                                            "description": {
+                                                                "type": "string",
+                                                                "example": "Sự kiện rất hoành tráng"
+                                                            },
+                                                            "content": {
+                                                                "type": "string",
+                                                                "example": "Chào mừng tổng thống"
+                                                            },
+                                                            "attendances_count": {
+                                                                "type": "integer",
+                                                                "example": 0
+                                                            },
+                                                            "feedback": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "properties": {
+                                                                        "id": {
+                                                                            "type": "integer",
+                                                                            "example": "1"
+                                                                        },
+                                                                        "content": {
+                                                                            "type": "string",
+                                                                            "example": "Phucla DepZai"
+                                                                        },
+                                                                        "user_id": {
+                                                                            "type": "integer",
+                                                                            "example": "1"
+                                                                        },
+                                                                        "event_id": {
+                                                                            "type": "integer",
+                                                                            "example": "2"
+                                                                        },
+                                                                        "created_at": {
+                                                                            "type": "string",
+                                                                            "format": "date-time",
+                                                                            "example": "2023-11-28 17:02:29"
+                                                                        },
+                                                                        "updated_at": {
+                                                                            "type": "string",
+                                                                            "format": "date-time",
+                                                                            "example": "2023-11-28 17:02:29"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            },
+                                                            "attendances": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "properties": {
+                                                                        "id": {
+                                                                            "type": "interger",
+                                                                            "example": 1
+                                                                        },
+                                                                        "user_id": {
+                                                                            "type": "integer",
+                                                                            "example": 1
+                                                                        },
+                                                                        "event_id": {
+                                                                            "type": "integer",
+                                                                            "example": 2
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            },
+                                                            "user": {
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "type": "integer",
+                                                                        "example": "1"
+                                                                    },
+                                                                    "name": {
+                                                                        "type": "string",
+                                                                        "example": "Kurtis Legros IV"
+                                                                    },
+                                                                    "email": {
+                                                                        "type": "string",
+                                                                        "example": "haudvph20519@fpt.edu.vn"
+                                                                    },
+                                                                    "phone": {
+                                                                        "type": "string",
+                                                                        "example": "+1 (564) 267-3494"
+                                                                    },
+                                                                    "role": {
+                                                                        "type": "integer",
+                                                                        "example": "1"
+                                                                    },
+                                                                    "google_id": {
+                                                                        "type": "string",
+                                                                        "example": "137518716745268"
+                                                                    },
+                                                                    "avatar": {
+                                                                        "type": "string",
+                                                                        "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
+                                                                    },
+                                                                    "created_at": {
+                                                                        "type": "string",
+                                                                        "format": "date-time",
+                                                                        "example": "2023-12-02T08:55:45.000000Z"
+                                                                    },
+                                                                    "updated_at": {
+                                                                        "type": "string",
+                                                                        "format": "date-time",
+                                                                        "example": "2023-12-02T08:55:45.000000Z"
+                                                                    }
+                                                                },
+                                                                "type": "object"
                                                             }
                                                         },
                                                         "type": "object"
                                                     }
                                                 },
-                                                "type": "object"
-                                            }
+                                                "totalDocs": {
+                                                    "type": "integer",
+                                                    "example": 16
+                                                },
+                                                "limit": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "totalPages": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "page": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "pagingCounter": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "hasPrevPage": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "hasNextPage": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -4627,32 +4795,65 @@
                                             "example": 200
                                         },
                                         "metadata": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string",
-                                                        "example": "Phuc La"
-                                                    },
-                                                    "email": {
-                                                        "type": "string",
-                                                        "example": "phuclaf@gmail.com"
-                                                    },
-                                                    "password": {
-                                                        "type": "string",
-                                                        "example": "123456"
-                                                    },
-                                                    "phone": {
-                                                        "type": "string",
-                                                        "example": "0983118272"
-                                                    },
-                                                    "role": {
-                                                        "type": "integer",
-                                                        "example": 1
+                                            "properties": {
+                                                "docs": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Phuc La"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "phuclaf@gmail.com"
+                                                            },
+                                                            "password": {
+                                                                "type": "string",
+                                                                "example": "123456"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string",
+                                                                "example": "0983118272"
+                                                            },
+                                                            "role": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     }
-                                                },
-                                                "type": "object"
-                                            }
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "totalDocs": {
+                                            "type": "integer",
+                                            "example": 16
+                                        },
+                                        "limit": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "totalPages": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "page": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "pagingCounter": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "hasPrevPage": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "hasNextPage": {
+                                            "type": "boolean",
+                                            "example": false
                                         }
                                     },
                                     "type": "object"
@@ -4880,30 +5081,66 @@
                                             "type": "integer",
                                             "example": 200
                                         },
-                                        "data": {
+                                        "metadata": {
                                             "properties": {
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "Phuc La"
-                                                },
-                                                "email": {
-                                                    "type": "string",
-                                                    "example": "phuclaf@gmail.com"
-                                                },
-                                                "password": {
-                                                    "type": "string",
-                                                    "example": "123456"
-                                                },
-                                                "phone": {
-                                                    "type": "string",
-                                                    "example": "0983118272"
-                                                },
-                                                "role": {
-                                                    "type": "integer",
-                                                    "example": 1
+                                                "docs": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Phuc La"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "phuclaf@gmail.com"
+                                                            },
+                                                            "password": {
+                                                                "type": "string",
+                                                                "example": "123456"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string",
+                                                                "example": "0983118272"
+                                                            },
+                                                            "role": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
                                                 }
                                             },
                                             "type": "object"
+                                        },
+                                        "totalDocs": {
+                                            "type": "integer",
+                                            "example": 16
+                                        },
+                                        "limit": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "totalPages": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "page": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "pagingCounter": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "hasPrevPage": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "hasNextPage": {
+                                            "type": "boolean",
+                                            "example": false
                                         }
                                     },
                                     "type": "object"
@@ -5341,24 +5578,57 @@
                                             "example": 200
                                         },
                                         "metadata": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string",
-                                                        "example": "Anh su kien"
-                                                    },
-                                                    "url": {
-                                                        "type": "string",
-                                                        "format": "binary"
-                                                    },
-                                                    "event_id": {
-                                                        "type": "interger",
-                                                        "example": 1
+                                            "properties": {
+                                                "docs": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Anh su kien"
+                                                            },
+                                                            "url": {
+                                                                "type": "string",
+                                                                "format": "binary"
+                                                            },
+                                                            "event_id": {
+                                                                "type": "interger",
+                                                                "example": 1
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     }
-                                                },
-                                                "type": "object"
-                                            }
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "totalDocs": {
+                                            "type": "integer",
+                                            "example": 16
+                                        },
+                                        "limit": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "totalPages": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "page": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "pagingCounter": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "hasPrevPage": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "hasNextPage": {
+                                            "type": "boolean",
+                                            "example": false
                                         }
                                     },
                                     "type": "object"
@@ -5889,24 +6159,57 @@
                                             "example": 200
                                         },
                                         "metadata": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string",
-                                                        "example": "Anh su kien"
-                                                    },
-                                                    "url": {
-                                                        "type": "string",
-                                                        "format": "binary"
-                                                    },
-                                                    "event_id": {
-                                                        "type": "interger",
-                                                        "example": 1
+                                            "properties": {
+                                                "docs": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Anh su kien"
+                                                            },
+                                                            "url": {
+                                                                "type": "string",
+                                                                "format": "binary"
+                                                            },
+                                                            "event_id": {
+                                                                "type": "interger",
+                                                                "example": 1
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     }
-                                                },
-                                                "type": "object"
-                                            }
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "totalDocs": {
+                                            "type": "integer",
+                                            "example": 16
+                                        },
+                                        "limit": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "totalPages": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "page": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "pagingCounter": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "hasPrevPage": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "hasNextPage": {
+                                            "type": "boolean",
+                                            "example": false
                                         }
                                     },
                                     "type": "object"

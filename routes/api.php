@@ -78,6 +78,7 @@ Route::post('searchEvent',[eventController::class,'searchEvent'])->middleware('a
 
 //Real Time
 Route::post('chat', [chatController::class, 'sendMessage']);
+Route::get('messageBox/{event_id}', [chatController::class, 'showMessageInEvent']);
 
 //Event statistics
 Route::post('eventStatistics',[eventController::class,'eventStatistics'])->middleware('auth:api');
