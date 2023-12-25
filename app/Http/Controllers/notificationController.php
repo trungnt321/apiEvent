@@ -79,7 +79,7 @@ class notificationController extends Controller
      *     )
      * )
      */
-    public function index($id)
+    public function index($id,Request $request)
     {
         try {
             $user =  User::find($id);
@@ -90,11 +90,22 @@ class notificationController extends Controller
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-            $notification = notification::with('user_receiver')->get();
+            $page = $request->query('page', 1);
+            $limit = $request->query('limit', 10);
+            $notification = notification::with('user_receiver')->paginate($limit, ['*'], 'page', $page);
 
             return response()->json([
-                'metadata' => $notification,
-                'message' => 'Get All records Successfully',
+                'metadata' => [
+                    'docs' => $notification->items(),
+                    'totalDocs' => $notification->total(),
+                    'limit' => $notification->perPage(),
+                    'totalPages' => $notification->lastPage(),
+                    'page' => $notification->currentPage(),
+                    'pagingCounter' => $notification->currentPage(),
+                    'hasPrevPage' => $notification->previousPageUrl() != null,
+                    'hasNextPage' => $notification->nextPageUrl() != null
+                ],
+                'message' => 'Lấy tất cả bản ghi thành công',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
             ], Response::HTTP_OK);

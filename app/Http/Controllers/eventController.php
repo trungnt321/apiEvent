@@ -190,7 +190,6 @@ class eventController extends Controller
 
             $validator = Validator::make($request->all(),[
                 'id_user_get'=>'required'
-
             ],[
                 'id_user_get.required' => 'id người lấy thông báo không được để trống',
             ]);
@@ -251,7 +250,7 @@ class eventController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             @OA\Property(property="name", type="string", example="Event Name"),
-     *                   
+     *
      *         )
      *     ),
      *     @OA\Response(
@@ -345,11 +344,11 @@ class eventController extends Controller
      *     tags={"Event"},
      *     summary="Thêm mới bản ghi với dữ liệu được cung cấp",
      *     description="
-     * - Endpoint trả về bản ghi mới được thêm vào 
+     * - Endpoint trả về bản ghi mới được thêm vào
      * -Role đước sử dụng là nhân viên, quản lí
      * -id là id của sự kiện cần được tạo lại
-     * -name là tên sự kiện 
-     * -location là nơi tổ chức sự kiện 
+     * -name là tên sự kiện
+     * -location là nơi tổ chức sự kiện
      * -contact là liên lạc bằng số điện thoại
      * -banner là ảnh của sự kiện
      * -user_id là id của user tổ chức sự kiện này
