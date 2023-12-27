@@ -11,33 +11,33 @@ use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
 {
-    /**
-     * @OA\Post(
-     *     path="/api/get-google-sign-in-url",
-     *     summary="Get Google Sign-In URL",
-     *     tags={"Authentication"},
-     *     operationId="getGoogleSignInUrl",
-     *     @OA\Response(
-     *         response=200,
-     *         description="Successful operation",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="metadata", type="object", @OA\Property(property="url", type="string")),
-     *             @OA\Property(property="message", type="string"),
-     *             @OA\Property(property="status", type="string"),
-     *             @OA\Property(property="statusCode", type="integer")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Internal Server Error",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="string"),
-     *             @OA\Property(property="message", type="string"),
-     *             @OA\Property(property="statusCode", type="integer")
-     *         )
-     *     )
-     * )
-     */
+//    /**
+//     * @OA\Post(
+//     *     path="/api/get-google-sign-in-url",
+//     *     summary="Get Google Sign-In URL",
+//     *     tags={"Authentication"},
+//     *     operationId="getGoogleSignInUrl",
+//     *     @OA\Response(
+//     *         response=200,
+//     *         description="Successful operation",
+//     *         @OA\JsonContent(
+//     *             @OA\Property(property="metadata", type="object", @OA\Property(property="url", type="string")),
+//     *             @OA\Property(property="message", type="string"),
+//     *             @OA\Property(property="status", type="string"),
+//     *             @OA\Property(property="statusCode", type="integer")
+//     *         )
+//     *     ),
+//     *     @OA\Response(
+//     *         response=500,
+//     *         description="Internal Server Error",
+//     *         @OA\JsonContent(
+//     *             @OA\Property(property="status", type="string"),
+//     *             @OA\Property(property="message", type="string"),
+//     *             @OA\Property(property="statusCode", type="integer")
+//     *         )
+//     *     )
+//     * )
+//     */
     public function getGoogleSignInUrl()
     {
         try {
