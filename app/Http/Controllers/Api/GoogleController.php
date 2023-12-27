@@ -11,6 +11,15 @@ use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('auth:api',[
+            'except' => [
+                "loginCallback"
+            ]
+        ]);
+    }
+
     /**
      * @OA\Post(
      *     path="/api/get-google-sign-in-url",
