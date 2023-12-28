@@ -8,36 +8,47 @@ use Illuminate\Http\Response;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class GoogleController extends Controller
 {
-//    /**
-//     * @OA\Post(
-//     *     path="/api/get-google-sign-in-url",
-//     *     summary="Get Google Sign-In URL",
-//     *     tags={"Authentication"},
-//     *     operationId="getGoogleSignInUrl",
-//     *     @OA\Response(
-//     *         response=200,
-//     *         description="Successful operation",
-//     *         @OA\JsonContent(
-//     *             @OA\Property(property="metadata", type="object", @OA\Property(property="url", type="string")),
-//     *             @OA\Property(property="message", type="string"),
-//     *             @OA\Property(property="status", type="string"),
-//     *             @OA\Property(property="statusCode", type="integer")
-//     *         )
-//     *     ),
-//     *     @OA\Response(
-//     *         response=500,
-//     *         description="Internal Server Error",
-//     *         @OA\JsonContent(
-//     *             @OA\Property(property="status", type="string"),
-//     *             @OA\Property(property="message", type="string"),
-//     *             @OA\Property(property="statusCode", type="integer")
-//     *         )
-//     *     )
-//     * )
-//     */
+
+    public function __construct(){
+        $this->middleware('auth:api',[
+            'except' => [
+                "loginCallback",
+                "getGoogleSignInUrl"
+            ]
+        ]);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/get-google-sign-in-url",
+     *     summary="Get Google Sign-In URL",
+     *     tags={"Authentication"},
+     *     operationId="getGoogleSignInUrl",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="metadata", type="object", @OA\Property(property="url", type="string")),
+     *             @OA\Property(property="message", type="string"),
+     *             @OA\Property(property="status", type="string"),
+     *             @OA\Property(property="statusCode", type="integer")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string"),
+     *             @OA\Property(property="message", type="string"),
+     *             @OA\Property(property="statusCode", type="integer")
+     *         )
+     *     )
+     * )
+     */
     public function getGoogleSignInUrl()
     {
         try {
@@ -111,10 +122,14 @@ class GoogleController extends Controller
             $finduser = User::where('google_id', $googleUser->id)->first();
 
             if($finduser){
-                Auth::login($finduser);
-                $finduser->token = auth()->user()->createToken("API Token")->accessToken;
+               $token = Auth::login($finduser);
+//                $finduser->token = auth()->user()->createToken("API Token")->accessToken;
                 return response()->json([
-                    'metadata' => $finduser,
+                    'metadata' => [
+                        'access_token' => $token,
+                        'token_type' => 'bearer',
+                        'user' => auth()->user()
+                    ],
                     'message' => 'Đăng nhập thành công',
                     'status' => 'success',
                     'statusCode' => Response::HTTP_OK
@@ -128,11 +143,15 @@ class GoogleController extends Controller
                     'avatar' => $googleUser->avatar
                 ]);
 //                $newUser->token = $newUser->createToken('API Token')->accessToken;
-                $newUser->token = $newUser->createToken('API Token')->accessToken;
-
+//                $newUser->token = $newUser->createToken('API Token')->accessToken;
+                $token = Auth::login($newUser);
                 return response()->json([
-                    'metadata' => $newUser,
-                    'message' => 'Đăng nhập thành công',
+                    'metadata' => [
+                        'access_token' => $token,
+                        'token_type' => 'bearer',
+                        'user' => auth()->user()
+                    ],
+                    'message' => 'Đăng ký thành công',
                     'status' => 'success',
                     'statusCode' => Response::HTTP_OK
                 ], Response::HTTP_OK);
