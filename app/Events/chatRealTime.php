@@ -11,6 +11,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class chatRealTime implements ShouldBroadcast
 {
@@ -20,10 +21,10 @@ class chatRealTime implements ShouldBroadcast
      * Create a new event instance.
      */
     //public $requestData;
-    public $message;
-    public function __construct($message)
+    public  $data;
+    public function __construct( $sendData)
     {
-        $this->message = $message;
+        $this->data = $sendData;
     }
 
     /**
@@ -34,7 +35,6 @@ class chatRealTime implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            //new PrivateChannel("Event_{$this->requestData['event_id']}"),
             new Channel('chat')
         ];
     }

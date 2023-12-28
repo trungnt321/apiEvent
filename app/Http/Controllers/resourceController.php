@@ -33,14 +33,22 @@ class resourceController extends Controller
      *             @OA\Property(property="statusCode", type="integer", example=200),
      *             @OA\Property(
      *                 property="metadata",
-     *                 type="array",
+     *                 type="object",
+     *                 @OA\Property(property="docs", type="array",
      *                 @OA\Items(
      *                     type="object",
      *                      @OA\Property(property="name", type="string", example="Anh su kien"),
      *                      @OA\Property(property="url", type="string", format="binary"),
      *                      @OA\Property(property="event_id", type="interger", example=1),
-     *                 )
-     *             )
+     *                 ))
+     *             ),
+     *             @OA\Property(property="totalDocs", type="integer", example=16),
+     *                 @OA\Property(property="limit", type="integer", example=10),
+     *                 @OA\Property(property="totalPages", type="integer", example=2),
+     *                 @OA\Property(property="page", type="integer", example=2),
+     *                 @OA\Property(property="pagingCounter", type="integer", example=2),
+     *                 @OA\Property(property="hasPrevPage", type="boolean", example=true),
+     *                 @OA\Property(property="hasNextPage", type="boolean", example=false)
      *         )
      *     ),
      *     @OA\Response(
@@ -65,16 +73,28 @@ class resourceController extends Controller
      *     )
      * )
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $resource = resource::all()->map(function ($resource) {
+            $page = $request->query('page', 1);
+            $limit = $request->query('limit', 10);
+            $resource = resource::paginate($limit, ['*'], 'page', $page);
+            $resource->map(function ($resource) {
                 $imageUrl = asset("Upload/{$resource->url}");
                 $resource->url = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
                 return $resource;
-            });
+            }); 
             return response()->json([
-                'metadata' => $resource,
+                'metadata' => [
+                    'docs' => $resource->items(),
+                    'totalDocs' => $resource->total(),
+                    'limit' => $resource->perPage(),
+                    'totalPages' => $resource->lastPage(),
+                    'page' => $resource->currentPage(),
+                    'pagingCounter' => $resource->currentPage(), // Bạn có thể sử dụng currentPage hoặc số khác nếu cần
+                    'hasPrevPage' => $resource->previousPageUrl() != null,
+                    'hasNextPage' => $resource->nextPageUrl() != null
+                ],
                 'message' => 'Get All Records Successfully',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
@@ -314,14 +334,22 @@ class resourceController extends Controller
      *             @OA\Property(property="statusCode", type="integer", example=200),
      *             @OA\Property(
      *                 property="metadata",
-     *                 type="array",
+     *                 type="object",
+     *                 @OA\Property(property="docs", type="array",
      *                 @OA\Items(
      *                     type="object",
      *                      @OA\Property(property="name", type="string", example="Anh su kien"),
      *                      @OA\Property(property="url", type="string", format="binary"),
      *                      @OA\Property(property="event_id", type="interger", example=1),
-     *                 )
-     *             )
+     *                 ))
+     *             ),
+     *                 @OA\Property(property="totalDocs", type="integer", example=16),
+     *                 @OA\Property(property="limit", type="integer", example=10),
+     *                 @OA\Property(property="totalPages", type="integer", example=2),
+     *                 @OA\Property(property="page", type="integer", example=2),
+     *                 @OA\Property(property="pagingCounter", type="integer", example=2),
+     *                 @OA\Property(property="hasPrevPage", type="boolean", example=true),
+     *                 @OA\Property(property="hasNextPage", type="boolean", example=false)
      *         )
      *     ),
      *     @OA\Response(
@@ -346,16 +374,27 @@ class resourceController extends Controller
      *     )
      * )
      */
-    public function GetRecordByEventId($event_id){
+    public function GetRecordByEventId($event_id,Request $request){
         try{
-            $resourceById = DB::table('resources')->where('event_id',$event_id)->get()
-            ->map(function ($resourceById) {
+            $page = $request->query('page', 1);
+            $limit = $request->query('limit', 10);
+            $resourceById = resource::where('event_id',$event_id)->paginate($limit, ['*'], 'page', $page);
+            $resourceById->map(function ($resourceById) {
                 $imageUrl = asset("Upload/{$resourceById->url}");
                 $resourceById->url = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
                 return $resourceById;
             });;
             return response()->json([
-                'metadata' => $resourceById,
+                'metadata' => [
+                    'docs' => $resourceById->items(),
+                    'totalDocs' => $resourceById->total(),
+                    'limit' => $resourceById->perPage(),
+                    'totalPages' => $resourceById->lastPage(),
+                    'page' => $resourceById->currentPage(),
+                    'pagingCounter' => $resourceById->currentPage(), 
+                    'hasPrevPage' => $resourceById->previousPageUrl() != null,
+                    'hasNextPage' => $resourceById->nextPageUrl() != null
+                ],
                 'message' => 'Get All Record By Event ID Successfully',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK

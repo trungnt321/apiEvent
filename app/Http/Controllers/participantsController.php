@@ -31,7 +31,8 @@ class participantsController extends Controller
      *             @OA\Property(property="statusCode", type="integer", example=200),
      *             @OA\Property(
      *                 property="metadata",
-     *                 type="array",
+     *                 type="object",
+     *                 @OA\Property(property="docs", type="array",
      *                 @OA\Items(
      *                     type="object",
      *                     @OA\Property(property="name", type="string", example="Phuc La"),
@@ -39,8 +40,15 @@ class participantsController extends Controller
      *                     @OA\Property(property="password", type="string", example="123456"),
      *                     @OA\Property(property="phone", type="string", example="0983118272"),
      *                     @OA\Property(property="role", type="integer", example=1),
-     *                 )
-     *             )
+     *                 ))
+     *             ),
+     *              @OA\Property(property="totalDocs", type="integer", example=16),
+     *                 @OA\Property(property="limit", type="integer", example=10),
+     *                 @OA\Property(property="totalPages", type="integer", example=2),
+     *                 @OA\Property(property="page", type="integer", example=2),
+     *                 @OA\Property(property="pagingCounter", type="integer", example=2),
+     *                 @OA\Property(property="hasPrevPage", type="boolean", example=true),
+     *                 @OA\Property(property="hasNextPage", type="boolean", example=false)
      *         )
      *     ),
      *     @OA\Response(
@@ -65,9 +73,11 @@ class participantsController extends Controller
      *     )
      * )
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
+            $page = $request->query('page', 1);
+            $limit = $request->query('limit', 10);
             if(auth()->user()->role != 2){
                 return response([
                     "status" => "error",
@@ -75,9 +85,18 @@ class participantsController extends Controller
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-            $users = User::all();
+            $users = User::paginate($limit, ['*'], 'page', $page);
             return response()->json([
-                'metadata' => $users,
+                'metadata' => [
+                    'docs' => $users->items(),
+                    'totalDocs' => $users->total(),
+                    'limit' => $users->perPage(),
+                    'totalPages' => $users->lastPage(),
+                    'page' => $users->currentPage(),
+                    'pagingCounter' => $users->currentPage(), // Bạn có thể sử dụng currentPage hoặc số khác nếu cần
+                    'hasPrevPage' => $users->previousPageUrl() != null,
+                    'hasNextPage' => $users->nextPageUrl() != null
+                ],
                 'message' => 'Get All Records Successfully',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
@@ -124,14 +143,23 @@ class participantsController extends Controller
  *             @OA\Property(property="message", type="string", example="Dữ liệu người dùng được trả về thành công"),
  *             @OA\Property(property="statusCode", type="integer", example=200),
  *             @OA\Property(
- *                 property="data",
+ *                 property="metadata",
  *                 type="object",
+ *  @OA\Property(property="docs", type="array",
+ * @OA\Items( type="object",
  *                 @OA\Property(property="name", type="string", example="Phuc La"),
  *                 @OA\Property(property="email", type="string", example="phuclaf@gmail.com"),
  *                 @OA\Property(property="password", type="string", example="123456"),
  *                 @OA\Property(property="phone", type="string", example="0983118272"),
  *                 @OA\Property(property="role", type="integer", example=1)
- *             )
+ *             ))),
+ * @OA\Property(property="totalDocs", type="integer", example=16),
+     *                 @OA\Property(property="limit", type="integer", example=10),
+     *                 @OA\Property(property="totalPages", type="integer", example=2),
+     *                 @OA\Property(property="page", type="integer", example=2),
+     *                 @OA\Property(property="pagingCounter", type="integer", example=2),
+     *                 @OA\Property(property="hasPrevPage", type="boolean", example=true),
+     *                 @OA\Property(property="hasNextPage", type="boolean", example=false)
  *         )
  *     ),
  *     @OA\Response(
@@ -158,6 +186,8 @@ class participantsController extends Controller
  */
     public function getUserByEmailAndPhone(Request $request){
         try{
+            $page = $request->query('page', 1);
+            $limit = $request->query('limit', 10);
             $validator = Validator::make($request->all(),[
                 'email'=>'required',
                 'phone'=> 'required'
@@ -176,14 +206,23 @@ class participantsController extends Controller
             $data = $request->all();
             $email = $data['email'];
             $phone = $data['phone'];
-            $users = DB::table('users')
-            ->where(function($query) use ($email, $phone) {
+            $users = User::
+            where(function($query) use ($email, $phone) {
                 $query->where('email', 'like', "%{$email}%")
                     ->orWhere('phone', 'like', "%{$phone}%");
             })
-            ->get();
+            ->paginate($limit, ['*'], 'page', $page);
             return response()->json([
-                'metadata' => $users,
+                'metadata' => [
+                    'docs' => $users->items(),
+                    'totalDocs' => $users->total(),
+                    'limit' => $users->perPage(),
+                    'totalPages' => $users->lastPage(),
+                    'page' => $users->currentPage(),
+                    'pagingCounter' => $users->currentPage(), // Bạn có thể sử dụng currentPage hoặc số khác nếu cần
+                    'hasPrevPage' => $users->previousPageUrl() != null,
+                    'hasNextPage' => $users->nextPageUrl() != null
+                ],
                 'message' => 'Get All Records Successfully',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK

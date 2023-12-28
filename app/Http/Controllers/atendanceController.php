@@ -22,34 +22,43 @@ class atendanceController extends Controller
      *      - Endpoint trả về thôn tìn người dùng tham gia sự kiện.
      *      - Trả về thông tin của người dùng đã tham gia sự kiện.
      *      - Role được sử dụng là role nhân viên ,quản lí ",
-     *     @OA\Response(
+     *      @OA\Response(
      *         response=200,
-     *         description="Successful operation",
+     *         description="Successful response with feedback data",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="Lấy thành công nhân viên tham gia sự kiện"),
-     *             @OA\Property(property="statusCode", type="integer", example=200),
+     *             @OA\Property(property="message", type="string", example="Successfully retrieved all feedback"),
      *             @OA\Property(
      *                 property="metadata",
-     *                 type="array",
-     *                 @OA\Items(
-     *                     type="object",
-     *                     @OA\Property(property="id", type="string", example="1"),
-     *                     @OA\Property(property="user_id", type="integer", example=1),
-     *                     @OA\Property(property="event_id", type="integer", example=2),
-     *                    @OA\Property(property="user", type="object",
-     *     @OA\Property(property="id", type="integer", example=1),
-     *     @OA\Property(property="name", type="string", example="John Doe"),
-     *     @OA\Property(property="email", type="string", example="john.doe@example.com"),
-     *     @OA\Property(property="phone", type="string", example="123456789"),
-     *     @OA\Property(property="role", type="integer", example=1),
-     *     @OA\Property(property="created_at", type="string", format="date-time", example="2023-11-23 11:20:22"),
-     *     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-11-23 11:20:22")
-     * ),
-     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-11-23 11:20:22"),
-     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-11-23 11:20:22")
-     *                 )
+     *                 type="object",
+     *                 @OA\Property(property="docs", type="array",
+     *                     @OA\Items(
+     *                         type="object",
+     *                         @OA\Property(property="id", type="integer", example="1"),
+     *                         @OA\Property(property="user_id", type="integer", example="2"),
+     *                         @OA\Property(property="event_id", type="integer", example="2"),
+     *                         @OA\Property(
+     *                             property="user",
+     *                             type="object",
+     *                             @OA\Property(property="id", type="integer", example="1"),
+     *                             @OA\Property(property="name", type="string", example="Emil Macejkovic"),
+     *                             @OA\Property(property="email", type="string", example="dwalker@example.com"),
+     *                             @OA\Property(property="phone", type="string", example="(838) 979-6792"),
+     *                             @OA\Property(property="role", type="integer", example="2"),
+     *                             @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-24T04:26:59.000000Z"),
+     *                             @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-24T04:26:59.000000Z"),
+     *                             @OA\Property(property="avatar", type="string", example="https://www.elle.vn/wp-content/uploads/2017/07/25/hinh-anh-dep-1.jpg")
+     *                         )
+     *                     )
+     *                 ),
+     *                 @OA\Property(property="totalDocs", type="integer", example=16),
+     *                 @OA\Property(property="limit", type="integer", example=10),
+     *                 @OA\Property(property="totalPages", type="integer", example=2),
+     *                 @OA\Property(property="page", type="integer", example=2),
+     *                 @OA\Property(property="pagingCounter", type="integer", example=2),
+     *                 @OA\Property(property="hasPrevPage", type="boolean", example=true),
+     *                 @OA\Property(property="hasNextPage", type="boolean", example=false)
      *             )
      *         )
      *     ),
@@ -75,9 +84,11 @@ class atendanceController extends Controller
      *     )
      * )
      */
-    public function index($id_event,$id_user)
+    public function index($id_event,$id_user,Request $request)
     {
         try {
+            $page = $request->query('page', 1);
+            $limit = $request->query('limit', 10);
             $user = User::find($id_user);
             if($user == null || $user->role == 0){
                 return response([
@@ -86,9 +97,23 @@ class atendanceController extends Controller
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-            $atendance = atendance::where('event_id',$id_event)->with('user')->get();
+            $atendance = atendance::where('event_id',$id_event)->with('user')->paginate($limit, ['*'], 'page', $page);
+
+            $nextPageUrl = $atendance->nextPageUrl();
+
             return response()->json([
-                'metadata' => $atendance,
+                'metadata' => [
+                    'docs' => $atendance->items(),
+                    'totalDocs' => $atendance->total(),
+                    'limit' => $atendance->perPage(),
+                    'totalPages' => $atendance->lastPage(),
+                    'page' => $atendance->currentPage(),
+                    'pagingCounter' => $atendance->currentPage(), // Bạn có thể sử dụng currentPage hoặc số khác nếu cần
+                    'hasPrevPage' => $atendance->previousPageUrl() != null,
+                    'hasNextPage' => $atendance->nextPageUrl() != null
+//                    'prevPage' => $atendance->previousPageUrl(),
+//                    'nextPage' =>$atendance->nextPageUrl(),
+                ],
                 'message' => 'Lấy thành công tất cả các bản ghi',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK

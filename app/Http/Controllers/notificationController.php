@@ -16,21 +16,28 @@ class notificationController extends Controller
     /**
      * @OA\Get(
      *     path="/api/notification/{id}",
-     *     summary="Lấy hết tất cả các thông báo đang được SET",
+     *     summary="Get all set notifications",
      *     tags={"notification"},
      *     description="
-     *      - Endpoint này cho phép lấy ra thông tin các thông báo được cài đặt sẵn.
-     *      - Trả về thông tin của các user được cài đặt.
-     *      - Role được sử dụng là cả hai role quản lí ,sinh viên
-     *      - id là id người thực hiện yêu cầu get",
+     *      - This endpoint retrieves information about all pre-set notifications.
+     *      - Returns information about users who have set notifications.
+     *      - Roles: Both Administrator and Student
+     *      - id is the ID of the user making the request.",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the user",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="Lấy ra tất cả bản ghi thành công"),
-     *             @OA\Property(
+     *             @OA\Property(property="message", type="string", example="Successfully retrieved all records"),
+     *         @OA\Property(
      *                 property="metadata",
      *                 type="array",
      *                 @OA\Items(
@@ -54,32 +61,40 @@ class notificationController extends Controller
      * )
      *                 )
      *             ),
-     *             @OA\Property(property="statusCode", type="integer", example=200),
+     *                 @OA\Property(property="totalDocs", type="integer", example=16),
+     *                 @OA\Property(property="limit", type="integer", example=10),
+     *                 @OA\Property(property="totalPages", type="integer", example=2),
+     *                 @OA\Property(property="page", type="integer", example=2),
+     *                 @OA\Property(property="pagingCounter", type="integer", example=2),
+     *                 @OA\Property(property="hasPrevPage", type="boolean", example=true),
+     *                 @OA\Property(property="hasNextPage", type="boolean", example=false)
+     *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Bản ghi không tồn tại",
+     *         description="Record not found",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
+     *             @OA\Property(property="message", type="string", example="Record not found"),
      *             @OA\Property(property="statusCode", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Lỗi hệ thống",
+     *         description="System error",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
+     *             @OA\Property(property="message", type="string", example="System error"),
      *             @OA\Property(property="statusCode", type="integer", example=500)
      *         )
      *     )
      * )
      */
-    public function index($id)
+
+    public function index($id,Request $request)
     {
         try {
             $user =  User::find($id);
@@ -90,11 +105,22 @@ class notificationController extends Controller
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-            $notification = notification::with('user_receiver')->get();
+            $page = $request->query('page', 1);
+            $limit = $request->query('limit', 10);
+            $notification = notification::with('user_receiver')->paginate($limit, ['*'], 'page', $page);
 
             return response()->json([
-                'metadata' => $notification,
-                'message' => 'Get All records Successfully',
+                'metadata' => [
+                    'docs' => $notification->items(),
+                    'totalDocs' => $notification->total(),
+                    'limit' => $notification->perPage(),
+                    'totalPages' => $notification->lastPage(),
+                    'page' => $notification->currentPage(),
+                    'pagingCounter' => $notification->currentPage(),
+                    'hasPrevPage' => $notification->previousPageUrl() != null,
+                    'hasNextPage' => $notification->nextPageUrl() != null
+                ],
+                'message' => 'Lấy tất cả bản ghi thành công',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
             ], Response::HTTP_OK);

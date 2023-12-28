@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\GoogleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserAuthController;
@@ -23,8 +24,16 @@ use App\Http\Controllers\resourceController;
 |
 */
 
-Route::post('register',[UserAuthController::class,'register']);
-Route::post('login',[UserAuthController::class,'login']);
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+// Google Sign In
+Route::post('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignInUrl']);
+Route::get('/callback', [GoogleController::class, 'loginCallback']);
+//
+//Route::post('register',[UserAuthController::class,'register']);
+//Route::post('login',[UserAuthController::class,'login']);
 
 //Route::apiResource('employees',EmployeeController::class)->middleware('auth:api');
 
@@ -54,8 +63,8 @@ Route::prefix('notification')->group(function() {
     Route::put('/{id}',[notificationController::class,'update']);
     Route::delete('/{id}',[notificationController::class,'destroy']);
 })->middleware('auth:api');
-Route::get('/event',[eventController::class,'index']);
-Route::post('/event/notification',[eventController::class,'indexNotification']);
+Route::get('/event',[eventController::class,'index'])->middleware('auth:api');
+Route::post('/event/notification',[eventController::class,'indexNotification'])->middleware('auth:api');
 //Test api in swagger donn't need token
 Route::apiResource('participants',participantsController::class)->middleware('auth:api');
 Route::apiResource('event',eventController::class)->middleware('auth:api');
@@ -69,6 +78,7 @@ Route::post('searchEvent',[eventController::class,'searchEvent'])->middleware('a
 
 //Real Time
 Route::post('chat', [chatController::class, 'sendMessage']);
+Route::get('messageBox/{event_id}', [chatController::class, 'showMessageInEvent']);
 
 //Event statistics
 Route::post('eventStatistics',[eventController::class,'eventStatistics'])->middleware('auth:api');
