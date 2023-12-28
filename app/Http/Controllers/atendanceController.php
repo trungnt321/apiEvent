@@ -208,7 +208,7 @@ class atendanceController extends Controller
 //                return response(['status' => 'error', 'message' => $validator->errors()], 500);
                 return response([
                     "status" => "error",
-                    "message" => $validator->errors(),
+                    "message" => $validator->errors()->all(),
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
@@ -340,7 +340,7 @@ class atendanceController extends Controller
 //                return response(['status' => 'error', 'message' => $validator->errors()], 500);
                 return response([
                     "status" => "error",
-                    "message" => $validator->errors(),
+                    "message" => $validator->errors()->all(),
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
