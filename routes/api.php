@@ -63,8 +63,8 @@ Route::prefix('notification')->group(function() {
     Route::put('/{id}',[notificationController::class,'update']);
     Route::delete('/{id}',[notificationController::class,'destroy']);
 })->middleware('auth:api');
-Route::get('/event',[eventController::class,'index']);
-Route::post('/event/notification',[eventController::class,'indexNotification']);
+Route::get('/event',[eventController::class,'index'])->middleware('auth:api');
+Route::post('/event/notification',[eventController::class,'indexNotification'])->middleware('auth:api');
 //Test api in swagger donn't need token
 Route::apiResource('participants',participantsController::class)->middleware('auth:api');
 Route::apiResource('event',eventController::class)->middleware('auth:api');

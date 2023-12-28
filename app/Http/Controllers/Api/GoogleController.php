@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class GoogleController extends Controller
 {
@@ -15,7 +16,8 @@ class GoogleController extends Controller
     public function __construct(){
         $this->middleware('auth:api',[
             'except' => [
-                "loginCallback"
+                "loginCallback",
+                "getGoogleSignInUrl"
             ]
         ]);
     }
@@ -120,10 +122,14 @@ class GoogleController extends Controller
             $finduser = User::where('google_id', $googleUser->id)->first();
 
             if($finduser){
-                Auth::login($finduser);
-                $finduser->token = auth()->user()->createToken("API Token")->accessToken;
+               $token = Auth::login($finduser);
+//                $finduser->token = auth()->user()->createToken("API Token")->accessToken;
                 return response()->json([
-                    'metadata' => $finduser,
+                    'metadata' => [
+                        'access_token' => $token,
+                        'token_type' => 'bearer',
+                        'user' => auth()->user()
+                    ],
                     'message' => 'Đăng nhập thành công',
                     'status' => 'success',
                     'statusCode' => Response::HTTP_OK
@@ -137,11 +143,15 @@ class GoogleController extends Controller
                     'avatar' => $googleUser->avatar
                 ]);
 //                $newUser->token = $newUser->createToken('API Token')->accessToken;
-                $newUser->token = $newUser->createToken('API Token')->accessToken;
-
+//                $newUser->token = $newUser->createToken('API Token')->accessToken;
+                $token = Auth::login($newUser);
                 return response()->json([
-                    'metadata' => $newUser,
-                    'message' => 'Đăng nhập thành công',
+                    'metadata' => [
+                        'access_token' => $token,
+                        'token_type' => 'bearer',
+                        'user' => auth()->user()
+                    ],
+                    'message' => 'Đăng ký thành công',
                     'status' => 'success',
                     'statusCode' => Response::HTTP_OK
                 ], Response::HTTP_OK);
