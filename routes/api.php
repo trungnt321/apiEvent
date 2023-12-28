@@ -29,11 +29,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // Google Sign In
-//Route::post('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignInUrl']);
-//Route::get('/callback', [GoogleController::class, 'loginCallback']);
+Route::post('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignInUrl']);
+Route::get('/callback', [GoogleController::class, 'loginCallback']);
 //
-Route::post('register',[UserAuthController::class,'register']);
-Route::post('login',[UserAuthController::class,'login']);
+//Route::post('register',[UserAuthController::class,'register']);
+//Route::post('login',[UserAuthController::class,'login']);
 
 //Route::apiResource('employees',EmployeeController::class)->middleware('auth:api');
 
