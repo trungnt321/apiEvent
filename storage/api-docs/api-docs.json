@@ -13,36 +13,74 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api/get-google-sign-in-url": {
+        "/api/register": {
             "post": {
                 "tags": [
                     "Authentication"
                 ],
-                "summary": "Get Google Sign-In URL",
-                "operationId": "getGoogleSignInUrl",
+                "summary": "Đăng ký người dùng mới",
+                "description": "\n     *      - Endpoint này cho phép đăng ký người dùng mới vào hệ thống.\n     *      - Trả về thông tin của người dùng đã đăng ký.\n     *      - Role được sử dụng là nhân viên và sinh viên",
+                "operationId": "ab15e8b534800db0828c4efe3a6099fa",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password123"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "role": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
+                        "description": "Thành công",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "metadata": {
-                                            "properties": {
-                                                "url": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
+                                            "type": "object",
+                                            "example": {
+                                                "id": 1,
+                                                "name": "John Doe",
+                                                "email": "john.doe@example.com",
+                                                "phone": "123456789",
+                                                "role": "user"
+                                            }
                                         },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Đăng ký người dùng thành công"
                                         },
                                         "status": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "statusCode": {
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "example": 200
                                         }
                                     },
                                     "type": "object"
@@ -51,19 +89,138 @@
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "Lỗi máy chủ nội bộ",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "status": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
-                                            "type": "string"
+                                            "type": "object",
+                                            "example": {
+                                                "name": [
+                                                    "tên không thể để trống"
+                                                ],
+                                                "email": [
+                                                    "email không thể để trống"
+                                                ]
+                                            }
                                         },
                                         "statusCode": {
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Đăng nhập người dùng",
+                "description": "\n     *      - Endpoint này cho phép người dùng đăng nhập vào hệ thống.\n     *      - Trả về thông tin của người dùng đã đăng nhập, bao gồm cả token đăng nhập.\n     *      - Role được sử dụng là cả ba role nhân viên ,quản lí ,sinh viên",
+                "operationId": "306b0884672cb3eed691231729c47fbb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "metadata": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "John Doe"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "john.doe@example.com"
+                                                },
+                                                "phone": {
+                                                    "type": "string",
+                                                    "example": "123456789"
+                                                },
+                                                "role": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "api-token"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Đăng nhập người dùng thành công"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi máy chủ nội bộ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Thông tin đăng nhập không chính xác. Vui lòng thử lại"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
                                         }
                                     },
                                     "type": "object"
@@ -1027,6 +1184,174 @@
                                         "statusCode": {
                                             "type": "integer",
                                             "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi hệ thống",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lỗi hệ thống"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/chat": {
+            "post": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Gửi tin nhắn với thời gian thực",
+                "description": "Endpoint để gửi tin nhắn và nhận các bản ghi tin nhắn mà người dùng vừa gửi.",
+                "operationId": "Gửi tin nhắn sự kiện",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "content": {
+                                        "type": "string",
+                                        "example": "Xin chào các bạn!"
+                                    },
+                                    "sender_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "event_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Dữ liệu trả về khi thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Gửi tin nhắn thành công"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "metadata": {
+                                            "properties": {
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "Xin chào các bạn!"
+                                                },
+                                                "event_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "sender_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "sender_info": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Người gửi"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "example@example.com"
+                                                        },
+                                                        "phone": {
+                                                            "type": "string",
+                                                            "example": "123456789"
+                                                        },
+                                                        "role": {
+                                                            "type": "string",
+                                                            "example": "user"
+                                                        },
+                                                        "google_id": {
+                                                            "type": "string",
+                                                            "example": "137518716745268"
+                                                        },
+                                                        "avatar": {
+                                                            "type": "string",
+                                                            "example": "https://example.com/avatar.jpg"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-11-28T17:02:29Z"
+                                                        },
+                                                        "updated_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2023-11-28T17:02:29Z"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Lỗi validate",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lỗi validate"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 422
                                         }
                                     },
                                     "type": "object"

@@ -504,11 +504,11 @@ class eventController extends Controller
 
                 $newEventData = $event->toArray();
 
-                $newEventData['status'] = 1;
+                $newEventData['status'] = 2;
                 $newEventData['user_id'] = $request->user_id;
                 $newEventData['start_time'] = $request->start_time;
                 $newEventData['end_time'] = $request->end_time;
-                $newEventData['banner'] = $imageUrl;
+                $newEventData['banner'] = $imageName;
                 Event::create($newEventData);
 
                 $eventRecreate = Event::orderBy('id','desc')->with('user')->first();
