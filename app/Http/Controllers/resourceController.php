@@ -183,7 +183,7 @@ class resourceController extends Controller
             if($validate->fails()){
                 return response([
                     "status" => "error",
-                    "message" => $validate->errors(),
+                    "message" => $validate->errors()->all(),
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
@@ -490,7 +490,7 @@ class resourceController extends Controller
             if($validate->fails()){
                 return response([
                     "status" => "error",
-                    "message" => $validate->errors(),
+                    "message" => $validate->errors()->all(),
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
