@@ -130,22 +130,23 @@ class GoogleController extends Controller
 //            parse_str($state, $result);
             $tokenapi = Str::replace('Bearer ','',$request->header('Authorization'));
 //            dd($tokenapi);
-//            $googleUser = Socialite::driver('google')->stateless()->user();
+            $googleUser = Socialite::driver('google')->userFromToken($tokenapi);
+//            dd($googleUser->id);
 //            echo $googleUser->token;
 //            die();
 //            $finduser = User::where('google_id', $googleUser->id)->first();
 //            dd($googleUser->token);
 //            $request->header('Authorization');
-            $googleUser = Http::get('https://www.googleapis.com/oauth2/v3/userinfo?access_token='.$tokenapi);
+//            $googleUser = Http::get('https://www.googleapis.com/oauth2/v3/userinfo?access_token='.$tokenapi);
 //            dd($googleUser->failed());
-            if($googleUser->failed()){
-                return response([
-                    "status" => "error",
-                    "message" => "Xác thực thất bại",
-                    'statusCode' => Response::HTTP_BAD_REQUEST
-                ], Response::HTTP_BAD_REQUEST);
-            }
-            $finduser = User::where('google_id', $googleUser['sub'])->first();
+//            if($googleUser->failed()){
+//                return response([
+//                    "status" => "error",
+//                    "message" => "Xác thực thất bại",
+//                    'statusCode' => Response::HTTP_BAD_REQUEST
+//                ], Response::HTTP_BAD_REQUEST);
+//            }
+            $finduser = User::where('google_id', $googleUser->id)->first();
 //
             if($finduser){
                $token = Auth::login($finduser);
@@ -162,11 +163,11 @@ class GoogleController extends Controller
                 ], Response::HTTP_OK);
             }else{
                 $newUser = User::create([
-                    'email' => $googleUser['email'],
-                    'name' => $googleUser['name'],
-                    'google_id'=> $googleUser['sub'],
+                    'email' => $googleUser->email,
+                    'name' => $googleUser->name,
+                    'google_id'=> $googleUser->id,
                     'password'=> bcrypt('123'),
-                    'avatar' => $googleUser['picture']
+                    'avatar' => $googleUser->avatar
                 ]);
 //                $newUser->token = $newUser->createToken('API Token')->accessToken;
 //                $newUser->token = $newUser->createToken('API Token')->accessToken;
