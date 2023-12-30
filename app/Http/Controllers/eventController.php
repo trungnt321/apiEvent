@@ -34,7 +34,7 @@ class eventController extends Controller
      *              @OA\Property(property="status", type="string", example="success"),
      *              @OA\Property(property="message", type="string", example="Lấy dữ liệu thành công"),
      *              @OA\Property(property="statusCode", type="integer", example=200),
-     *              @OA\Property(property="metadata",type="object", 
+     *              @OA\Property(property="metadata",type="object",
      *              @OA\Property(property="docs", type="array",
      *                  @OA\Items(
      *                      type="object",
@@ -71,7 +71,7 @@ class eventController extends Controller
      *                 @OA\Property(property="hasPrevPage", type="boolean", example=true),
      *                 @OA\Property(property="hasNextPage", type="boolean", example=false)
      *              )
-     *                 
+     *
      *         )
      *     ),
      *     @OA\Response(
@@ -227,7 +227,7 @@ class eventController extends Controller
             if($validator->fails()){
                 return response([
                     "status" => "error",
-                    "message" => $validator->errors(),
+                    "message" => $validator->errors()->all(),
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
@@ -368,7 +368,7 @@ class eventController extends Controller
                     'limit' => $event->perPage(),
                     'totalPages' => $event->lastPage(),
                     'page' => $event->currentPage(),
-                    'pagingCounter' => $event->currentPage(), 
+                    'pagingCounter' => $event->currentPage(),
                     'hasPrevPage' => $event->previousPageUrl() != null,
                     'hasNextPage' => $event->nextPageUrl() != null
                 ],
@@ -488,7 +488,7 @@ class eventController extends Controller
             if($validator->fails()) {
                 return response([
                     "status" => "error",
-                    "message" => $validator->errors(),
+                    "message" => $validator->errors()->all(),
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
@@ -595,7 +595,7 @@ class eventController extends Controller
      *                     @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
-     *                     @OA\Property(property="role", type="integer", example="1"),     
+     *                     @OA\Property(property="role", type="integer", example="1"),
      *                     @OA\Property(property="google_id", type="string", example="137518716745268"),
      *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
@@ -746,7 +746,7 @@ class eventController extends Controller
      *                     @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
-     *                     @OA\Property(property="role", type="integer", example="1"),     
+     *                     @OA\Property(property="role", type="integer", example="1"),
      *                     @OA\Property(property="google_id", type="string", example="137518716745268"),
      *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
@@ -968,7 +968,7 @@ class eventController extends Controller
         if ($validator->fails()) {
             return response([
                 "status" => "error",
-                "message" => $validator->errors(),
+                "message" => $validator->errors()->all(),
                 'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -1066,7 +1066,7 @@ class eventController extends Controller
      *                     @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
-     *                     @OA\Property(property="role", type="integer", example="1"),     
+     *                     @OA\Property(property="role", type="integer", example="1"),
      *                      @OA\Property(property="google_id", type="string", example="137518716745268"),
      *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
@@ -1229,7 +1229,7 @@ class eventController extends Controller
      *                     @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
      *                     @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
      *                     @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
-     *                     @OA\Property(property="role", type="integer", example="1"),     
+     *                     @OA\Property(property="role", type="integer", example="1"),
      *                      @OA\Property(property="google_id", type="string", example="137518716745268"),
      *                     @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
      *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),

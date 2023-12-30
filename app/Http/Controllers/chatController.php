@@ -49,7 +49,7 @@ class chatController extends Controller
  *                         @OA\Property(property="avatar", type="string", example="https://example.com/avatar.jpg"),
  *                         @OA\Property(property="created_at", type="string", format="date-time", example="2023-11-28T17:02:29Z"),
  *                         @OA\Property(property="updated_at", type="string", format="date-time", example="2023-11-28T17:02:29Z")
- *                     
+ *
  *                 )
  *             )
  *         )
@@ -76,7 +76,7 @@ class chatController extends Controller
  */
     public function sendMessage(Request $request)
     {
-         //Request ở đây là tin nhắn 
+         //Request ở đây là tin nhắn
         $validator = Validator::make($request->all(),[
             'content'=>'required',
             'sender_id'=>'required',
@@ -89,7 +89,7 @@ class chatController extends Controller
         if ($validator->fails()) {
             return response([
                 "status" => "error",
-                "message" => $validator->errors(),
+                "message" => $validator->errors()->all(),
                 'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -113,6 +113,6 @@ class chatController extends Controller
     }
 
     public function showTaskbar(){
-        
+
     }
 }
