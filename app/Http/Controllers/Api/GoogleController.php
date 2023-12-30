@@ -7,8 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use function PHPUnit\Framework\throwException;
 
 class GoogleController extends Controller
 {
@@ -22,33 +25,33 @@ class GoogleController extends Controller
         ]);
     }
 
-    /**
-     * @OA\Post(
-     *     path="/api/get-google-sign-in-url",
-     *     summary="Get Google Sign-In URL",
-     *     tags={"Authentication"},
-     *     operationId="getGoogleSignInUrl",
-     *     @OA\Response(
-     *         response=200,
-     *         description="Successful operation",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="metadata", type="object", @OA\Property(property="url", type="string")),
-     *             @OA\Property(property="message", type="string"),
-     *             @OA\Property(property="status", type="string"),
-     *             @OA\Property(property="statusCode", type="integer")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Internal Server Error",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="string"),
-     *             @OA\Property(property="message", type="string"),
-     *             @OA\Property(property="statusCode", type="integer")
-     *         )
-     *     )
-     * )
-     */
+//    /**
+//     * @OA\Post(
+//     *     path="/api/get-google-sign-in-url",
+//     *     summary="Get Google Sign-In URL",
+//     *     tags={"Authentication"},
+//     *     operationId="getGoogleSignInUrl",
+//     *     @OA\Response(
+//     *         response=200,
+//     *         description="Successful operation",
+//     *         @OA\JsonContent(
+//     *             @OA\Property(property="metadata", type="object", @OA\Property(property="url", type="string")),
+//     *             @OA\Property(property="message", type="string"),
+//     *             @OA\Property(property="status", type="string"),
+//     *             @OA\Property(property="statusCode", type="integer")
+//     *         )
+//     *     ),
+//     *     @OA\Response(
+//     *         response=500,
+//     *         description="Internal Server Error",
+//     *         @OA\JsonContent(
+//     *             @OA\Property(property="status", type="string"),
+//     *             @OA\Property(property="message", type="string"),
+//     *             @OA\Property(property="statusCode", type="integer")
+//     *         )
+//     *     )
+//     * )
+//     */
     public function getGoogleSignInUrl()
     {
         try {
@@ -68,59 +71,82 @@ class GoogleController extends Controller
         }
     }
 
-//    /**
-//     * @OA\Get(
-//     *     path="/api/callback",
-//     *     summary="Google Login Callback",
-//     *     tags={"Authentication"},
-//     *     operationId="loginCallback",
-//     *     @OA\Response(
-//     *         response=200,
-//     *         description="Successful operation",
-//     *              @OA\JsonContent(
-//         *             @OA\Property(property="metadata", type="object",
-//         *                 @OA\Property(property="id", type="integer", example=1),
-//         *                 @OA\Property(property="name", type="string", example="John Doe"),
-//         *                 @OA\Property(property="email", type="string", example="john.doe@example.com"),
-//         *                 @OA\Property(property="phone", type="string", example="123456789"),
-//         *                 @OA\Property(property="role", type="integer", example=1),
-//         *                 @OA\Property(property="token", type="string", example="api-token")
-//         *             ),
-//         *             @OA\Property(property="message", type="string", example="Đăng nhập người dùng thành công"),
-//         *             @OA\Property(property="status", type="string", example="success"),
-//         *             @OA\Property(property="statusCode", type="integer", example=200),
-//         *         )
-//     *     ),
-//     *     @OA\Response(
-//     *         response=400,
-//     *         description="Bad Request",
-//     *         @OA\JsonContent(
-//     *             @OA\Property(property="status", type="string"),
-//     *             @OA\Property(property="message", type="string"),
-//     *             @OA\Property(property="statusCode", type="integer")
-//     *         )
-//     *     ),
-//     *     @OA\Response(
-//     *         response=500,
-//     *         description="Internal Server Error",
-//     *         @OA\JsonContent(
-//     *             @OA\Property(property="status", type="string"),
-//     *             @OA\Property(property="message", type="string"),
-//     *             @OA\Property(property="statusCode", type="integer")
-//     *         )
-//     *     )
-//     * )
-//     */
+ /**
+ * @OA\Get(
+ *      path="/api/auth/google",
+ *      operationId="googleAuth",
+ *      tags={"Authentication"},
+ *      summary="Authenticate with Google",
+ *      description="Authenticate with Google and get an access token.",
+ *      @OA\RequestBody(
+ *          required=true,
+ *          @OA\MediaType(
+ *              mediaType="application/json",
+ *              @OA\Schema(
+ *                  @OA\Property(
+ *                      property="Authorization",
+ *                      type="string",
+ *                      example="Bearer YOUR_GOOGLE_TOKEN"
+ *                  ),
+ *              ),
+ *          ),
+ *      ),
+ *      @OA\Response(
+ *          response=200,
+ *          description="Successful operation",
+ *          @OA\JsonContent(
+ *              @OA\Property(property="metadata", type="object"),
+ *              @OA\Property(property="message", type="string"),
+ *              @OA\Property(property="status", type="string"),
+ *              @OA\Property(property="statusCode", type="integer"),
+ *          ),
+ *      ),
+ *      @OA\Response(
+ *          response=400,
+ *          description="Bad request",
+ *          @OA\JsonContent(
+ *              @OA\Property(property="status", type="string"),
+ *              @OA\Property(property="message", type="string"),
+ *              @OA\Property(property="statusCode", type="integer"),
+ *          ),
+ *      ),
+ *      @OA\Response(
+ *          response=401,
+ *          description="Unauthorized",
+ *          @OA\JsonContent(
+ *              @OA\Property(property="status", type="string"),
+ *              @OA\Property(property="message", type="string"),
+ *              @OA\Property(property="statusCode", type="integer"),
+ *          ),
+ *      ),
+ * )
+ */
     public function loginCallback(Request $request)
     {
         try {
 
-            $state = $request->input('state');
-
-            parse_str($state, $result);
-            $googleUser = Socialite::driver('google')->stateless()->user();
-            $finduser = User::where('google_id', $googleUser->id)->first();
-
+//            $state = $request->input('state');
+//            dd($request->header('Authorization'));
+//            parse_str($state, $result);
+            $tokenapi = Str::replace('Bearer ','',$request->header('Authorization'));
+//            dd($tokenapi);
+//            $googleUser = Socialite::driver('google')->stateless()->user();
+//            echo $googleUser->token;
+//            die();
+//            $finduser = User::where('google_id', $googleUser->id)->first();
+//            dd($googleUser->token);
+//            $request->header('Authorization');
+            $googleUser = Http::get('https://www.googleapis.com/oauth2/v3/userinfo?access_token='.$tokenapi);
+//            dd($googleUser->failed());
+            if($googleUser->failed()){
+                return response([
+                    "status" => "error",
+                    "message" => "Xác thực thất bại",
+                    'statusCode' => Response::HTTP_BAD_REQUEST
+                ], Response::HTTP_BAD_REQUEST);
+            }
+            $finduser = User::where('google_id', $googleUser['sub'])->first();
+//
             if($finduser){
                $token = Auth::login($finduser);
 //                $finduser->token = auth()->user()->createToken("API Token")->accessToken;
@@ -136,11 +162,11 @@ class GoogleController extends Controller
                 ], Response::HTTP_OK);
             }else{
                 $newUser = User::create([
-                    'email' => $googleUser->email,
-                    'name' => $googleUser->name,
-                    'google_id'=> $googleUser->id,
+                    'email' => $googleUser['email'],
+                    'name' => $googleUser['name'],
+                    'google_id'=> $googleUser['sub'],
                     'password'=> bcrypt('123'),
-                    'avatar' => $googleUser->avatar
+                    'avatar' => $googleUser['picture']
                 ]);
 //                $newUser->token = $newUser->createToken('API Token')->accessToken;
 //                $newUser->token = $newUser->createToken('API Token')->accessToken;

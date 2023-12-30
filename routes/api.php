@@ -30,7 +30,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // Google Sign In
 Route::post('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignInUrl']);
-Route::get('/callback', [GoogleController::class, 'loginCallback']);
+Route::get('/auth/google', [GoogleController::class, 'loginCallback']);
 //
 //Route::post('register',[UserAuthController::class,'register']);
 //Route::post('login',[UserAuthController::class,'login']);
