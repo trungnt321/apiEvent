@@ -6,6 +6,7 @@ use App\Models\event;
 use App\Models\User;
 use App\Models\atendance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Http\Resources\EventResources;
@@ -1374,13 +1375,14 @@ class eventController extends Controller
     public function Statistics()
     {
         // return auth()->user();
-        // if (auth()->user()->role != 2) {
-        //     return response()->json([
-        //         'message' => 'Không phải quản lí thì không có quyền vào xem thống kê',
-        //         'status' => 'error',
-        //         'statusCode' => Response::HTTP_FORBIDDEN
-        //     ], Response::HTTP_FORBIDDEN);
-        // }
+//        dd(Auth::user()->role);
+         if (Auth::user()->role != 2) {
+             return response()->json([
+                 'message' => 'Không phải quản lí thì không có quyền vào xem thống kê',
+                 'status' => 'error',
+                 'statusCode' => Response::HTTP_FORBIDDEN
+             ], Response::HTTP_FORBIDDEN);
+         }
         $currentTime = Carbon::now();
         $dayIncurrentMonth = $currentTime->daysInMonth;
         $firstDayOfMonth = Carbon::now()->startOfMonth();

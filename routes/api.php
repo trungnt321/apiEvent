@@ -93,7 +93,7 @@ Route::post('chat', [chatController::class, 'sendMessage']);
 Route::get('messageBox/{event_id}', [chatController::class, 'showMessageInEvent']);
 
 //Event statistics
-Route::get('statistics',[eventController::class,'Statistics']);
+Route::get('statistics',[eventController::class,'Statistics'])->middleware('auth:api');
 Route::get('getNearstEvent',[eventController::class,'getNearstEvent'])->middleware('auth:api');
 Route::post('eventStatistics',[eventController::class,'eventStatistics'])->middleware('auth:api');
 Route::post('recreateEvent',[eventController::class,'recreateEvent'])->middleware('auth:api');
