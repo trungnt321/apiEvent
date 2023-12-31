@@ -646,8 +646,8 @@ class eventController extends Controller
             'banner' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'start_time' => ['required'],
             'end_time' => ['required', 'after:start_time'],
-            'description' => 'required',
-            'content' => 'required'
+            'description'=>'required',
+            'content'=>'required'
         ], [
             'name.required' => 'Không để trống name của của sự kiện nhập',
             'location.required' => 'Không được để trống địa điểm của sự kiện',
@@ -659,7 +659,7 @@ class eventController extends Controller
             'end_time.required' => 'Ngày kết thúc của event không được để trống',
             'end_time.after' => 'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu',
             'description.required' => 'Không được để trống trường mô tả',
-            'content.required' => 'Không được để trống trường nội dung'
+            'content.required'=>'Không được để trống trường nội dung'
         ]);
         if ($validate->fails()) {
             //            dd($validate->errors());
