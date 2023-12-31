@@ -33,7 +33,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/auth/google', [GoogleController::class, 'loginCallback']);
 //
 //Route::post('register',[UserAuthController::class,'register']);
-//Route::post('login',[UserAuthController::class,'login']);
+// Route::post('login',[UserAuthController::class,'login']);
 
 //Route::apiResource('employees',EmployeeController::class)->middleware('auth:api');
 
@@ -82,6 +82,8 @@ Route::get('messageBox/{event_id}', [chatController::class, 'showMessageInEvent'
 
 //Event statistics
 Route::post('eventStatistics',[eventController::class,'eventStatistics'])->middleware('auth:api');
+Route::get('statistics',[eventController::class,'Statistics']);
+Route::get('getNearstEvent',[eventController::class,'getNearstEvent']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

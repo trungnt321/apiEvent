@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\event;
 use App\Models\User;
+use App\Models\atendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Http\Resources\EventResources;
+use App\Models\feedback;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Support\Facades\DB;
@@ -114,7 +116,7 @@ class eventController extends Controller
                     'docs' => $event->items(),
                     'totalDocs' => $event->total(),
                     'limit' => $event->perPage(),
-                    'totalPages' =>$event->lastPage(),
+                    'totalPages' => $event->lastPage(),
                     'page' => $event->currentPage(),
                     'pagingCounter' => $event->currentPage(), // Bạn có thể sử dụng currentPage hoặc số khác nếu cần
                     'hasPrevPage' => $event->previousPageUrl() != null,
@@ -219,12 +221,12 @@ class eventController extends Controller
     {
         try {
 
-            $validator = Validator::make($request->all(),[
-                'id_user_get'=>'required'
-            ],[
+            $validator = Validator::make($request->all(), [
+                'id_user_get' => 'required'
+            ], [
                 'id_user_get.required' => 'id người lấy thông báo không được để trống',
             ]);
-            if($validator->fails()){
+            if ($validator->fails()) {
                 return response([
                     "status" => "error",
                     "message" => $validator->errors()->all(),
@@ -235,7 +237,7 @@ class eventController extends Controller
             $dateCr = $currentDateTime->toDateTimeString();
             $fiveHoursAhead = $currentDateTime->addHours(24)->toDateTimeString();
             $user = User::find($request->id_user_get);
-            if($user->role == 0){
+            if ($user->role == 0) {
                 return response([
                     "status" => "error",
                     "message" => "Role người dùng không hợp lệ",
@@ -267,94 +269,94 @@ class eventController extends Controller
         }
     }
 
-/**
- * @OA\Post(
- *     path="/api/searchEvent",
- *     summary="Tìm kiếm sự kiện theo tên",
- *     tags={"Event"},
- *     operationId="Tìm kiếm sự kiện",
- *     description="Request cần nhập vào là tên sự kiện. Tên sự kiện chỉ cần nhập gần giống, không nhất thiết phải giống hẳn. Endpoint trả ra là những sự kiện có tên dạng vậy",
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(
- *             @OA\Property(property="name", type="string", example="Event Name")
- *         )
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="Successful operation",
- *         @OA\JsonContent(
- *             type="object",
- *             @OA\Property(property="status", type="string", example="success"),
- *             @OA\Property(property="message", type="string", example="Event information retrieved successfully"),
- *             @OA\Property(property="statusCode", type="integer", example=200),
- *             @OA\Property(property="metadata", type="object",
- *                 @OA\Property(property="docs", type="array",
- *                     @OA\Items(
- *                         type="object",
- *                         @OA\Property(property="name", type="string", example="Event Name"),
- *                         @OA\Property(property="location", type="string", example="Ha Noi"),
- *                         @OA\Property(property="contact", type="string", example="0986567467"),
- *                         @OA\Property(property="user_id", type="integer", example=2),
- *                         @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
- *                         @OA\Property(property="start_time", type="string", format="date-time", example="2023-11-23T11:20:22"),
- *                         @OA\Property(property="end_time", type="string", format="date-time", example="2023-11-23T11:20:22"),
- *                         @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
- *                         @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
- *                         @OA\Property(property="attendances_count", type="integer", example=3),
- *                         @OA\Property(
- *                             property="user",
- *                             type="object",
- *                             @OA\Property(property="id", type="integer", example=1),
- *                             @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
- *                             @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
- *                             @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
- *                             @OA\Property(property="role", type="integer", example=1),
- *                             @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
- *                             @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
- *                         )
- *                     )
- *                 ),
- *                 @OA\Property(property="totalDocs", type="integer", example=16),
- *                 @OA\Property(property="limit", type="integer", example=10),
- *                 @OA\Property(property="totalPages", type="integer", example=2),
- *                 @OA\Property(property="page", type="integer", example=2),
- *                 @OA\Property(property="pagingCounter", type="integer", example=2),
- *                 @OA\Property(property="hasPrevPage", type="boolean", example=true),
- *                 @OA\Property(property="hasNextPage", type="boolean", example=false)
- *             )
- *         )
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="Event not found",
- *         @OA\JsonContent(
- *             type="object",
- *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Event not found"),
- *             @OA\Property(property="statusCode", type="integer", example=404)
- *         )
- *     ),
- *     @OA\Response(
- *         response=500,
- *         description="Server error",
- *         @OA\JsonContent(
- *             type="object",
- *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Internal server error"),
- *             @OA\Property(property="statusCode", type="integer", example=500)
- *         )
- *     )
- * )
- */
+    /**
+     * @OA\Post(
+     *     path="/api/searchEvent",
+     *     summary="Tìm kiếm sự kiện theo tên",
+     *     tags={"Event"},
+     *     operationId="Tìm kiếm sự kiện",
+     *     description="Request cần nhập vào là tên sự kiện. Tên sự kiện chỉ cần nhập gần giống, không nhất thiết phải giống hẳn. Endpoint trả ra là những sự kiện có tên dạng vậy",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="name", type="string", example="Event Name")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Event information retrieved successfully"),
+     *             @OA\Property(property="statusCode", type="integer", example=200),
+     *             @OA\Property(property="metadata", type="object",
+     *                 @OA\Property(property="docs", type="array",
+     *                     @OA\Items(
+     *                         type="object",
+     *                         @OA\Property(property="name", type="string", example="Event Name"),
+     *                         @OA\Property(property="location", type="string", example="Ha Noi"),
+     *                         @OA\Property(property="contact", type="string", example="0986567467"),
+     *                         @OA\Property(property="user_id", type="integer", example=2),
+     *                         @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
+     *                         @OA\Property(property="start_time", type="string", format="date-time", example="2023-11-23T11:20:22"),
+     *                         @OA\Property(property="end_time", type="string", format="date-time", example="2023-11-23T11:20:22"),
+     *                         @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
+     *                         @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
+     *                         @OA\Property(property="attendances_count", type="integer", example=3),
+     *                         @OA\Property(
+     *                             property="user",
+     *                             type="object",
+     *                             @OA\Property(property="id", type="integer", example=1),
+     *                             @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
+     *                             @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
+     *                             @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
+     *                             @OA\Property(property="role", type="integer", example=1),
+     *                             @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
+     *                             @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
+     *                         )
+     *                     )
+     *                 ),
+     *                 @OA\Property(property="totalDocs", type="integer", example=16),
+     *                 @OA\Property(property="limit", type="integer", example=10),
+     *                 @OA\Property(property="totalPages", type="integer", example=2),
+     *                 @OA\Property(property="page", type="integer", example=2),
+     *                 @OA\Property(property="pagingCounter", type="integer", example=2),
+     *                 @OA\Property(property="hasPrevPage", type="boolean", example=true),
+     *                 @OA\Property(property="hasNextPage", type="boolean", example=false)
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Event not found",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Event not found"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Internal server error"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
+     *         )
+     *     )
+     * )
+     */
     public function searchEvent(Request $request)
     {
         try {
             if ($request->name == "" || $request->name == null) {
                 $request->name == "";
             }
-            $page = $request->query('page',1);
-            $limit = $request->query('limit',10);
+            $page = $request->query('page', 1);
+            $limit = $request->query('limit', 10);
             $event = event::where('name', 'like', "%{$request->name}%")->withCount('attendances')->with('user')->paginate($limit, ['*'], 'page', $page);
             $event->map(function ($event) {
                 $imageUrl = asset("Upload/{$event->banner}");
@@ -471,21 +473,22 @@ class eventController extends Controller
      *     )
      * )
      */
-    public function recreateEvent(Request $request){
-        try{
-            $validator = Validator::make($request->all(),[
-                'id'=>'required',
-                'start_time'=>'required',
-                'end_time'=>'required|after:start_time',
-                'user_id'=>'required'
-            ],[
-                'id.required'=>'Không được để trống id của sự kiện cần tạo lại',
-                'start_time.required'=>'Không được để trống thời gian bắt đầu',
-                'end_time.required'=>'Không được để trống thời gian kết thúc',
-                'end_time.after'=>'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu',
-                'user_id'=>'Không được để trống id của người tạo sự kiện'
+    public function recreateEvent(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'id' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required|after:start_time',
+                'user_id' => 'required'
+            ], [
+                'id.required' => 'Không được để trống id của sự kiện cần tạo lại',
+                'start_time.required' => 'Không được để trống thời gian bắt đầu',
+                'end_time.required' => 'Không được để trống thời gian kết thúc',
+                'end_time.after' => 'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu',
+                'user_id' => 'Không được để trống id của người tạo sự kiện'
             ]);
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 return response([
                     "status" => "error",
                     "message" => $validator->errors()->all(),
@@ -496,11 +499,11 @@ class eventController extends Controller
             if ($logUserRole == 1 || $logUserRole == 2) {
                 //Tạo thêm ảnh mới
                 $event = Event::findOrFail($request->id);
-                $imageName = time().'.'.pathinfo($event->banner, PATHINFO_EXTENSION);
+                $imageName = time() . '.' . pathinfo($event->banner, PATHINFO_EXTENSION);
                 $imageUrl = asset("Upload/{$imageName}");
                 $sourcePath = public_path('Upload\\') . $event->banner; // Đường dẫn tệp tin hiện tại
                 $destinationPath = public_path('Upload\\') . $imageName; // Đường dẫn tới tệp tin mới
-                $success = File::copy($sourcePath,$destinationPath);
+                $success = File::copy($sourcePath, $destinationPath);
 
                 $newEventData = $event->toArray();
 
@@ -511,7 +514,7 @@ class eventController extends Controller
                 $newEventData['banner'] = $imageName;
                 Event::create($newEventData);
 
-                $eventRecreate = Event::orderBy('id','desc')->with('user')->first();
+                $eventRecreate = Event::orderBy('id', 'desc')->with('user')->first();
                 return response()->json([
                     'metadata' => $eventRecreate,
                     'message' => 'Create Record Successfully',
@@ -524,8 +527,7 @@ class eventController extends Controller
                 "message" => "Không phải nhân viên hoặc quản lí thì không có quyền tạo lại sự kiện",
                 'statusCode' => Response::HTTP_FORBIDDEN
             ], Response::HTTP_FORBIDDEN);
-
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
                 'status' => 'error',
@@ -641,26 +643,26 @@ class eventController extends Controller
                     $query->whereIn('role', [1, 2]);
                 })
             ],
-            'banner'=>'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'banner' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'start_time' => ['required'],
             'end_time' => ['required', 'after:start_time'],
-            'description'=>'required',
-            'content'=>'required'
+            'description' => 'required',
+            'content' => 'required'
         ], [
             'name.required' => 'Không để trống name của của sự kiện nhập',
             'location.required' => 'Không được để trống địa điểm của sự kiện',
             'contact.required' => 'Không được để trống phần liên lạc',
             'contact.regex' => 'Định dạng số điện thoại được nhập không đúng',
             'user_id.required' => 'User Id không được để trống',
-            'banner.required' =>'Ảnh sự kiện bắt buộc phải có',
+            'banner.required' => 'Ảnh sự kiện bắt buộc phải có',
             'start_time.required' => 'Ngày khởi đầu của event không được để trống',
             'end_time.required' => 'Ngày kết thúc của event không được để trống',
             'end_time.after' => 'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu',
             'description.required' => 'Không được để trống trường mô tả',
-            'content.required'=>'Không được để trống trường nội dung'
+            'content.required' => 'Không được để trống trường nội dung'
         ]);
         if ($validate->fails()) {
-//            dd($validate->errors());
+            //            dd($validate->errors());
             return response([
                 "status" => "error",
                 "message" => $validate->errors(),
@@ -671,7 +673,7 @@ class eventController extends Controller
         if ($logUserRole == 1 || $logUserRole == 2) {
             //Only staff and admin can make event
             try {
-                $imageName = time().'.'.$request->banner->extension();
+                $imageName = time() . '.' . $request->banner->extension();
                 $request->banner->move(public_path('Upload'), $imageName);
                 $resourceData = $request->all();
                 $resourceData['banner'] = $imageName;
@@ -780,7 +782,11 @@ class eventController extends Controller
     public function show($id)
     {
         try {
-            $event = event::withCount('attendances')->findOrFail($id);
+            $event = event::withCount('attendances')
+                ->with('feedback')
+                ->with('attendances')
+                ->with('user')
+                ->findOrFail($id);
             $event->banner = url("Upload/{$event->banner}");
             return response()->json([
                 'metadata' => $event,
@@ -796,7 +802,7 @@ class eventController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
     }
-/**
+    /**
      * @OA\Post(
      *     path="/api/eventStatistics",
      *     tags={"Event"},
@@ -910,7 +916,7 @@ class eventController extends Controller
         $logUser = auth()->user()->role;
         $page = $request->query('page', 1);
         $limit = $request->query('limit', 10);
-        if($logUser == 0){
+        if ($logUser == 0) {
             return response([
                 "status" => "error",
                 "message" => 'Sinh viên không thể xem thống kê',
@@ -924,18 +930,18 @@ class eventController extends Controller
             // Lấy thông tin về tuần và năm
             $weekNumber = $today->weekOfYear;
             $year = $today->year;
-            $dayOfWeekNumber = $today->dayOfWeek==0?7:$today->dayOfWeek;
+            $dayOfWeekNumber = $today->dayOfWeek == 0 ? 7 : $today->dayOfWeek;
 
             //Lấy ngày đầu tiên, cuối cùng của tuần đó
-            $firstDayOfWeekNumber = $today->copy()->addDays(-$dayOfWeekNumber+1);
-            $lastDayOfWeekNumber = $today->copy()->addDays(7-$dayOfWeekNumber);
-            $eventInWeek = event::where('end_time','>=',$firstDayOfWeekNumber)
-                                                ->where('start_time','<=',$lastDayOfWeekNumber)
-                                                ->with('feedback')
-                                                ->withCount('attendances')
-                                                ->with('attendances')
-                                                ->with('user')
-                                                ->paginate($limit, ['*'], 'page', $page);
+            $firstDayOfWeekNumber = $today->copy()->addDays(-$dayOfWeekNumber + 1);
+            $lastDayOfWeekNumber = $today->copy()->addDays(7 - $dayOfWeekNumber);
+            $eventInWeek = event::where('end_time', '>=', $firstDayOfWeekNumber)
+                ->where('start_time', '<=', $lastDayOfWeekNumber)
+                ->with('feedback')
+                ->withCount('attendances')
+                ->with('attendances')
+                ->with('user')
+                ->paginate($limit, ['*'], 'page', $page);
             $eventInWeek->map(function ($event) {
                 $imageUrl = asset("Upload/{$event->banner}");
                 $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
@@ -957,13 +963,13 @@ class eventController extends Controller
                 'statusCode' => Response::HTTP_OK
             ], Response::HTTP_OK);
         }
-        $validator = Validator::make($request->all(),[
-            'start_time'=>'required',
-            'end_time'=>'required', 'after:start_time'
-        ],[
-            'start_time.required'=>'Ngày bắt đầu phải có',
-            'end_time.required'=>'Ngày kết thúc phải có',
-            'start_time.after'=>'Ngày kết thúc phải lớn hơn ngày bắt đầu'
+        $validator = Validator::make($request->all(), [
+            'start_time' => 'required',
+            'end_time' => 'required', 'after:start_time'
+        ], [
+            'start_time.required' => 'Ngày bắt đầu phải có',
+            'end_time.required' => 'Ngày kết thúc phải có',
+            'start_time.after' => 'Ngày kết thúc phải lớn hơn ngày bắt đầu'
         ]);
         if ($validator->fails()) {
             return response([
@@ -972,13 +978,13 @@ class eventController extends Controller
                 'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        $eventInStatistic = event::where('end_time','>=',$request->start_time)
-        ->where('start_time','<=',$request->end_time)
-        ->with('feedback')
-        ->withCount('attendances')
-        ->with('attendances')
-        ->with('user')
-        ->paginate($limit, ['*'], 'page', $page);
+        $eventInStatistic = event::where('end_time', '>=', $request->start_time)
+            ->where('start_time', '<=', $request->end_time)
+            ->with('feedback')
+            ->withCount('attendances')
+            ->with('attendances')
+            ->with('user')
+            ->paginate($limit, ['*'], 'page', $page);
         $eventInStatistic->map(function ($event) {
             $imageUrl = asset("Upload/{$event->banner}");
             $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
@@ -1117,7 +1123,7 @@ class eventController extends Controller
                     $query->whereIn('role', [1, 2]);
                 })
             ],
-            'banner'=>'required',
+            'banner' => 'required',
             'start_time' => ['required'],
             'end_time' => ['required', 'after:start_time'],
             'description' => ['required'],
@@ -1134,7 +1140,7 @@ class eventController extends Controller
             'banner.required' => 'Không được để trống ảnh',
             'end_time.after' => 'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu',
             'description.required' => 'Không được để trống trường mô tả',
-            'content.required'=>'Không được để trống trường nội dung'
+            'content.required' => 'Không được để trống trường nội dung'
         ]);
         if ($validate->fails()) {
             return response([
@@ -1150,11 +1156,11 @@ class eventController extends Controller
             $event = event::findOrFail($id)->with('user');
             try {
                 //Xóa ảnh
-                $imagePath = public_path('Upload/'.$event->banner);
+                $imagePath = public_path('Upload/' . $event->banner);
                 File::delete($imagePath);
 
                 //Thêm ảnh mới
-                $imageName = time().'.'.$request->banner->extension();
+                $imageName = time() . '.' . $request->banner->extension();
                 $request->banner->move(public_path('Upload'), $imageName);
 
                 $resourceData = $request->all();
@@ -1273,15 +1279,15 @@ class eventController extends Controller
                 ], Response::HTTP_NOT_FOUND);
             }
             $logUserRole = auth()->user()->role;
-            if($logUserRole != 2){
+            if ($logUserRole != 2) {
                 return response()->json([
                     'message' => 'Không phải quản lí thì sẽ không có quyền xóa',
                     'status' => 'error',
-                    'statusCode' => Response::HTTP_CONFLICT
-                ], Response::HTTP_CONFLICT);
+                    'statusCode' => Response::HTTP_FORBIDDEN
+                ], Response::HTTP_FORBIDDEN);
             }
             //Xóa ảnh
-            $imagePath = public_path('Upload/'.$event->banner);
+            $imagePath = public_path('Upload/' . $event->banner);
             File::delete($imagePath);
 
             $event->delete();
@@ -1292,7 +1298,7 @@ class eventController extends Controller
                 return $event;
             });
             return response()->json([
-                'metadata'=> $restOfEvents,
+                'metadata' => $restOfEvents,
                 'message' => 'Xóa bản ghi thành công',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
@@ -1304,5 +1310,100 @@ class eventController extends Controller
                 'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function Statistics()
+    {
+        if (auth()->user()->role != 2) {
+            return response()->json([
+                'message' => 'Không phải quản lí thì không có quyền vào xem thống kê',
+                'status' => 'error',
+                'statusCode' => Response::HTTP_FORBIDDEN
+            ], Response::HTTP_FORBIDDEN);
+        }
+        $currentTime = Carbon::now();
+        $dayIncurrentMonth = $currentTime->daysInMonth;
+        $firstDayOfMonth = Carbon::now()->startOfMonth();
+        $lastDayOfMonth = Carbon::now()->endOfMonth();
+
+        $firstDayOfLastMonth = Carbon::now()->subDays($dayIncurrentMonth)->startOfMonth();
+        $lastDayOfLastMonth = Carbon::now()->subDays($dayIncurrentMonth)->endOfMonth();
+        //Tổng số sự kiện tháng hiện tại
+        $eventInCurrentMonth = event::where('end_time', '>=', $firstDayOfMonth)
+            ->where('start_time', '<=', $lastDayOfMonth)
+            ->where('status', '<', 2)
+            ->count();
+        //Tổng số sự kiện tháng trước
+        $eventInLastMonth = event::where('end_time', '>=', $firstDayOfLastMonth)
+            ->where('start_time', '<=', $lastDayOfLastMonth)
+            ->where('status', '<', 2)
+            ->count();
+        //Tổng số sinh viên tham gia tháng này
+        $joinEventInCurrentMonth = atendance::where('created_at', '>=', $firstDayOfMonth)
+            ->where('created_at', '<=', $lastDayOfMonth)
+            ->count();
+        //Tổng số sinh viên tham gia tháng trước
+        $joinEventInLastMonth = atendance::where('created_at', '>=', $firstDayOfLastMonth)
+            ->where('created_at', '<=', $lastDayOfLastMonth)
+            ->count();
+
+        //Tổng số nhân viên từ trước tới nay
+        $userInRoleStaff = User::where('role', 1)->count();
+
+        //Tổng số feedback tham gia tháng này
+        $feedBackInCurrentMonth = feedback::where('created_at', '>=', $firstDayOfMonth)
+            ->where('created_at', '<=', $lastDayOfMonth)
+            ->count();
+        //Tổng số feedback tham gia tháng trước
+        $feedBackInLastMonth = feedback::where('created_at', '>=', $firstDayOfLastMonth)
+            ->where('created_at', '<=', $lastDayOfLastMonth)
+            ->count();
+
+        //Validate nếu mẫu bằng 0
+        $percentInEvent = ($eventInLastMonth == 0)
+            ? 1
+            : ($eventInCurrentMonth - $eventInLastMonth) / $eventInLastMonth;
+        $percentInJoinEvent = ($joinEventInLastMonth == 0)
+            ? 1
+            : ($joinEventInCurrentMonth - $joinEventInLastMonth) / $joinEventInLastMonth;
+        $percentInFeedBack = ($feedBackInLastMonth == 0)
+            ? 1
+            : ($feedBackInCurrentMonth - $feedBackInLastMonth) / $feedBackInLastMonth;
+
+        $returnData = [
+            'eventInLastMonth' => $eventInLastMonth,
+            'eventInCurrentMonth' => $eventInCurrentMonth,
+            'percentInEvent' => $percentInEvent,
+            'joinEventInCurrentMonth' => $joinEventInCurrentMonth,
+            'joinEventInLastMonth' => $joinEventInLastMonth,
+            'percentInJoinEvent' => $percentInJoinEvent,
+            'userInRoleStaff' => $userInRoleStaff,
+            'feedBackInCurrentMonth' => $feedBackInCurrentMonth,
+            'feedBackInLastMonth' => $feedBackInLastMonth,
+            'percentInFeedBack' => $percentInFeedBack
+        ];
+
+        return response()->json([
+            'metadata' => $returnData,
+            'message' => 'Lấy thông tin thống kê thành công',
+            'status' => 'success',
+            'statusCode' => Response::HTTP_OK
+        ], Response::HTTP_OK);
+    }
+
+    public function getNearstEvent()
+    {
+        $currentTime = Carbon::now();
+        $fiveEventNearst = event::where('status', 0)
+            ->where('end_time','<',$currentTime)
+            ->orderBy('end_time', 'desc')
+            ->limit(5)
+            ->get();
+        return response()->json([
+            'metadata' => $fiveEventNearst,
+            'message' => 'Lấy ra 5 sự kiện đã kết thúc gần nhất',
+            'status' => 'success',
+            'statusCode' => Response::HTTP_OK
+        ], Response::HTTP_OK);
     }
 }
