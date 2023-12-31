@@ -3225,6 +3225,265 @@
                 }
             }
         },
+        "/api/statistics": {
+            "get": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Lấy ra những điều cần thiết trong trang dashboard",
+                "description": "\n     *  -Endpoint này lấy ra những điều cần thiết trong trang dashboard\n     *  -eventInLastMonth là số sự kiện diễn ra trong tháng trước\n     *  -eventInCurrentMonth là số sự kiện diễn ra trong tháng này\n     *  -percentInEvent là phần trăm tăng bao nhiêu số sự kiện từ thang trước sang tháng này\n     *  -Tương tự với joinEvent là người tham gia sự kiện được thống kê ở mỗi tháng\n     *  -Tương tự với feedBack là số feedback được thống kê ở mỗi tháng\n     *  -userInRoleStaff là số nhân viên từ trước tới nay",
+                "operationId": "Statistic",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Thống kê thành công"
+                                        },
+                                        "metadata": {
+                                            "properties": {
+                                                "eventInLastMonth": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "eventInCurrentMonth": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "percentInEvent": {
+                                                    "type": "integer",
+                                                    "example": 0.8
+                                                },
+                                                "joinEventInCurrentMonth": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "joinEventInLastMonth": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "percentInJoinEvent": {
+                                                    "type": "integer",
+                                                    "example": 0.9
+                                                },
+                                                "userInRoleStaff": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "feedBackInCurrentMonth": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "feedBackInLastMonth": {
+                                                    "type": "integer",
+                                                    "example": 15
+                                                },
+                                                "percentInFeedBack": {
+                                                    "type": "interger",
+                                                    "example": 0.7
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bản ghi không tồn tại",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bản ghi không tồn tại"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi hệ thống",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lỗi hệ thống"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/getNearstEvent": {
+            "get": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Lấy tất cả các sự kiện diễn ra gần nhất",
+                "description": "Endpoint trả về thông tin của 5 sự kiện đang và sắp diễn ra gần nhất",
+                "operationId": "d8a7396bb04415494bd6de362ed17349",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lấy dữ liệu thành công"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "metadata": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Event Name"
+                                                    },
+                                                    "location": {
+                                                        "type": "string",
+                                                        "example": "Ha Noi"
+                                                    },
+                                                    "contact": {
+                                                        "type": "string",
+                                                        "example": "0986567467"
+                                                    },
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "banner": {
+                                                        "type": "string",
+                                                        "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
+                                                    },
+                                                    "start_time": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-23 11:20:22"
+                                                    },
+                                                    "end_time": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-23 11:20:22"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Sự kiện rất hoành tráng"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "Chào mừng tổng thống"
+                                                    },
+                                                    "attendances_count": {
+                                                        "type": "integer",
+                                                        "example": 3
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Không tìm thấy bản ghi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Không tìm thấy bản ghi"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi hệ thống",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lỗi hệ thống"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/feedback/{id_event}": {
             "get": {
                 "tags": [

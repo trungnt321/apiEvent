@@ -646,8 +646,8 @@ class eventController extends Controller
             'banner' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'start_time' => ['required'],
             'end_time' => ['required', 'after:start_time'],
-            'description'=>'required',
-            'content'=>'required'
+            'description' => 'required',
+            'content' => 'required'
         ], [
             'name.required' => 'Không để trống name của của sự kiện nhập',
             'location.required' => 'Không được để trống địa điểm của sự kiện',
@@ -659,7 +659,8 @@ class eventController extends Controller
             'end_time.required' => 'Ngày kết thúc của event không được để trống',
             'end_time.after' => 'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu',
             'description.required' => 'Không được để trống trường mô tả',
-            'content.required'=>'Không được để trống trường nội dung'
+            'user_id.exists' => 'Role của userid không hợp lệ.',
+            'content.required' => 'Không được để trống trường nội dung'
         ]);
         if ($validate->fails()) {
             //            dd($validate->errors());
@@ -1311,16 +1312,75 @@ class eventController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
+    /**
+     * @OA\Get(
+     *      path="/api/statistics",
+     *      operationId="Statistic",
+     *      tags={"Event"},
+     *      summary="Lấy ra những điều cần thiết trong trang dashboard",
+     *      description="
+     *  -Endpoint này lấy ra những điều cần thiết trong trang dashboard
+     *  -eventInLastMonth là số sự kiện diễn ra trong tháng trước
+     *  -eventInCurrentMonth là số sự kiện diễn ra trong tháng này
+     *  -percentInEvent là phần trăm tăng bao nhiêu số sự kiện từ thang trước sang tháng này
+     *  -Tương tự với joinEvent là người tham gia sự kiện được thống kê ở mỗi tháng
+     *  -Tương tự với feedBack là số feedback được thống kê ở mỗi tháng
+     *  -userInRoleStaff là số nhân viên từ trước tới nay",
+     *      @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Thống kê thành công"),
+     *             @OA\Property(
+     *                 property="metadata",
+     *                 type="object",
+     *                 @OA\Property(property="eventInLastMonth", type="integer", example=1),
+     *                           @OA\Property(property="eventInCurrentMonth", type="integer", example=1),
+     *                           @OA\Property(property="percentInEvent", type="integer", example=0.8),
+     *                           @OA\Property(property="joinEventInCurrentMonth", type="integer", example=2),
+     *                           @OA\Property(property="joinEventInLastMonth", type="integer", example=1),
+     *                           @OA\Property(property="percentInJoinEvent", type="integer", example=0.9),
+     *                           @OA\Property(property="userInRoleStaff", type="integer", example=10),
+     *                           @OA\Property(property="feedBackInCurrentMonth", type="integer", example=10),
+     *                           @OA\Property(property="feedBackInLastMonth", type="integer", example=15),
+     *                           @OA\Property(property="percentInFeedBack", type="interger", example=0.7),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Bản ghi không tồn tại",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Bản ghi không tồn tại"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Lỗi hệ thống",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
+     *         )
+     *     )
+     * )
+     */
     public function Statistics()
     {
-        if (auth()->user()->role != 2) {
-            return response()->json([
-                'message' => 'Không phải quản lí thì không có quyền vào xem thống kê',
-                'status' => 'error',
-                'statusCode' => Response::HTTP_FORBIDDEN
-            ], Response::HTTP_FORBIDDEN);
-        }
+        // return auth()->user();
+        // if (auth()->user()->role != 2) {
+        //     return response()->json([
+        //         'message' => 'Không phải quản lí thì không có quyền vào xem thống kê',
+        //         'status' => 'error',
+        //         'statusCode' => Response::HTTP_FORBIDDEN
+        //     ], Response::HTTP_FORBIDDEN);
+        // }
         $currentTime = Carbon::now();
         $dayIncurrentMonth = $currentTime->daysInMonth;
         $firstDayOfMonth = Carbon::now()->startOfMonth();
@@ -1391,12 +1451,67 @@ class eventController extends Controller
         ], Response::HTTP_OK);
     }
 
+/**
+ * @OA\Get(
+ *     path="/api/getNearstEvent",
+ *     summary="Lấy tất cả các sự kiện diễn ra gần nhất",
+ *     tags={"Event"},
+ *     description="Endpoint trả về thông tin của 5 sự kiện đang và sắp diễn ra gần nhất",
+ *     @OA\Response(
+ *         response=200,
+ *         description="Successful operation",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="success"),
+ *             @OA\Property(property="message", type="string", example="Lấy dữ liệu thành công"),
+ *             @OA\Property(property="statusCode", type="integer", example=200),
+ *             @OA\Property(property="metadata", type="array",
+ *                 @OA\Items(
+ *                     type="object",
+ *                     @OA\Property(property="name", type="string", example="Event Name"),
+ *                     @OA\Property(property="location", type="string", example="Ha Noi"),
+ *                     @OA\Property(property="contact", type="string", example="0986567467"),
+ *                     @OA\Property(property="user_id", type="integer", example=2),
+ *                     @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
+ *                     @OA\Property(property="start_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
+ *                     @OA\Property(property="end_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
+ *                     @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
+ *                     @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
+ *                     @OA\Property(property="attendances_count", type="integer", example=3),
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Không tìm thấy bản ghi",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Không tìm thấy bản ghi"),
+ *             @OA\Property(property="statusCode", type="integer", example=404)
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Lỗi hệ thống",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
+ *             @OA\Property(property="statusCode", type="integer", example=500)
+ *         )
+ *     )
+ * )
+ */
     public function getNearstEvent()
     {
         $currentTime = Carbon::now();
-        $fiveEventNearst = event::where('status', 0)
-            ->where('end_time','<',$currentTime)
-            ->orderBy('end_time', 'desc')
+        $fiveEventNearst = event::where('status','>', 0)
+            ->where('start_time', '>=', $currentTime)
+            ->orWhere('start_time','<',$currentTime)
+            ->where('end_time', '>=', $currentTime)
+            ->orderBy('start_time', 'asc')
             ->limit(5)
             ->get();
         return response()->json([

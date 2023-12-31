@@ -80,7 +80,7 @@ Route::prefix('event')->group(function() {
 
 //Test api in swagger donn't need token
 Route::apiResource('participants',participantsController::class)->middleware('auth:api');
-Route::post('recreateEvent',[eventController::class,'recreateEvent'])->middleware('auth:api');
+
 Route::get('resourceByEventID/{event_id}',[resourceController::class,'GetRecordByEventId'])->middleware('auth:api');
 Route::apiResource('resource',resourceController::class)->middleware('auth:api');
 
@@ -93,9 +93,10 @@ Route::post('chat', [chatController::class, 'sendMessage']);
 Route::get('messageBox/{event_id}', [chatController::class, 'showMessageInEvent']);
 
 //Event statistics
-Route::post('eventStatistics',[eventController::class,'eventStatistics'])->middleware('auth:api');
 Route::get('statistics',[eventController::class,'Statistics']);
-Route::get('getNearstEvent',[eventController::class,'getNearstEvent']);
+Route::get('getNearstEvent',[eventController::class,'getNearstEvent'])->middleware('auth:api');
+Route::post('eventStatistics',[eventController::class,'eventStatistics'])->middleware('auth:api');
+Route::post('recreateEvent',[eventController::class,'recreateEvent'])->middleware('auth:api');
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
