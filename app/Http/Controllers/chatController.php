@@ -97,7 +97,7 @@ class chatController extends Controller
         //Trả về dữ liệu
         $userChat = chat::with('senderInfo')->orderBy('created_at','desc')->first();
 
-        broadcast(new chatRealTime($userChat))->toOthers();
+        //broadcast(new chatRealTime($userChat))->toOthers();
 
         return response()->json([
             'metadata' => $userChat,
