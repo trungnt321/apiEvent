@@ -124,9 +124,12 @@ class GoogleController extends Controller
     public function loginCallback(Request $request)
     {
         try {
-
+//        $testToekn = 'ya29.a0AfB_byBR-TgPRUsUTpYWO7e8ni_1UkI_8SrcdUw2_tkxCGOvRgBtop6tKHRVxN-ahtFKFLCxn77eX5-mb-nnVAh1ZdYU97CYIxbeQG-CUCLfjaV58lPYrZtS4ygtMghqW76YG2WAXs7sZs_2hbtg-A0L1ZOPdanCMzfVaCgYKAUkSARESFQHGX2MiIyPhfqchpJX8aY2AIaChAA0171';
 //            $state = $request->input('state');
 //            dd($request->header('Authorization'));
+//            $googleUser = Socialite::driver('google')->stateless()->user();
+//            echo $googleUser->token;
+//            die();
 //            parse_str($state, $result);
             $tokenapi = Str::replace('Bearer ','',$request->header('Authorization'));
 //            dd($tokenapi);

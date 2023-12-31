@@ -643,7 +643,7 @@ class eventController extends Controller
             ],
             'banner'=>'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'start_time' => ['required'],
-            'end_time' => ['required', 'after:start_time'],
+            'end_time' => ['required','after:start_time'],
             'description'=>'required',
             'content'=>'required'
         ], [
