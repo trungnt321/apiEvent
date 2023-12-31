@@ -657,7 +657,8 @@ class eventController extends Controller
             'end_time.required' => 'Ngày kết thúc của event không được để trống',
             'end_time.after' => 'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu',
             'description.required' => 'Không được để trống trường mô tả',
-            'content.required'=>'Không được để trống trường nội dung'
+            'content.required'=>'Không được để trống trường nội dung',
+            'user_id.exists' => 'User Id không hợp lệ hoặc Role không hợp lệ.',
         ]);
         if ($validate->fails()) {
 //            dd($validate->errors());
