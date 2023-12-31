@@ -486,7 +486,7 @@ class eventController extends Controller
                 'start_time.required' => 'Không được để trống thời gian bắt đầu',
                 'end_time.required' => 'Không được để trống thời gian kết thúc',
                 'end_time.after' => 'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu',
-                'user_id' => 'Không được để trống id của người tạo sự kiện'
+                'user_id.required' => 'Không được để trống id của người tạo sự kiện'
             ]);
             if ($validator->fails()) {
                 return response([
