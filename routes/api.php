@@ -12,7 +12,7 @@ use App\Http\Controllers\notificationController;
 use App\Http\Controllers\participantsController;
 use App\Http\Controllers\feedbackController;
 use App\Http\Controllers\resourceController;
-
+use App\Http\Controllers\keywordsController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -40,12 +40,12 @@ Route::get('/callback', [GoogleController::class, 'loginCallback']);
 
 //Route::apiResource('atendances',atendanceController::class)->middleware('auth:api');
 Route::middleware('auth:api')->prefix('attendances')->group(function() {
-    Route::get('/join/{id_event}/{id_user}',[atendanceController::class,'index']);
+    Route::get('/join/{id_event}',[atendanceController::class,'index']);
     Route::post('/add',[atendanceController::class,'addEmail']);
     Route::post('/',[atendanceController::class,'store']);
     Route::get('/{id}',[atendanceController::class,'show']);
     Route::put('/{id}',[atendanceController::class,'update']);
-    Route::delete('/{id}/{id_user}',[atendanceController::class,'destroy']);
+    Route::delete('/{id}',[atendanceController::class,'destroy']);
 });
 //Route::apiResource('feedback',feedbackController::class)->middleware('auth:api');
 Route::middleware('auth:api')->prefix('feedback')->group(function() {
@@ -65,18 +65,26 @@ Route::middleware('auth:api')->prefix('notification')->group(function() {
     Route::delete('/{id}',[notificationController::class,'destroy']);
 });
 
+Route::get('/searchKeyword',[keywordsController::class,'searchEvent']);
+Route::middleware('auth:api')->prefix('keywords')->group(function() {
+    Route::get('/',[keywordsController::class,'index']);
+    Route::get('/{id}',[keywordsController::class,'show']);
+    Route::post('/',[keywordsController::class,'store']);
+    Route::put('/{id}',[keywordsController::class,'update']);
+    Route::delete('/{id}',[keywordsController::class,'destroy']);
+});
 Route::prefix('event')->group(function() {
-    Route::get('/',[eventController::class,'index']);
     Route::get('/{id}',[eventController::class,'show']);
     Route::middleware(['auth:api'])->group(function () {
+        Route::get('/',[eventController::class,'index']);
         Route::post('/', [eventController::class, 'store']);
         Route::post('/notification', [eventController::class, 'indexNotification']);
-        Route::put('/{id}', [eventController::class, 'update']);
+        Route::post('/{id}', [eventController::class, 'update']);
         Route::delete('/{id}', [eventController::class, 'destroy']);
     });
-//    Route::apiResource('event',eventController::class)->middleware('auth:api');
-
 });
+
+//    Route::apiResource('event',eventController::class)->middleware('auth:api');
 
 //Test api in swagger donn't need token
 Route::apiResource('participants',participantsController::class)->middleware('auth:api');

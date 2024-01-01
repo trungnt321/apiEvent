@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\atendance;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -13,12 +14,11 @@ class atendanceController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/atendances/join/{id_event}/{id_user}",
+     *     path="/api/attendances/join/{id_event}",
      *     summary="Lấy tất cả các bản ghi theo id sự kiện",
      *     tags={"Attendances"},
      *      description="
      *      - id_event là id sự kiện
-     *      - id_user là id người thực hiện lấy
      *      - Endpoint trả về thôn tìn người dùng tham gia sự kiện.
      *      - Trả về thông tin của người dùng đã tham gia sự kiện.
      *      - Role được sử dụng là role nhân viên ,quản lí ",
@@ -84,12 +84,13 @@ class atendanceController extends Controller
      *     )
      * )
      */
-    public function index($id_event,$id_user,Request $request)
+    public function index($id_event,Request $request)
     {
         try {
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $user = User::find($id_user);
+            $status = $request->query('status', false);
+            $user = Auth::user();
             if($user == null || $user->role == 0){
                 return response([
                     "status" => "error",
@@ -97,11 +98,18 @@ class atendanceController extends Controller
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-            $atendance = atendance::where('event_id',$id_event)->with('user')->paginate($limit, ['*'], 'page', $page);
-
-            $nextPageUrl = $atendance->nextPageUrl();
-
-            return response()->json([
+            $query = atendance::where('event_id',$id_event)->with('user');
+            $atendance = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
+            if (!$status && $page > $atendance->lastPage()) {
+                $page = 1;
+                $atendance = atendance::where('event_id',$id_event)->with('user')->paginate($limit, ['*'], 'page', $page);
+            }
+            $data = ($status) ? [
+                'metadata' => $atendance,
+                'message' => 'Get All Records Successfully',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ] : [
                 'metadata' => [
                     'docs' => $atendance->items(),
                     'totalDocs' => $atendance->total(),
@@ -117,7 +125,8 @@ class atendanceController extends Controller
                 'message' => 'Lấy thành công tất cả các bản ghi',
                 'status' => 'success',
                 'statusCode' => Response::HTTP_OK
-            ], Response::HTTP_OK);
+            ];
+            return response()->json($data, Response::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -196,12 +205,13 @@ class atendanceController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'event_id' => 'required',
+                'event_id' => 'required|exists:events,id',
                 'user_id' => 'required|exists:users,id',
             ], [
                 'event_id.required' => 'Id sự kiện không được để trống',
                 'user_id.required' => 'Id người dùng không được để trống.',
-                'user_id.exists' => 'Id người dùng không tồn tại.'
+                'user_id.exists' => 'Người dùng không tồn tại.',
+                'event_id.exists' => 'Sự kiện không tồn tại.'
             ]);
 
             if ($validator->fails()) {
@@ -392,7 +402,7 @@ class atendanceController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/atendances/{id}",
+     *     path="/api/attendances/{id}",
      *     summary="Lấy ra thông tin người tham gia sự kiện",
      *     tags={"Attendances"},
      *     description="
@@ -478,7 +488,7 @@ class atendanceController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/atendances/{atendance}",
+     *     path="/api/attendances/{atendance}",
      *     summary="Update an attendance record",
      *     tags={"Attendances"},
      *     description="
@@ -581,7 +591,7 @@ class atendanceController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/atendances/{id}/{id_user}",
+     *     path="/api/attendances/{id}",
      *     summary="Xóa 1 người dùng đã tham gia sự kiện",
      *     tags={"Attendances"},
      *     description="
@@ -589,7 +599,6 @@ class atendanceController extends Controller
      *          - Role được sử dụng là role Quản lí
      *          - Xóa thành công sẽ trả lại data là các sinh viên còn lại sự kiện đó
      *          - id là id của bản ghi tham gia
-     *          - id_user là id của người thực hiện xóa
      *          ",
      *     @OA\Parameter(
      *         name="atendance",
@@ -651,7 +660,7 @@ class atendanceController extends Controller
      *     )
      * )
      */
-    public function destroy($id,$id_user)
+    public function destroy($id)
     {
         try {
             $atendance = atendance::find($id);
@@ -665,7 +674,7 @@ class atendanceController extends Controller
             $idEvent = $atendance->event_id;
 
 
-            $user = User::find($id_user);
+            $user = Auth::user();
             if($user->role == 0 || $user->role == 1){
                 return response([
                     "status" => "error",

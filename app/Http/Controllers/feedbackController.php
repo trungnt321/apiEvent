@@ -90,22 +90,14 @@ class feedbackController extends Controller
         try {
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $feedback = feedback::where('event_id',$id_event)->with('user')->paginate($limit, ['*'], 'page', $page);
-            return response()->json([
-                'metadata' => [
-                    'docs' => $feedback->items(),
-                    'totalDocs' => $feedback->total(),
-                    'limit' => $feedback->perPage(),
-                    'totalPages' => $feedback->lastPage(),
-                    'page' => $feedback->currentPage(),
-                    'pagingCounter' => $feedback->currentPage(),
-                    'hasPrevPage' => $feedback->previousPageUrl() != null,
-                    'hasNextPage' => $feedback->nextPageUrl() != null
-                ],
-                'message' => 'Lấy tất cả phản hồi thành công',
-                'status' => 'success',
-                'statusCode' => Response::HTTP_OK
-            ], Response::HTTP_OK);
+            $status = $request->query('status', false);
+            $query = feedback::where('event_id',$id_event)->with('user');
+             $feedback = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
+            if (!$status && $page > $feedback->lastPage()) {
+                $page = 1;
+                $feedback = feedback::where('event_id',$id_event)->with('user')->paginate($limit, ['*'], 'page', $page);
+            }
+            return response()->json(handleData($status,$feedback), Response::HTTP_OK);
         }catch(\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),

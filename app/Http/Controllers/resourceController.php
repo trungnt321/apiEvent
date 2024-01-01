@@ -78,27 +78,18 @@ class resourceController extends Controller
         try {
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $resource = resource::paginate($limit, ['*'], 'page', $page);
+            $status = $request->query('status', false);
+            $resource = ($status) ? resource::all() :  resource::paginate($limit, ['*'], 'page', $page);
+            if ($page > $resource->lastPage()) {
+                $page = 1;
+                $resource = resource::paginate($limit, ['*'], 'page', $page);
+            }
             $resource->map(function ($resource) {
                 $imageUrl = asset("Upload/{$resource->url}");
                 $resource->url = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
                 return $resource;
-            }); 
-            return response()->json([
-                'metadata' => [
-                    'docs' => $resource->items(),
-                    'totalDocs' => $resource->total(),
-                    'limit' => $resource->perPage(),
-                    'totalPages' => $resource->lastPage(),
-                    'page' => $resource->currentPage(),
-                    'pagingCounter' => $resource->currentPage(), // Bạn có thể sử dụng currentPage hoặc số khác nếu cần
-                    'hasPrevPage' => $resource->previousPageUrl() != null,
-                    'hasNextPage' => $resource->nextPageUrl() != null
-                ],
-                'message' => 'Get All Records Successfully',
-                'status' => 'success',
-                'statusCode' => Response::HTTP_OK
-            ],Response::HTTP_OK);
+            });
+            return response()->json(handleData($status,$resource),Response::HTTP_OK);
         }catch(\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -188,7 +179,7 @@ class resourceController extends Controller
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
             if(auth()->user()->role == 1 || auth()->user()->role == 2){
-                $imageName = time().'.'.$request->url->extension();  
+                $imageName = time().'.'.$request->url->extension();
                 $request->url->move(public_path('Upload'), $imageName);
                 $resourceData = $request->all();
                 $resourceData['url'] = $imageName;
@@ -280,7 +271,7 @@ class resourceController extends Controller
     public function show($id)
     {
         try{
-            
+
             $resource = resource::findOrFail($id);
             if(!$resource){
                 return response()->json([
@@ -378,27 +369,19 @@ class resourceController extends Controller
         try{
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $resourceById = resource::where('event_id',$event_id)->paginate($limit, ['*'], 'page', $page);
+            $status = $request->query('status', false);
+            $query = resource::where('event_id',$event_id);
+            $resourceById = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
+            if ($page > $resourceById->lastPage()) {
+                $page = 1;
+                $resourceById = resource::where('event_id',$event_id)->paginate($limit, ['*'], 'page', $page);
+            }
             $resourceById->map(function ($resourceById) {
                 $imageUrl = asset("Upload/{$resourceById->url}");
                 $resourceById->url = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
                 return $resourceById;
             });;
-            return response()->json([
-                'metadata' => [
-                    'docs' => $resourceById->items(),
-                    'totalDocs' => $resourceById->total(),
-                    'limit' => $resourceById->perPage(),
-                    'totalPages' => $resourceById->lastPage(),
-                    'page' => $resourceById->currentPage(),
-                    'pagingCounter' => $resourceById->currentPage(), 
-                    'hasPrevPage' => $resourceById->previousPageUrl() != null,
-                    'hasNextPage' => $resourceById->nextPageUrl() != null
-                ],
-                'message' => 'Get All Record By Event ID Successfully',
-                'status' => 'success',
-                'statusCode' => Response::HTTP_OK
-            ], Response::HTTP_OK);
+            return response()->json(handleData($status,$resourceById), Response::HTTP_OK);
         }catch(\Exception $e){
             return response([
                 "status" => "error",
@@ -406,7 +389,7 @@ class resourceController extends Controller
                 'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        
+
 
     }
        /**
@@ -503,14 +486,14 @@ class resourceController extends Controller
                 ], Response::HTTP_NOT_FOUND);
             }
 
-            
+
             if(auth()->user()->role != 0){
-                //Xóa ảnh 
+                //Xóa ảnh
                 $imagePath = public_path('Upload/'.$resource->url);
                 File::delete($imagePath);
-    
-                //Thêm ảnh mới 
-                $imageName = time().'.'.$request->url->extension();  
+
+                //Thêm ảnh mới
+                $imageName = time().'.'.$request->url->extension();
                 $request->url->move(public_path('Upload'), $imageName);
 
                 $resourceData = $request->all();
@@ -523,7 +506,7 @@ class resourceController extends Controller
                     'message' => 'Update Record Successfully',
                     'status' => 'success',
                     'statusCode' => Response::HTTP_OK
-                        ], Response::HTTP_OK); 
+                        ], Response::HTTP_OK);
             }
             return response([
                 "status" => "error",
@@ -604,7 +587,7 @@ class resourceController extends Controller
                     'statusCode' => Response::HTTP_NOT_FOUND
                 ], Response::HTTP_NOT_FOUND);
             }
-            //Xóa ảnh 
+            //Xóa ảnh
             $imagePath = public_path('Upload/'.$resource->url);
             File::delete($imagePath);
             $resource->delete();
