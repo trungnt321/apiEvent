@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('content');
             $table->dateTime('time_send');
             $table->dateTime('sent_at')->nullable();
-            $table->integer('receiver_id');
+            $table->bigInteger('receiver_id');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
         });

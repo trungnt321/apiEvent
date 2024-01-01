@@ -1,9 +1,10 @@
 <?php
 
+use App\Models\event;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use App\Models\User;
 return new class extends Migration
 {
     /**
@@ -14,8 +15,8 @@ return new class extends Migration
         Schema::create('feedback', function (Blueprint $table) {
             $table->id();
             $table->string('content');
-            $table->integer('user_id');
-            $table->integer('event_id');
+            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(event::class);
             $table->timestamps();
         });
     }
