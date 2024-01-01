@@ -671,6 +671,7 @@ class eventController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         $logUserRole = auth()->user()->role;
+        return $logUserRole;
         if ($logUserRole == 1 || $logUserRole == 2) {
             //Only staff and admin can make event
             try {
