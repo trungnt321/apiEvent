@@ -2524,13 +2524,13 @@
                     }
                 }
             },
-            "put": {
+            "post": {
                 "tags": [
                     "Event"
                 ],
                 "summary": "Sửa dữ liệu của một sự kiện ",
                 "description": "\n     * -Endpoint trả về dữ liệu bản ghi mới được sửa đổi\n     * -Role quy định là role nhân viên, quản lí\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * -keywords là mảng chứa id keyword cần cập nhật ( Lưu ý : phải tồn tại keywords đó)\n     * ",
-                "operationId": "updateEvent",
+                "operationId": "eventPut",
                 "parameters": [
                     {
                         "name": "id",

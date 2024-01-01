@@ -74,13 +74,12 @@ Route::middleware('auth:api')->prefix('keywords')->group(function() {
     Route::delete('/{id}',[keywordsController::class,'destroy']);
 });
 Route::prefix('event')->group(function() {
-
     Route::get('/{id}',[eventController::class,'show']);
     Route::middleware(['auth:api'])->group(function () {
         Route::get('/',[eventController::class,'index']);
         Route::post('/', [eventController::class, 'store']);
         Route::post('/notification', [eventController::class, 'indexNotification']);
-        Route::put('/{id}', [eventController::class, 'update']);
+        Route::post('/{id}', [eventController::class, 'update']);
         Route::delete('/{id}', [eventController::class, 'destroy']);
     });
 });

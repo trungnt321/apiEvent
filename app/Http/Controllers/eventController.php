@@ -15,6 +15,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Resources\EventResources;
 use App\Models\feedback;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -1072,7 +1073,7 @@ class eventController extends Controller
 
     /**
      * /**
-     * @OA\Put(
+     * @OA\Post(
      *     path="/api/event/{id}",
      *     operationId="updateEvent",
      *     tags={"Event"},
@@ -1088,6 +1089,7 @@ class eventController extends Controller
      * -end_time là thời gian kết thúc sự kiện
      * -keywords là mảng chứa id keyword cần cập nhật ( Lưu ý : phải tồn tại keywords đó)
      * ",
+     *     operationId="eventPut",
      *     @OA\Parameter(
      *         name="id",
      *         description="ID của một sự kiện",
@@ -1171,7 +1173,6 @@ class eventController extends Controller
     public function update(Request $request, $id)
     {
         //Check validate
-//        dd($request->all());
         $validate = Validator::make($request->all(), [
             'name' => 'required',
             'location' => ['required'],
@@ -1181,7 +1182,7 @@ class eventController extends Controller
             ],
             'status' => [
                 'required',
-                Rule::in([0, 1])
+                Rule::in([0, 1, 2])
             ],
             'user_id' => [
                 'required',
@@ -1203,6 +1204,7 @@ class eventController extends Controller
             'contact.required' => 'Không được để trống phần liên lạc',
             'contact.regex' => 'Định dạng số điện thoại được nhập không đúng',
             'status.required' => 'Trạng thái của sự kiện không được để trống',
+            'status.in' => 'Vui lòng nhập đúng trạng thái',
             'user_id.required' => 'User Id không được để trống',
             'start_time.required' => 'Ngày khởi đầu của event không được để trống',
             'end_time.required' => 'Ngày kết thúc của event không được để trống',
@@ -1217,7 +1219,7 @@ class eventController extends Controller
         if ($validate->fails()) {
             return response([
                 "status" => "error",
-                "message" => $validate->errors(),
+                "message" => $validate->errors()->all(),
                 'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
