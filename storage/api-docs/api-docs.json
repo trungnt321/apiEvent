@@ -118,14 +118,14 @@
                 }
             }
         },
-        "/api/atendances/join/{id_event}": {
+        "/api/attendances/join/{id_event}": {
             "get": {
                 "tags": [
                     "Attendances"
                 ],
                 "summary": "Lấy tất cả các bản ghi theo id sự kiện",
                 "description": "\n     *      - id_event là id sự kiện\n     *      - Endpoint trả về thôn tìn người dùng tham gia sự kiện.\n     *      - Trả về thông tin của người dùng đã tham gia sự kiện.\n     *      - Role được sử dụng là role nhân viên ,quản lí ",
-                "operationId": "513e2fefdb28376d423aa50d381cea8c",
+                "operationId": "d30a7d4f47b44ef1170d7215b2246543",
                 "responses": {
                     "200": {
                         "description": "Successful response with feedback data",
@@ -639,14 +639,14 @@
                 }
             }
         },
-        "/api/atendances/{id}": {
+        "/api/attendances/{id}": {
             "get": {
                 "tags": [
                     "Attendances"
                 ],
                 "summary": "Lấy ra thông tin người tham gia sự kiện",
                 "description": "\n     *          - Endpoint này lấy ra 1 bản ghi của sự kiện\n     *          - id là id của atendances\n     *          ",
-                "operationId": "a48c7c55e5322d537132fd481b53fa3b",
+                "operationId": "62e5310c598dfd076bcda971d80b259c",
                 "parameters": [
                     {
                         "name": "id",
@@ -797,7 +797,7 @@
                 ],
                 "summary": "Xóa 1 người dùng đã tham gia sự kiện",
                 "description": "\n     *          - Endpoint này sẽ xóa 1 sinh viên đang tham gia sự kiện đi\n     *          - Role được sử dụng là role Quản lí\n     *          - Xóa thành công sẽ trả lại data là các sinh viên còn lại sự kiện đó\n     *          - id là id của bản ghi tham gia\n     *          ",
-                "operationId": "88308f6df797c7f3193bf6c04b33d472",
+                "operationId": "5837c0332d41d03e0c7def2bc5b75589",
                 "parameters": [
                     {
                         "name": "atendance",
@@ -950,14 +950,14 @@
                 }
             }
         },
-        "/api/atendances/{atendance}": {
+        "/api/attendances/{atendance}": {
             "put": {
                 "tags": [
                     "Attendances"
                 ],
                 "summary": "Update an attendance record",
                 "description": "\n     *          - Endpoint này cho phép quản lí và nhân viên cập nhật thông tin người tham gia sự kiện\n     *          - Trả về data của tất cả người dùng thuộc sự kiện đó\n     *          - event_id là id sự kiện tham gia\n     *          - email là email của người muốn thêm (Lưu ý : phải có trong hệ thống)\n     *          - update_by là id của người cập nhật (Lưu ý : phải có trong hệ thống)\n     *          ",
-                "operationId": "3c4f46246f8127c13487023166336683",
+                "operationId": "03ced21461f51f2bf86a3bff9a5a6007",
                 "parameters": [
                     {
                         "name": "atendance",
@@ -4482,14 +4482,14 @@
                 ]
             }
         },
-        "/api/searchKeyword": {
+        "/api/searchKeyword?search=tukhoa1": {
             "get": {
                 "tags": [
                     "keywords"
                 ],
                 "summary": "Lấy ra 10 keywords nổi bật",
                 "description": "Endpoint này cho phép lấy ra các keywords nổi bật. Trả về thông tin keywords và sự kiện của keywords đó. Tất cả role đều được sử dụng",
-                "operationId": "0579ccb00fe78ebeda35141739973d61",
+                "operationId": "375480ae04488bcde929a70695673b94",
                 "parameters": [
                     {
                         "name": "search",
