@@ -14,7 +14,7 @@ class atendanceController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/atendances/join/{id_event}",
+     *     path="/api/attendances/join/{id_event}",
      *     summary="Lấy tất cả các bản ghi theo id sự kiện",
      *     tags={"Attendances"},
      *      description="
@@ -402,7 +402,7 @@ class atendanceController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/atendances/{id}",
+     *     path="/api/attendances/{id}",
      *     summary="Lấy ra thông tin người tham gia sự kiện",
      *     tags={"Attendances"},
      *     description="
@@ -488,7 +488,7 @@ class atendanceController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/atendances/{atendance}",
+     *     path="/api/attendances/{atendance}",
      *     summary="Update an attendance record",
      *     tags={"Attendances"},
      *     description="
@@ -591,7 +591,7 @@ class atendanceController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/atendances/{id}",
+     *     path="/api/attendances/{id}",
      *     summary="Xóa 1 người dùng đã tham gia sự kiện",
      *     tags={"Attendances"},
      *     description="

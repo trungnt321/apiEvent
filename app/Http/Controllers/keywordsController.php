@@ -88,7 +88,7 @@ class keywordsController extends Controller
     }
     /**
      * @OA\Get(
-     *     path="/api/searchKeyword",
+     *     path="/api/searchKeyword?search=tukhoa1",
      *     summary="Lấy ra 10 keywords nổi bật",
      *     tags={"keywords"},
      *     description="Endpoint này cho phép lấy ra các keywords nổi bật. Trả về thông tin keywords và sự kiện của keywords đó. Tất cả role đều được sử dụng",
