@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\event;
+use App\Models\events_keywords;
+use App\Models\keywords;
 use App\Models\User;
 use App\Models\atendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use App\Http\Resources\EventResources;
 use App\Models\feedback;
@@ -28,6 +31,9 @@ class eventController extends Controller
      *      - Endpoint trả về thông tin của tất cả các sự kiện
      *      - Role được sử dụng là role của tất cả
      *      - Trả về thông tin của tất cả các sự kiện đã diễn ra
+     *     - StatusJoin là xác đinh người dùng đang login vào đã tham gia những sự kiện nào
+     *     - Nếu là 1 thì là trạng thái người dùng đó đã tham gia
+     *     - 0 là trạng thái người dùng đó không tham gia
      * ",
      *     @OA\Response(
      *         response=200,
@@ -51,6 +57,7 @@ class eventController extends Controller
      *                       @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
      *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
      *                       @OA\Property(property="attendances_count", type="interger", example=3),
+     *                       @OA\Property(property="status_join", type="interger", example=1),
      *                       @OA\Property(
      *                          property="user",
      *                          type="object",
@@ -104,12 +111,37 @@ class eventController extends Controller
         try {
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
+            $status = $request->query('status', false);
             //return $page;
 
-            $event = event::withCount('attendances')->with('user')->paginate($limit, ['*'], 'page', $page);
-            if ($page > $event->lastPage()) {
+            $query = event::withCount('attendances')->with('user')->with('keywords');
+            $query->leftJoin('atendances', function ($join) {
+                $join->on('events.id', '=', 'atendances.event_id')
+                    ->where('atendances.user_id', '=', Auth::user()->id);
+            })
+                ->select('events.*')
+                ->selectSub(function ($query) {
+                    $query->selectRaw('IF(COUNT(atendances.id) > 0, 1, 0) as status_join')
+                        ->from('atendances')
+                        ->whereColumn('atendances.event_id', 'events.id')
+                        ->where('atendances.user_id', Auth::user()->id);
+                }, 'status_join');
+            $event = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
+            if (!$status && $page > $event->lastPage()) {
                 $page = 1;
-                $event = event::withCount('attendances')->with('user')->paginate($limit, ['*'], 'page', $page);
+                $event = event::withCount('attendances')->with('user')->with('keywords')
+                    ->leftJoin('attendances', function ($join) {
+                        $join->on('events.id', '=', 'attendances.event_id')
+                            ->where('attendances.user_id', '=', Auth::user()->id);
+                    })
+                    ->select('events.*')
+                    ->selectSub(function ($query) {
+                        $query->selectRaw('IF(COUNT(attendances.id) > 0, 1, 0) as status_join')
+                            ->from('attendances')
+                            ->whereColumn('attendances.event_id', 'events.id')
+                            ->where('attendances.user_id', Auth::user()->id);
+                    }, 'status_join')
+                    ->paginate($limit, ['*'], 'page', $page);
             }
 
             $event->map(function ($event) {
@@ -117,21 +149,7 @@ class eventController extends Controller
                 $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
                 return $event;
             });
-            return response()->json([
-                'metadata' => [
-                    'docs' => $event->items(),
-                    'totalDocs' => $event->total(),
-                    'limit' => $event->perPage(),
-                    'totalPages' => $event->lastPage(),
-                    'page' => $event->currentPage(),
-                    'pagingCounter' => $event->currentPage(), // Bạn có thể sử dụng currentPage hoặc số khác nếu cần
-                    'hasPrevPage' => $event->previousPageUrl() != null,
-                    'hasNextPage' => $event->nextPageUrl() != null
-                ],
-                'message' => 'Get All Records Successfully',
-                'status' => 'success',
-                'statusCode' => Response::HTTP_OK
-            ], Response::HTTP_OK);
+            return response()->json(handleData($status,$event), Response::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -363,8 +381,10 @@ class eventController extends Controller
             }
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $event = event::where('name', 'like', "%{$request->name}%")->withCount('attendances')->with('user')->paginate($limit, ['*'], 'page', $page);
-            if ($page > $event->lastPage()) {
+            $status = $request->query('status', false);
+            $query = event::where('name', 'like', "%{$request->name}%")->withCount('attendances')->with('user');
+            $event = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
+            if (!$status && $page > $event->lastPage()) {
                 $page = 1;
                 $event = event::where('name', 'like', "%{$request->name}%")->withCount('attendances')->with('user')->paginate($limit, ['*'], 'page', $page);
             }
@@ -373,21 +393,7 @@ class eventController extends Controller
                 $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
                 return $event;
             });
-            return response()->json([
-                'metadata' => [
-                    'docs' => $event->items(),
-                    'totalDocs' => $event->total(),
-                    'limit' => $event->perPage(),
-                    'totalPages' => $event->lastPage(),
-                    'page' => $event->currentPage(),
-                    'pagingCounter' => $event->currentPage(),
-                    'hasPrevPage' => $event->previousPageUrl() != null,
-                    'hasNextPage' => $event->nextPageUrl() != null
-                ],
-                'message' => 'Lấy các bản ghi thành công',
-                'status' => 'success',
-                'statusCode' => Response::HTTP_OK
-            ], Response::HTTP_OK);
+            return response()->json(handleData($status,$event), Response::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -565,6 +571,7 @@ class eventController extends Controller
      * -user_id là id của user tổ chức sự kiện này
      * -start_time là thời gian bắt đầu sự kiện
      * -end_time là thời gian kết thúc sự kiện
+     * - keywords là mảng chứa các id của keyword có thể để trống
      * ",
      *     operationId="storeEvent",
      *     @OA\RequestBody(
@@ -579,6 +586,7 @@ class eventController extends Controller
      *             @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *                                   @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
      *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
+     *      @OA\Property(property="keywords",type="array",@OA\Items(type="integer"),example="[1, 2]")
      *         )
      *     ),
      *     @OA\Response(
@@ -640,6 +648,25 @@ class eventController extends Controller
     public function store(Request $request)
     {
         //Check valiadate
+//        dd($request->keywords);
+
+//        [
+//            function ($attribute, $value, $fail) {
+//                $keywordIds = json_decode($value);
+////                    if (empty($keywordIds) || !is_array($keywordIds) || count($keywordIds) === 0) {
+////                        $fail('Mảng keywords không được trống và phải có ít nhất một phần tử.');
+////                        return;
+////                    }
+//                $existingKeywords = keywords::whereIn('id', $keywordIds)->get();
+//
+//                $missingKeywords = collect($keywordIds)->diff($existingKeywords->pluck('id')->toArray());
+//
+//                if ($missingKeywords->isNotEmpty()) {
+//                    $missingKeywordsList = $missingKeywords->implode(', ');
+//                    $fail("Từ khóa có ID {$missingKeywordsList} không tồn tại! Vui lòng tạo mới và thử lại.");
+//                }
+//            },
+//        ]
         $validate = Validator::make($request->all(), [
             'name' => ['required'],
             'location' => ['required'],
@@ -653,16 +680,21 @@ class eventController extends Controller
                     $query->whereIn('role', [1, 2]);
                 })
             ],
-            'banner' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'banner' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'start_time' => ['required'],
             'end_time' => ['required', 'after:start_time'],
             'description' => 'required',
-            'content' => 'required'
+            'content' => 'required',
+            'keywords' =>[   'array',
+                'min:1', // ít nhất một phần tử trong mảng
+                Rule::exists('keywords', 'id')]
         ], [
             'name.required' => 'Không để trống name của của sự kiện nhập',
             'location.required' => 'Không được để trống địa điểm của sự kiện',
             'contact.required' => 'Không được để trống phần liên lạc',
             'contact.regex' => 'Định dạng số điện thoại được nhập không đúng',
+            'banner.image' => 'Vui lòng upload banner định dạng file',
+            'banner.mimes' => 'Vui lòng upload banner định dạng jpeg,png,jpg,gif,svg',
             'user_id.required' => 'User Id không được để trống',
             'banner.required' => 'Ảnh sự kiện bắt buộc phải có',
             'start_time.required' => 'Ngày khởi đầu của event không được để trống',
@@ -670,7 +702,10 @@ class eventController extends Controller
             'end_time.after' => 'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu',
             'description.required' => 'Không được để trống trường mô tả',
             'user_id.exists' => 'Role của userid không hợp lệ.',
-            'content.required' => 'Không được để trống trường nội dung'
+            'content.required' => 'Không được để trống trường nội dung',
+            'keywords.array' => 'keywords Phải là 1 array',
+            'keywords.min' => 'Keywords Phải có ít nhất 1 phần tủ',
+            'keywords.exists' => 'Trong số các keywords đẩy lên có 1 hoặc nhiều keywords không tồn tại,vui lòng thêm và thử lại',
         ]);
         if ($validate->fails()) {
             //            dd($validate->errors());
@@ -691,6 +726,22 @@ class eventController extends Controller
                 $event = event::create($resourceData);
                 $returnData = event::withCount('attendances')->with('user')->findOrFail($event->id);
                 $returnData->banner = asset("Upload/{$returnData->banner}");
+//                dd($request->keywords);
+                if(!empty($request->keywords)){
+//                    dd($request->keywords);
+//                    $keywordsReply = Str::of($request->keywords)->trim('[]')->explode(',');
+                    $dataKeywords = collect($request->keywords)->map(function ($keywordId) use ($event) {
+                        return [
+                            'keywords_id' => (int) $keywordId,
+                            'event_id' => $event->id,
+                        ];
+                    })->toArray();
+                    events_keywords::insert($dataKeywords);
+                    $returnData->event_keywords = $returnData->eventKeywords;
+                }
+
+
+
                 return response()->json([
                     'metadata' => $returnData,
                     'message' => 'Create Record Successfully',
@@ -796,6 +847,7 @@ class eventController extends Controller
             $event = event::withCount('attendances')
                 ->with('feedback')
                 ->with('attendances')
+                ->with('keywords')
                 ->with('user')
                 ->findOrFail($id);
             $event->banner = url("Upload/{$event->banner}");
@@ -927,6 +979,7 @@ class eventController extends Controller
         $logUser = auth()->user()->role;
         $page = $request->query('page', 1);
         $limit = $request->query('limit', 10);
+        $status = $request->query('status', false);
         if ($logUser == 0) {
             return response([
                 "status" => "error",
@@ -946,14 +999,14 @@ class eventController extends Controller
             //Lấy ngày đầu tiên, cuối cùng của tuần đó
             $firstDayOfWeekNumber = $today->copy()->addDays(-$dayOfWeekNumber + 1);
             $lastDayOfWeekNumber = $today->copy()->addDays(7 - $dayOfWeekNumber);
-            $eventInWeek = event::where('end_time', '>=', $firstDayOfWeekNumber)
+            $query = event::where('end_time', '>=', $firstDayOfWeekNumber)
                 ->where('start_time', '<=', $lastDayOfWeekNumber)
                 ->with('feedback')
                 ->withCount('attendances')
                 ->with('attendances')
-                ->with('user')
-                ->paginate($limit, ['*'], 'page', $page);
-
+                ->with('keywords')
+                ->with('user');
+            $eventInWeek = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
             if ($page > $eventInWeek->lastPage()) {
                 $page = 1;
                 $eventInWeek = event::where('end_time', '>=', $firstDayOfWeekNumber)
@@ -961,6 +1014,7 @@ class eventController extends Controller
                     ->with('feedback')
                     ->withCount('attendances')
                     ->with('attendances')
+                    ->with('keywords')
                     ->with('user')
                     ->paginate($limit, ['*'], 'page', $page);
             }
@@ -969,21 +1023,7 @@ class eventController extends Controller
                 $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
                 return $event;
             });
-            return response()->json([
-                'metadata' => [
-                    'docs' => $eventInWeek->items(),
-                    'totalDocs' => $eventInWeek->total(),
-                    'limit' => $eventInWeek->perPage(),
-                    'totalPages' => $eventInWeek->lastPage(),
-                    'page' => $eventInWeek->currentPage(),
-                    'pagingCounter' => $eventInWeek->currentPage(), // Bạn có thể sử dụng currentPage hoặc số khác nếu cần
-                    'hasPrevPage' => $eventInWeek->previousPageUrl() != null,
-                    'hasNextPage' => $eventInWeek->nextPageUrl() != null
-                ],
-                'message' => 'Get One Record Successfully',
-                'status' => 'success',
-                'statusCode' => Response::HTTP_OK
-            ], Response::HTTP_OK);
+            return response()->json(handleData($status,$eventInWeek), Response::HTTP_OK);
         }
         $validator = Validator::make($request->all(), [
             'start_time' => 'required',
@@ -1005,6 +1045,7 @@ class eventController extends Controller
             ->with('feedback')
             ->withCount('attendances')
             ->with('attendances')
+            ->with('keywords')
             ->with('user')
             ->paginate($limit, ['*'], 'page', $page);
         $eventInStatistic->map(function ($event) {
@@ -1045,6 +1086,7 @@ class eventController extends Controller
      * -user_id là id của user tổ chức sự kiện này
      * -start_time là thời gian bắt đầu sự kiện
      * -end_time là thời gian kết thúc sự kiện
+     * -keywords là mảng chứa id keyword cần cập nhật ( Lưu ý : phải tồn tại keywords đó)
      * ",
      *     @OA\Parameter(
      *         name="id",
@@ -1066,6 +1108,7 @@ class eventController extends Controller
      *             @OA\Property(property="end_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
      *                                   @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
      *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
+     *       *      @OA\Property(property="keywords",type="array",@OA\Items(type="integer"),example="[1, 2]")
      *         )
      *     ),
      *     @OA\Response(
@@ -1128,8 +1171,9 @@ class eventController extends Controller
     public function update(Request $request, $id)
     {
         //Check validate
+//        dd($request->all());
         $validate = Validator::make($request->all(), [
-            'name' => ['required'],
+            'name' => 'required',
             'location' => ['required'],
             'contact' => [
                 'required',
@@ -1150,6 +1194,9 @@ class eventController extends Controller
             'end_time' => ['required', 'after:start_time'],
             'description' => ['required'],
             'content' => ['required'],
+            'keywords' =>[   'array',
+                'min:1', // ít nhất một phần tử trong mảng
+                Rule::exists('keywords', 'id')]
         ], [
             'name.required' => 'Không để trống name của của sự kiện nhập',
             'location.required' => 'Không được để trống địa điểm của sự kiện',
@@ -1162,7 +1209,10 @@ class eventController extends Controller
             'banner.required' => 'Không được để trống ảnh',
             'end_time.after' => 'Ngày kết thúc của dự án phải lớn hơn ngày bắt đầu',
             'description.required' => 'Không được để trống trường mô tả',
-            'content.required' => 'Không được để trống trường nội dung'
+            'content.required' => 'Không được để trống trường nội dung',
+            'keywords.array' => 'keywords Phải là 1 array',
+            'keywords.min' => 'Keywords Phải có ít nhất 1 phần tủ',
+            'keywords.exists' => 'Trong số các keywords đẩy lên có 1 hoặc nhiều keywords không tồn tại,vui lòng thêm và thử lại'
         ]);
         if ($validate->fails()) {
             return response([
@@ -1189,7 +1239,17 @@ class eventController extends Controller
                 $resourceData['banner'] = $imageName;
                 $event->update($resourceData);
                 $event->banner = url("Upload/{$event->banner}");
-
+                if(!empty($request->keywords)){
+                    events_keywords::where("event_id",$event->id)->delete();
+                    $dataKeywords = collect($request->keywords)->map(function ($keywordId) use ($event) {
+                        return [
+                            'keywords_id' => (int) $keywordId,
+                            'event_id' => $event->id,
+                        ];
+                    })->toArray();
+                    events_keywords::insert($dataKeywords);
+                    $event->event_keywords = $event->eventKeywords;
+                }
                 return response()->json([
                     'metadata' => $event,
                     'message' => 'Update One Record Successfully',
@@ -1311,7 +1371,7 @@ class eventController extends Controller
             //Xóa ảnh
             $imagePath = public_path('Upload/' . $event->banner);
             File::delete($imagePath);
-
+            events_keywords::where("event_id",$event->id)->delete();
             $event->delete();
             $restOfEvents = event::with('user')->get();
             $restOfEvents->map(function ($event) {
@@ -1543,4 +1603,6 @@ class eventController extends Controller
             'statusCode' => Response::HTTP_OK
         ], Response::HTTP_OK);
     }
+
+
 }

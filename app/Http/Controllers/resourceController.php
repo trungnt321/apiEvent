@@ -78,7 +78,8 @@ class resourceController extends Controller
         try {
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $resource = resource::paginate($limit, ['*'], 'page', $page);
+            $status = $request->query('status', false);
+            $resource = ($status) ? resource::all() :  resource::paginate($limit, ['*'], 'page', $page);
             if ($page > $resource->lastPage()) {
                 $page = 1;
                 $resource = resource::paginate($limit, ['*'], 'page', $page);
@@ -88,21 +89,7 @@ class resourceController extends Controller
                 $resource->url = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
                 return $resource;
             });
-            return response()->json([
-                'metadata' => [
-                    'docs' => $resource->items(),
-                    'totalDocs' => $resource->total(),
-                    'limit' => $resource->perPage(),
-                    'totalPages' => $resource->lastPage(),
-                    'page' => $resource->currentPage(),
-                    'pagingCounter' => $resource->currentPage(), // Bạn có thể sử dụng currentPage hoặc số khác nếu cần
-                    'hasPrevPage' => $resource->previousPageUrl() != null,
-                    'hasNextPage' => $resource->nextPageUrl() != null
-                ],
-                'message' => 'Get All Records Successfully',
-                'status' => 'success',
-                'statusCode' => Response::HTTP_OK
-            ],Response::HTTP_OK);
+            return response()->json(handleData($status,$resource),Response::HTTP_OK);
         }catch(\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -382,7 +369,9 @@ class resourceController extends Controller
         try{
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $resourceById = resource::where('event_id',$event_id)->paginate($limit, ['*'], 'page', $page);
+            $status = $request->query('status', false);
+            $query = resource::where('event_id',$event_id);
+            $resourceById = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
             if ($page > $resourceById->lastPage()) {
                 $page = 1;
                 $resourceById = resource::where('event_id',$event_id)->paginate($limit, ['*'], 'page', $page);
@@ -392,21 +381,7 @@ class resourceController extends Controller
                 $resourceById->url = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
                 return $resourceById;
             });;
-            return response()->json([
-                'metadata' => [
-                    'docs' => $resourceById->items(),
-                    'totalDocs' => $resourceById->total(),
-                    'limit' => $resourceById->perPage(),
-                    'totalPages' => $resourceById->lastPage(),
-                    'page' => $resourceById->currentPage(),
-                    'pagingCounter' => $resourceById->currentPage(),
-                    'hasPrevPage' => $resourceById->previousPageUrl() != null,
-                    'hasNextPage' => $resourceById->nextPageUrl() != null
-                ],
-                'message' => 'Get All Record By Event ID Successfully',
-                'status' => 'success',
-                'statusCode' => Response::HTTP_OK
-            ], Response::HTTP_OK);
+            return response()->json(handleData($status,$resourceById), Response::HTTP_OK);
         }catch(\Exception $e){
             return response([
                 "status" => "error",

@@ -118,14 +118,14 @@
                 }
             }
         },
-        "/api/atendances/join/{id_event}/{id_user}": {
+        "/api/atendances/join/{id_event}": {
             "get": {
                 "tags": [
                     "Attendances"
                 ],
                 "summary": "Lấy tất cả các bản ghi theo id sự kiện",
-                "description": "\n     *      - id_event là id sự kiện\n     *      - id_user là id người thực hiện lấy\n     *      - Endpoint trả về thôn tìn người dùng tham gia sự kiện.\n     *      - Trả về thông tin của người dùng đã tham gia sự kiện.\n     *      - Role được sử dụng là role nhân viên ,quản lí ",
-                "operationId": "2ae0c3a5ddc429cdf3e4115b2d673da3",
+                "description": "\n     *      - id_event là id sự kiện\n     *      - Endpoint trả về thôn tìn người dùng tham gia sự kiện.\n     *      - Trả về thông tin của người dùng đã tham gia sự kiện.\n     *      - Role được sử dụng là role nhân viên ,quản lí ",
+                "operationId": "513e2fefdb28376d423aa50d381cea8c",
                 "responses": {
                     "200": {
                         "description": "Successful response with feedback data",
@@ -790,158 +790,14 @@
                         }
                     }
                 }
-            }
-        },
-        "/api/atendances/{atendance}": {
-            "put": {
-                "tags": [
-                    "Attendances"
-                ],
-                "summary": "Update an attendance record",
-                "description": "\n     *          - Endpoint này cho phép quản lí và nhân viên cập nhật thông tin người tham gia sự kiện\n     *          - Trả về data của tất cả người dùng thuộc sự kiện đó\n     *          - event_id là id sự kiện tham gia\n     *          - email là email của người muốn thêm (Lưu ý : phải có trong hệ thống)\n     *          - update_by là id của người cập nhật (Lưu ý : phải có trong hệ thống)\n     *          ",
-                "operationId": "3c4f46246f8127c13487023166336683",
-                "parameters": [
-                    {
-                        "name": "atendance",
-                        "in": "path",
-                        "description": "Mô hình dữ liệu attendance",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "event_id": {
-                                        "type": "integer",
-                                        "example": "1"
-                                    },
-                                    "user_id": {
-                                        "type": "integer",
-                                        "example": "2"
-                                    },
-                                    "update_by": {
-                                        "type": "integer",
-                                        "example": "2"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Update One Record Successfully"
-                                        },
-                                        "metadata": {
-                                            "properties": {
-                                                "id": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                },
-                                                "user_id": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                },
-                                                "event_id": {
-                                                    "type": "integer",
-                                                    "example": 2
-                                                },
-                                                "created_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2023-11-23 11:20:22"
-                                                },
-                                                "updated_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2023-11-23 11:20:22"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Bản ghi không tồn tại ",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Bản ghi không tồn tại "
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 404
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Lỗi hệ thống",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Lỗi hệ thống"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/atendances/{id}/{id_user}": {
+            },
             "delete": {
                 "tags": [
                     "Attendances"
                 ],
                 "summary": "Xóa 1 người dùng đã tham gia sự kiện",
-                "description": "\n     *          - Endpoint này sẽ xóa 1 sinh viên đang tham gia sự kiện đi\n     *          - Role được sử dụng là role Quản lí\n     *          - Xóa thành công sẽ trả lại data là các sinh viên còn lại sự kiện đó\n     *          - id là id của bản ghi tham gia\n     *          - id_user là id của người thực hiện xóa\n     *          ",
-                "operationId": "eb01c45ea0454cb2779192b8056e108c",
+                "description": "\n     *          - Endpoint này sẽ xóa 1 sinh viên đang tham gia sự kiện đi\n     *          - Role được sử dụng là role Quản lí\n     *          - Xóa thành công sẽ trả lại data là các sinh viên còn lại sự kiện đó\n     *          - id là id của bản ghi tham gia\n     *          ",
+                "operationId": "88308f6df797c7f3193bf6c04b33d472",
                 "parameters": [
                     {
                         "name": "atendance",
@@ -1056,6 +912,148 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Bản ghi không tồn tại"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi hệ thống",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lỗi hệ thống"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/atendances/{atendance}": {
+            "put": {
+                "tags": [
+                    "Attendances"
+                ],
+                "summary": "Update an attendance record",
+                "description": "\n     *          - Endpoint này cho phép quản lí và nhân viên cập nhật thông tin người tham gia sự kiện\n     *          - Trả về data của tất cả người dùng thuộc sự kiện đó\n     *          - event_id là id sự kiện tham gia\n     *          - email là email của người muốn thêm (Lưu ý : phải có trong hệ thống)\n     *          - update_by là id của người cập nhật (Lưu ý : phải có trong hệ thống)\n     *          ",
+                "operationId": "3c4f46246f8127c13487023166336683",
+                "parameters": [
+                    {
+                        "name": "atendance",
+                        "in": "path",
+                        "description": "Mô hình dữ liệu attendance",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "event_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": "2"
+                                    },
+                                    "update_by": {
+                                        "type": "integer",
+                                        "example": "2"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Update One Record Successfully"
+                                        },
+                                        "metadata": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "user_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "event_id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-11-23 11:20:22"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-11-23 11:20:22"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bản ghi không tồn tại ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bản ghi không tồn tại "
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -1268,7 +1266,7 @@
                     "Event"
                 ],
                 "summary": "Lấy tất cả các sự kiện",
-                "description": "\n     *      - Endpoint trả về thông tin của tất cả các sự kiện\n     *      - Role được sử dụng là role của tất cả\n     *      - Trả về thông tin của tất cả các sự kiện đã diễn ra\n     * ",
+                "description": "\n     *      - Endpoint trả về thông tin của tất cả các sự kiện\n     *      - Role được sử dụng là role của tất cả\n     *      - Trả về thông tin của tất cả các sự kiện đã diễn ra\n     *     - StatusJoin là xác đinh người dùng đang login vào đã tham gia những sự kiện nào\n     *     - Nếu là 1 thì là trạng thái người dùng đó đã tham gia\n     *     - 0 là trạng thái người dùng đó không tham gia\n     * ",
                 "operationId": "1713890b60b4f32dcbc6113136f80b49",
                 "responses": {
                     "200": {
@@ -1336,6 +1334,10 @@
                                                             "attendances_count": {
                                                                 "type": "interger",
                                                                 "example": 3
+                                                            },
+                                                            "status_join": {
+                                                                "type": "interger",
+                                                                "example": 1
                                                             },
                                                             "user": {
                                                                 "properties": {
@@ -1476,7 +1478,7 @@
                     "Event"
                 ],
                 "summary": "Thêm mới bản ghi với dữ liệu được cung cấp",
-                "description": "\n     * - Endpoint trả về bản ghi mới được thêm vào\n     * -Role đước sử dụng là nhân viên, quản lí\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -banner là ảnh của sự kiện\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * ",
+                "description": "\n     * - Endpoint trả về bản ghi mới được thêm vào\n     * -Role đước sử dụng là nhân viên, quản lí\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -banner là ảnh của sự kiện\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * - keywords là mảng chứa các id của keyword có thể để trống\n     * ",
                 "operationId": "storeEvent",
                 "requestBody": {
                     "required": true,
@@ -1522,6 +1524,13 @@
                                     "content": {
                                         "type": "string",
                                         "example": "Chào mừng tổng thống"
+                                    },
+                                    "keywords": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": "[1, 2]"
                                     }
                                 },
                                 "type": "object"
@@ -2520,7 +2529,7 @@
                     "Event"
                 ],
                 "summary": "Sửa dữ liệu của một sự kiện ",
-                "description": "\n     * -Endpoint trả về dữ liệu bản ghi mới được sửa đổi\n     * -Role quy định là role nhân viên, quản lí\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * ",
+                "description": "\n     * -Endpoint trả về dữ liệu bản ghi mới được sửa đổi\n     * -Role quy định là role nhân viên, quản lí\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * -keywords là mảng chứa id keyword cần cập nhật ( Lưu ý : phải tồn tại keywords đó)\n     * ",
                 "operationId": "updateEvent",
                 "parameters": [
                     {
@@ -2580,6 +2589,13 @@
                                     "content": {
                                         "type": "string",
                                         "example": "Chào mừng tổng thống"
+                                    },
+                                    "keywords": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": "[1, 2]"
                                     }
                                 },
                                 "type": "object"
@@ -4191,6 +4207,785 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Xóa phản hồi thành công"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bản ghi không tồn tại",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bản ghi không tồn tại"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/keywords": {
+            "get": {
+                "tags": [
+                    "keywords"
+                ],
+                "summary": "Lấy ra tất cả các keywords",
+                "description": "\n     *      - Endpoint này cho phép lấy ra các keywords.\n     *      - Trả về thông tin keywords,\n     *      - Tất cả role đều được sử dụng",
+                "operationId": "6a6847931b539a1bdec255e64808fa6a",
+                "responses": {
+                    "200": {
+                        "description": "Successful response with keywords data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successfully retrieved all keywords"
+                                        },
+                                        "metadata": {
+                                            "properties": {
+                                                "docs": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "sự kiện"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-28 17:02:29"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-28 17:02:29"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "totalDocs": {
+                                                    "type": "integer",
+                                                    "example": 16
+                                                },
+                                                "limit": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "totalPages": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "page": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "pagingCounter": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "hasPrevPage": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "hasNextPage": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "keywords"
+                ],
+                "summary": "Tạo 1 keywords mới",
+                "description": "\n     *      - Endpoint này cho phép tạo thêm 1 keywords mới.\n     *      - Trả về thông tin các phản hồi của sự kiện đó.\n     *      - Role được sử dụng quản quản lí, nhân viên.\n     *      - `name` là tên từ khóa",
+                "operationId": "storeKeywords",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Từ khóa 1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Thêm phản hồi thành công"
+                                        },
+                                        "metadata": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": "3"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Từ khóa 1"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-12-05T12:36:46.000000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-12-05T12:36:46.000000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Validation error or internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User does not exist"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/searchKeyword": {
+            "get": {
+                "tags": [
+                    "keywords"
+                ],
+                "summary": "Lấy ra 10 keywords nổi bật",
+                "description": "Endpoint này cho phép lấy ra các keywords nổi bật. Trả về thông tin keywords và sự kiện của keywords đó. Tất cả role đều được sử dụng",
+                "operationId": "0579ccb00fe78ebeda35141739973d61",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Từ khóa tìm kiếm",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response with keywords data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successfully retrieved all keywords"
+                                        },
+                                        "metadata": {
+                                            "properties": {
+                                                "docs": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "sự kiện"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-28 17:02:29"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-11-28 17:02:29"
+                                                            },
+                                                            "events_count": {
+                                                                "type": "integer",
+                                                                "example": 4
+                                                            },
+                                                            "events": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "properties": {
+                                                                        "id": {
+                                                                            "type": "integer",
+                                                                            "example": "1"
+                                                                        },
+                                                                        "name": {
+                                                                            "type": "string",
+                                                                            "example": "Event Name"
+                                                                        },
+                                                                        "location": {
+                                                                            "type": "string",
+                                                                            "example": "Hai Phong"
+                                                                        },
+                                                                        "contact": {
+                                                                            "type": "string",
+                                                                            "example": "0983467584"
+                                                                        },
+                                                                        "status": {
+                                                                            "type": "integer",
+                                                                            "example": 2
+                                                                        },
+                                                                        "description": {
+                                                                            "type": "string",
+                                                                            "example": "Sự kiện rất hoành tráng"
+                                                                        },
+                                                                        "content": {
+                                                                            "type": "string",
+                                                                            "example": "Sự kiện rất hoành tráng"
+                                                                        },
+                                                                        "banner": {
+                                                                            "type": "string",
+                                                                            "example": "http://127.0.0.1:8000/Upload/anh1.jpg"
+                                                                        },
+                                                                        "start_time": {
+                                                                            "type": "string",
+                                                                            "example": "2024-01-01 14:19:35"
+                                                                        },
+                                                                        "end_time": {
+                                                                            "type": "string",
+                                                                            "example": "2024-01-02 14:19:35"
+                                                                        },
+                                                                        "created_at": {
+                                                                            "type": "string",
+                                                                            "format": "date-time",
+                                                                            "example": null
+                                                                        },
+                                                                        "updated_at": {
+                                                                            "type": "string",
+                                                                            "format": "date-time",
+                                                                            "example": null
+                                                                        },
+                                                                        "attendances_count": {
+                                                                            "type": "integer",
+                                                                            "example": 1
+                                                                        },
+                                                                        "laravel_through_key": {
+                                                                            "type": "integer",
+                                                                            "example": 2
+                                                                        },
+                                                                        "user": {
+                                                                            "properties": {
+                                                                                "id": {
+                                                                                    "type": "integer",
+                                                                                    "example": "1"
+                                                                                },
+                                                                                "name": {
+                                                                                    "type": "string",
+                                                                                    "example": "HẬU ĐẶNG"
+                                                                                },
+                                                                                "email": {
+                                                                                    "type": "string",
+                                                                                    "example": "haudvph20519@fpt.edu.vn"
+                                                                                },
+                                                                                "avatar": {
+                                                                                    "type": "string",
+                                                                                    "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
+                                                                                },
+                                                                                "role": {
+                                                                                    "type": "integer",
+                                                                                    "example": 2
+                                                                                },
+                                                                                "created_at": {
+                                                                                    "type": "string",
+                                                                                    "format": "date-time",
+                                                                                    "example": "2024-01-01T12:54:12.000000Z"
+                                                                                },
+                                                                                "updated_at": {
+                                                                                    "type": "string",
+                                                                                    "format": "date-time",
+                                                                                    "example": "2024-01-01T12:54:12.000000Z"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "totalDocs": {
+                                                    "type": "integer",
+                                                    "example": 16
+                                                },
+                                                "limit": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "totalPages": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "pagingCounter": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "hasPrevPage": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "hasNextPage": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/keywords/{id}": {
+            "get": {
+                "tags": [
+                    "keywords"
+                ],
+                "summary": "Lấy ra chi tiết 1 keywords",
+                "description": "\n     *      - Endpoint này cho phép lấy ra chi tiết 1 keywords.\n     *      - Trả về thông tin các phản hồi của sự kiện đó.\n     *      - Role được sử dụng quản quản lí, nhân viên\n     *      - id là của keywords đó",
+                "operationId": "aa910f9f9052dd9410742f441f540c8c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID của keywords",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Get One Record Successfully"
+                                        },
+                                        "metadata": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": "2"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "từ khóa 1"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-11-28 17:02:29"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-11-28 17:02:29"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Record not exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Keywords không tồn tại"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "keywords"
+                ],
+                "summary": "Cập nhật lại keywords",
+                "description": "\n     *      - Endpoint này cho phép cập nhật lại nội dung 1 keywords.\n     *      - Trả về thông tin các keywords đó.\n     *      - Role được sử dụng quản quản lí,nhân viên\n     *      - id là của keywords đó",
+                "operationId": "updateKeywords",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the keywords record to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Từ khóa update"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Cập nhật thành công keywords"
+                                        },
+                                        "metadata": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": "3"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "keywords content update"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-12-05T12:36:46.000000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-12-05T12:39:16.000000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bản ghi không tồn tại",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bản ghi không tồn tại"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi hệ thống",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lỗi hệ thống"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "keywords"
+                ],
+                "summary": "Xóa keywords",
+                "description": "\n     *      - Xóa 1 phản hồi bằng ID\n     *      - Trả về thông báo xóa thành công.\n     *      - Role được sử dụng quản quản lí\n     *      - id là của keywords đó",
+                "operationId": "deleteKeywords",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the keywords record",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Xóa keywords thành công"
                                         },
                                         "statusCode": {
                                             "type": "integer",
