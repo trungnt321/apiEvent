@@ -113,9 +113,17 @@ class eventController extends Controller
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
             $status = $request->query('status', false);
+            $search = $request->query('search', '');
             //return $page;
 
-            $query = event::withCount('attendances')->with('user')->with('keywords');
+            $query = event::where('name', 'like', "%{$search}%")
+            ->orWhere('location', 'like', "%{$search}%")
+            ->orWhere('contact', 'like', "%{$search}%")
+            ->orWhere('content', 'like', "%{$search}%")
+            ->orWhere('description', 'like', "%{$search}%")
+            ->orWhere('start_time', 'like', "%{$search}%")
+            ->orWhere('end_time', 'like', "%{$search}%")
+            ->withCount('attendances')->with('user')->with('keywords');
             $query->leftJoin('atendances', function ($join) {
                 $join->on('events.id', '=', 'atendances.event_id')
                     ->where('atendances.user_id', '=', Auth::user()->id);
@@ -130,7 +138,14 @@ class eventController extends Controller
             $event = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
             if (!$status && $page > $event->lastPage()) {
                 $page = 1;
-                $event = event::withCount('attendances')->with('user')->with('keywords')
+                $event = event::where('name', 'like', "%{$search}%")
+                ->orWhere('location', 'like', "%{$search}%")
+                ->orWhere('contact', 'like', "%{$search}%")
+                ->orWhere('content', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%")
+                ->orWhere('start_time', 'like', "%{$search}%")
+                ->orWhere('end_time', 'like', "%{$search}%")
+                ->withCount('attendances')->with('user')->with('keywords')
                     ->leftJoin('attendances', function ($join) {
                         $join->on('events.id', '=', 'attendances.event_id')
                             ->where('attendances.user_id', '=', Auth::user()->id);
