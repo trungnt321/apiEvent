@@ -107,6 +107,11 @@ class eventController extends Controller
             //return $page;
 
             $event = event::withCount('attendances')->with('user')->paginate($limit, ['*'], 'page', $page);
+            if ($page > $event->lastPage()) {
+                $page = 1;
+                $event = event::withCount('attendances')->with('user')->paginate($limit, ['*'], 'page', $page);
+            }
+
             $event->map(function ($event) {
                 $imageUrl = asset("Upload/{$event->banner}");
                 $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
@@ -359,6 +364,10 @@ class eventController extends Controller
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
             $event = event::where('name', 'like', "%{$request->name}%")->withCount('attendances')->with('user')->paginate($limit, ['*'], 'page', $page);
+            if ($page > $event->lastPage()) {
+                $page = 1;
+                $event = event::where('name', 'like', "%{$request->name}%")->withCount('attendances')->with('user')->paginate($limit, ['*'], 'page', $page);
+            }
             $event->map(function ($event) {
                 $imageUrl = asset("Upload/{$event->banner}");
                 $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
@@ -944,6 +953,17 @@ class eventController extends Controller
                 ->with('attendances')
                 ->with('user')
                 ->paginate($limit, ['*'], 'page', $page);
+
+            if ($page > $eventInWeek->lastPage()) {
+                $page = 1;
+                $eventInWeek = event::where('end_time', '>=', $firstDayOfWeekNumber)
+                    ->where('start_time', '<=', $lastDayOfWeekNumber)
+                    ->with('feedback')
+                    ->withCount('attendances')
+                    ->with('attendances')
+                    ->with('user')
+                    ->paginate($limit, ['*'], 'page', $page);
+            }
             $eventInWeek->map(function ($event) {
                 $imageUrl = asset("Upload/{$event->banner}");
                 $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng

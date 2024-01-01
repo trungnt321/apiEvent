@@ -91,6 +91,10 @@ class feedbackController extends Controller
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
             $feedback = feedback::where('event_id',$id_event)->with('user')->paginate($limit, ['*'], 'page', $page);
+            if ($page > $feedback->lastPage()) {
+                $page = 1;
+                $feedback = feedback::where('event_id',$id_event)->with('user')->paginate($limit, ['*'], 'page', $page);
+            }
             return response()->json([
                 'metadata' => [
                     'docs' => $feedback->items(),

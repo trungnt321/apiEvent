@@ -108,7 +108,10 @@ class notificationController extends Controller
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
             $notification = notification::with('user_receiver')->paginate($limit, ['*'], 'page', $page);
-
+            if ($page > $notification->lastPage()) {
+                $page = 1;
+                $notification = notification::with('user_receiver')->paginate($limit, ['*'], 'page', $page);
+            }
             return response()->json([
                 'metadata' => [
                     'docs' => $notification->items(),

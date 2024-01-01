@@ -98,7 +98,10 @@ class atendanceController extends Controller
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
             $atendance = atendance::where('event_id',$id_event)->with('user')->paginate($limit, ['*'], 'page', $page);
-
+            if ($page > $atendance->lastPage()) {
+                $page = 1;
+                $atendance = atendance::where('event_id',$id_event)->with('user')->paginate($limit, ['*'], 'page', $page);
+            }
             $nextPageUrl = $atendance->nextPageUrl();
 
             return response()->json([

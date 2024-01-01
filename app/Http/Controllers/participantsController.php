@@ -86,6 +86,10 @@ class participantsController extends Controller
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
             $users = User::paginate($limit, ['*'], 'page', $page);
+            if ($page > $users->lastPage()) {
+                $page = 1;
+                $users = User::paginate($limit, ['*'], 'page', $page);
+            }
             return response()->json([
                 'metadata' => [
                     'docs' => $users->items(),
@@ -212,6 +216,16 @@ class participantsController extends Controller
                     ->orWhere('phone', 'like', "%{$phone}%");
             })
             ->paginate($limit, ['*'], 'page', $page);
+
+            if ($page > $users->lastPage()) {
+                $page = 1;
+                $users = User::
+                where(function($query) use ($email, $phone) {
+                    $query->where('email', 'like', "%{$email}%")
+                        ->orWhere('phone', 'like', "%{$phone}%");
+                })
+                    ->paginate($limit, ['*'], 'page', $page);
+            }
             return response()->json([
                 'metadata' => [
                     'docs' => $users->items(),
