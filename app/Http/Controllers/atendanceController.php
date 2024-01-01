@@ -196,12 +196,13 @@ class atendanceController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'event_id' => 'required',
+                'event_id' => 'required|exists:events,id',
                 'user_id' => 'required|exists:users,id',
             ], [
                 'event_id.required' => 'Id sự kiện không được để trống',
                 'user_id.required' => 'Id người dùng không được để trống.',
-                'user_id.exists' => 'Id người dùng không tồn tại.'
+                'user_id.exists' => 'Người dùng không tồn tại.',
+                'event_id.exists' => 'Sự kiện không tồn tại.'
             ]);
 
             if ($validator->fails()) {
