@@ -107,26 +107,14 @@ class notificationController extends Controller
             }
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $notification = notification::with('user_receiver')->paginate($limit, ['*'], 'page', $page);
+            $status = $request->query('status', false);
+            $query = notification::with('user_receiver');
+            $notification = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
             if ($page > $notification->lastPage()) {
                 $page = 1;
                 $notification = notification::with('user_receiver')->paginate($limit, ['*'], 'page', $page);
             }
-            return response()->json([
-                'metadata' => [
-                    'docs' => $notification->items(),
-                    'totalDocs' => $notification->total(),
-                    'limit' => $notification->perPage(),
-                    'totalPages' => $notification->lastPage(),
-                    'page' => $notification->currentPage(),
-                    'pagingCounter' => $notification->currentPage(),
-                    'hasPrevPage' => $notification->previousPageUrl() != null,
-                    'hasNextPage' => $notification->nextPageUrl() != null
-                ],
-                'message' => 'Lấy tất cả bản ghi thành công',
-                'status' => 'success',
-                'statusCode' => Response::HTTP_OK
-            ], Response::HTTP_OK);
+            return response()->json(handleData($status,$notification), Response::HTTP_OK);
         }catch(\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),

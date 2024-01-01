@@ -78,6 +78,7 @@ class participantsController extends Controller
         try {
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
+            $status = $request->query('status', false);
             if(auth()->user()->role != 2){
                 return response([
                     "status" => "error",
@@ -85,26 +86,12 @@ class participantsController extends Controller
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-            $users = User::paginate($limit, ['*'], 'page', $page);
-            if ($page > $users->lastPage()) {
+            $users = ($status) ?  User::all() : User::paginate($limit, ['*'], 'page', $page);
+            if (!$status && $page > $users->lastPage()) {
                 $page = 1;
                 $users = User::paginate($limit, ['*'], 'page', $page);
             }
-            return response()->json([
-                'metadata' => [
-                    'docs' => $users->items(),
-                    'totalDocs' => $users->total(),
-                    'limit' => $users->perPage(),
-                    'totalPages' => $users->lastPage(),
-                    'page' => $users->currentPage(),
-                    'pagingCounter' => $users->currentPage(), // Bạn có thể sử dụng currentPage hoặc số khác nếu cần
-                    'hasPrevPage' => $users->previousPageUrl() != null,
-                    'hasNextPage' => $users->nextPageUrl() != null
-                ],
-                'message' => 'Get All Records Successfully',
-                'status' => 'success',
-                'statusCode' => Response::HTTP_OK
-            ],Response::HTTP_OK);
+            return response()->json(handleData($status,$users),Response::HTTP_OK);
         }catch(\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -192,6 +179,7 @@ class participantsController extends Controller
         try{
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
+            $status = $request->query('status', false);
             $validator = Validator::make($request->all(),[
                 'email'=>'required',
                 'phone'=> 'required'
@@ -210,13 +198,13 @@ class participantsController extends Controller
             $data = $request->all();
             $email = $data['email'];
             $phone = $data['phone'];
-            $users = User::
+            $query = User::
             where(function($query) use ($email, $phone) {
                 $query->where('email', 'like', "%{$email}%")
                     ->orWhere('phone', 'like', "%{$phone}%");
             })
-            ->paginate($limit, ['*'], 'page', $page);
-
+           ;
+            $users = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
             if ($page > $users->lastPage()) {
                 $page = 1;
                 $users = User::
@@ -226,21 +214,7 @@ class participantsController extends Controller
                 })
                     ->paginate($limit, ['*'], 'page', $page);
             }
-            return response()->json([
-                'metadata' => [
-                    'docs' => $users->items(),
-                    'totalDocs' => $users->total(),
-                    'limit' => $users->perPage(),
-                    'totalPages' => $users->lastPage(),
-                    'page' => $users->currentPage(),
-                    'pagingCounter' => $users->currentPage(), // Bạn có thể sử dụng currentPage hoặc số khác nếu cần
-                    'hasPrevPage' => $users->previousPageUrl() != null,
-                    'hasNextPage' => $users->nextPageUrl() != null
-                ],
-                'message' => 'Get All Records Successfully',
-                'status' => 'success',
-                'statusCode' => Response::HTTP_OK
-            ],Response::HTTP_OK);
+            return response()->json(handleData($status,$users),Response::HTTP_OK);
         }catch(\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
