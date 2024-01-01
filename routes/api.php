@@ -65,7 +65,7 @@ Route::middleware('auth:api')->prefix('notification')->group(function() {
     Route::delete('/{id}',[notificationController::class,'destroy']);
 });
 
-Route::get('/searchKeyword',[keywordsController::class,'searchEvent']);
+Route::get('/searchKeyword',[keywordsController::class,'searchEvent'])->middleware('auth:api');
 Route::middleware('auth:api')->prefix('keywords')->group(function() {
     Route::get('/',[keywordsController::class,'index']);
     Route::get('/{id}',[keywordsController::class,'show']);
