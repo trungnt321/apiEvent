@@ -236,61 +236,61 @@ class participantsController extends Controller
                 : Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    /**
-     * @OA\Post(
-     *     path="/api/participants",
-     *     tags={"Participants"},
-     *     summary="Thêm mới người dùng với dữ liệu được cung cấp",
-     *     description="
-     * -Endpoint trả về người dùng vừa được thêm
-     * -Role người thêm phải lớn hơn hoặc bằng người được thêm
-     * -Role là sinh viên thì không có quyền thêm
-     *
-     * ",
-     *     operationId="storeParticipants",
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *              @OA\Property(property="name", type="string", example="Phuc La"),
-     *                     @OA\Property(property="email", type="string", example="phuclaf@gmail.com"),
-     *                     @OA\Property(property="password", type="string", example="123456"),
-     *                     @OA\Property(property="phone", type="string", example="0983118272"),
-     *                     @OA\Property(property="role", type="integer", example=1),
-     *         )
-     *     ),
-     *    @OA\Response(
-     *         response=200,
-     *         description="Successful operation",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="Create Record Successfully"),
-     *             @OA\Property(property="statusCode", type="int", example=200),
-     *     @OA\Property(
-     *                 property="metadata",
-     *                 type="array",
-     *                 @OA\Items(
-     *                     type="object",
-     *                     @OA\Property(property="name", type="string", example="Phuc La"),
-     *                     @OA\Property(property="email", type="string", example="phuclaf@gmail.com"),
-     *                     @OA\Property(property="password", type="string", example="123456"),
-     *                     @OA\Property(property="phone", type="string", example="0983118272"),
-     *                     @OA\Property(property="role", type="integer", example=1),
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Validation error or internal server error",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="object", example={"user_id": {"User ID is required"}}),
-     *             @OA\Property(property="statusCode", type="int", example=500),
-
-     *         )
-     *     ),
-     * )
-     */
+//    /**
+//     * @OA\Post(
+//     *     path="/api/participants",
+//     *     tags={"Participants"},
+//     *     summary="Thêm mới người dùng với dữ liệu được cung cấp",
+//     *     description="
+//     * -Endpoint trả về người dùng vừa được thêm
+//     * -Role người thêm phải lớn hơn hoặc bằng người được thêm
+//     * -Role là sinh viên thì không có quyền thêm
+//     *
+//     * ",
+//     *     operationId="storeParticipants",
+//     *     @OA\RequestBody(
+//     *         required=true,
+//     *         @OA\JsonContent(
+//     *              @OA\Property(property="name", type="string", example="Phuc La"),
+//     *                     @OA\Property(property="email", type="string", example="phuclaf@gmail.com"),
+//     *                     @OA\Property(property="password", type="string", example="123456"),
+//     *                     @OA\Property(property="phone", type="string", example="0983118272"),
+//     *                     @OA\Property(property="role", type="integer", example=1),
+//     *         )
+//     *     ),
+//     *    @OA\Response(
+//     *         response=200,
+//     *         description="Successful operation",
+//     *         @OA\JsonContent(
+//     *             @OA\Property(property="status", type="string", example="success"),
+//     *             @OA\Property(property="message", type="string", example="Create Record Successfully"),
+//     *             @OA\Property(property="statusCode", type="int", example=200),
+//     *     @OA\Property(
+//     *                 property="metadata",
+//     *                 type="array",
+//     *                 @OA\Items(
+//     *                     type="object",
+//     *                     @OA\Property(property="name", type="string", example="Phuc La"),
+//     *                     @OA\Property(property="email", type="string", example="phuclaf@gmail.com"),
+//     *                     @OA\Property(property="password", type="string", example="123456"),
+//     *                     @OA\Property(property="phone", type="string", example="0983118272"),
+//     *                     @OA\Property(property="role", type="integer", example=1),
+//     *                 )
+//     *             )
+//     *         )
+//     *     ),
+//     *     @OA\Response(
+//     *         response=500,
+//     *         description="Validation error or internal server error",
+//     *         @OA\JsonContent(
+//     *             @OA\Property(property="status", type="string", example="error"),
+//     *             @OA\Property(property="message", type="object", example={"user_id": {"User ID is required"}}),
+//     *             @OA\Property(property="statusCode", type="int", example=500),
+//
+//     *         )
+//     *     ),
+//     * )
+//     */
     public function store(Request $request)
     {
         try {
