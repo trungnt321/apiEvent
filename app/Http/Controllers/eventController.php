@@ -1112,7 +1112,6 @@ class eventController extends Controller
      * -end_time là thời gian kết thúc sự kiện
      * -Banner là ảnh chuyển qua mã base 64
      * -keywords là mảng chứa id keyword cần cập nhật ( Lưu ý : phải tồn tại keywords đó)
-     * -banner là mã base 64 được chuyển từ ảnh
      * ",
      *     operationId="eventPut",
      *     @OA\Parameter(

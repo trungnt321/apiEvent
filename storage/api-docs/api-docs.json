@@ -2525,7 +2525,7 @@
                     "Event"
                 ],
                 "summary": "Sửa dữ liệu của một sự kiện ",
-                "description": "\n     * -Endpoint trả về dữ liệu bản ghi mới được sửa đổi\n     * -Role quy định là role nhân viên, quản lí\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * -keywords là mảng chứa id keyword cần cập nhật ( Lưu ý : phải tồn tại keywords đó)\n     * ",
+                "description": "\n     * -Endpoint trả về dữ liệu bản ghi mới được sửa đổi\n     * -Role quy định là role nhân viên, quản lí\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * -Banner là ảnh chuyển qua mã base 64\n     * -keywords là mảng chứa id keyword cần cập nhật ( Lưu ý : phải tồn tại keywords đó)\n     * ",
                 "operationId": "eventPut",
                 "parameters": [
                     {
@@ -7156,7 +7156,7 @@
                     "Resource"
                 ],
                 "summary": "Sửa dữ liệu bản ghi hình ảnh",
-                "description": "\n     * -Endpoint trả về hình ảnh mà mình đã sửa\n     * -Role được sử dụng là role nhân viên và quản lí\n     * -Ảnh mới sẽ được thêm vào đồng thời xóa đi ảnh cũ",
+                "description": "\n     * -Endpoint trả về hình ảnh mà mình đã sửa\n     * -Role được sử dụng là role nhân viên và quản lí\n     * -Ảnh mới sẽ được thêm vào đồng thời xóa đi ảnh cũ\n        * -Ảnh mới sẽ là ảnh được chuyển đổi sang mã base 64\n        *     ",
                 "operationId": "updateResource",
                 "parameters": [
                     {
