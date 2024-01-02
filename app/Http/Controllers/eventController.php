@@ -595,7 +595,6 @@ class eventController extends Controller
      * -location là nơi tổ chức sự kiện
      * -contact là liên lạc bằng số điện thoại
      * -banner là ảnh của sự kiện
-     * -user_id là id của user tổ chức sự kiện này
      * -start_time là thời gian bắt đầu sự kiện
      * -end_time là thời gian kết thúc sự kiện
      * - keywords là mảng chứa các id của keyword có thể để trống
