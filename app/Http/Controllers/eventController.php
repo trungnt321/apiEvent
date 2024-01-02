@@ -36,6 +36,12 @@ class eventController extends Controller
      *     - StatusJoin là xác đinh người dùng đang login vào đã tham gia những sự kiện nào
      *     - Nếu là 1 thì là trạng thái người dùng đó đã tham gia
      *     - 0 là trạng thái người dùng đó không tham gia
+     *     - Sẽ có 1 số option param sau
+     *     - page=<số trang> chuyển sang trang cần
+     *     - limit=<số record> số record muốn lấy trong 1 trang
+     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>
+     *     - search=<nội dung muốn tìm kiếm >
+     *     - sort=<latest|oldest> mặc định sẽ là latest sẽ là sắp xếp ngày đăng mới nhất(oldest là cũ nhất)
      * ",
      *     @OA\Response(
      *         response=200,
@@ -113,8 +119,9 @@ class eventController extends Controller
         try {
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $status = $request->query('status', false);
+            $status = $request->query('pagination', false);
             $search = $request->query('search', '');
+            $sort = $request->query('sort', 'latest');
             //return $page;
 
             $query = event::where('name', 'like', "%{$search}%")
@@ -125,6 +132,9 @@ class eventController extends Controller
             ->orWhere('start_time', 'like', "%{$search}%")
             ->orWhere('end_time', 'like', "%{$search}%")
             ->withCount('attendances')->with('user')->with('keywords');
+
+
+
             $query->leftJoin('atendances', function ($join) {
                 $join->on('events.id', '=', 'atendances.event_id')
                     ->where('atendances.user_id', '=', Auth::user()->id);
@@ -136,6 +146,7 @@ class eventController extends Controller
                         ->whereColumn('atendances.event_id', 'events.id')
                         ->where('atendances.user_id', Auth::user()->id);
                 }, 'status_join');
+            $query->orderBy('id',($sort) == 'oldest' ? 'asc' : 'desc');
             $event = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
             if (!$status && $page > $event->lastPage()) {
                 $page = 1;
@@ -316,7 +327,12 @@ class eventController extends Controller
      *     summary="Tìm kiếm sự kiện theo tên",
      *     tags={"Event"},
      *     operationId="Tìm kiếm sự kiện",
-     *     description="Request cần nhập vào là tên sự kiện. Tên sự kiện chỉ cần nhập gần giống, không nhất thiết phải giống hẳn. Endpoint trả ra là những sự kiện có tên dạng vậy",
+     *     description="Request cần nhập vào là tên sự kiện. Tên sự kiện chỉ cần nhập gần giống, không nhất thiết phải giống hẳn. Endpoint trả ra là những sự kiện có tên dạng vậy
+     *     - Sẽ có 1 số option param sau
+     *     - page=<số trang> chuyển sang trang cần
+     *     - limit=<số record> số record muốn lấy trong 1 trang
+     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>
+     *     ",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -398,7 +414,7 @@ class eventController extends Controller
             }
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $status = $request->query('status', false);
+            $status = $request->query('pagination', false);
             $query = event::where('name', 'like', "%{$request->name}%")->withCount('attendances')->with('user');
             $event = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
             if (!$status && $page > $event->lastPage()) {
@@ -910,6 +926,10 @@ class eventController extends Controller
      * - end_time có thể rỗng
      * - Nhưng nếu nhập start_time thì bắt buộc phải nhập end_time
      * - Nếu không nhập cả start_time và end_time thì sẽ là thống kê của tuần hiện tại
+     *     - Sẽ có 1 số option param sau
+     *     - page=<số trang> chuyển sang trang cần
+     *     - limit=<số record> số record muốn lấy trong 1 trang
+     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>
      * ",
      *     operationId="eventStatistics",
      *     @OA\RequestBody(
@@ -1003,7 +1023,7 @@ class eventController extends Controller
         $logUser = auth()->user()->role;
         $page = $request->query('page', 1);
         $limit = $request->query('limit', 10);
-        $status = $request->query('status', false);
+        $status = $request->query('pagination', false);
         if ($logUser == 0) {
             return response([
                 "status" => "error",

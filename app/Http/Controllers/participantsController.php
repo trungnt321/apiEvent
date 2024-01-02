@@ -20,7 +20,12 @@ class participantsController extends Controller
      *     tags={"Participants"},
      *  description="
      *      - Endpoint trả về thôn tin của tất cả người dùng.
-     *      - Role được sử dụng là role quản lí ",
+     *      - Role được sử dụng là role quản lí
+     *      - Sẽ có 1 số option param sau
+     *     - page=<số trang> chuyển sang trang cần
+     *     - limit=<số record> số record muốn lấy trong 1 trang
+     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>
+     *     ",
      *     @OA\Response(
      *         response=200,
      *         description="Dữ liệu trả về thành công",
@@ -78,7 +83,7 @@ class participantsController extends Controller
         try {
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $status = $request->query('status', false);
+            $status = $request->query('pagination', false);
             if(auth()->user()->role != 2){
                 return response([
                     "status" => "error",
@@ -116,6 +121,10 @@ class participantsController extends Controller
  * -phone là số diện thoại của người cần tìm, không cần nhập quá giống
  * -Ta sẽ tìm kiếm theo SDT hoặc Email
  * -Role là tất cả các role
+ *     - Sẽ có 1 số option param sau
+ *     - page=<số trang> chuyển sang trang cần
+ *     - limit=<số record> số record muốn lấy trong 1 trang
+ *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>
  * ",
  *     operationId="getUserByEmailAndPhone",
  *     @OA\RequestBody(
@@ -179,7 +188,7 @@ class participantsController extends Controller
         try{
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $status = $request->query('status', false);
+            $status = $request->query('pagination', false);
             $validator = Validator::make($request->all(),[
                 'email'=>'required',
                 'phone'=> 'required'

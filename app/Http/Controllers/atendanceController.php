@@ -21,7 +21,12 @@ class atendanceController extends Controller
      *      - id_event là id sự kiện
      *      - Endpoint trả về thôn tìn người dùng tham gia sự kiện.
      *      - Trả về thông tin của người dùng đã tham gia sự kiện.
-     *      - Role được sử dụng là role nhân viên ,quản lí ",
+     *      - Role được sử dụng là role nhân viên ,quản lí
+     *     - Sẽ có 1 số option param sau
+     *     - page=<số trang> chuyển sang trang cần
+     *     - limit=<số record> số record muốn lấy trong 1 trang
+     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>
+     *     ",
      *      @OA\Response(
      *         response=200,
      *         description="Successful response with feedback data",
@@ -89,7 +94,7 @@ class atendanceController extends Controller
         try {
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $status = $request->query('status', false);
+            $status = $request->query('pagination', false);
             $user = Auth::user();
             if($user == null || $user->role == 0){
                 return response([

@@ -22,7 +22,12 @@ class notificationController extends Controller
      *      - This endpoint retrieves information about all pre-set notifications.
      *      - Returns information about users who have set notifications.
      *      - Roles: Both Administrator and Student
-     *      - id is the ID of the user making the request.",
+     *      - id is the ID of the user making the request.
+     *      - Sẽ có 1 số option param sau
+     *     - page=<số trang> chuyển sang trang cần
+     *     - limit=<số record> số record muốn lấy trong 1 trang
+     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>
+     *     ",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -107,7 +112,7 @@ class notificationController extends Controller
             }
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $status = $request->query('status', false);
+            $status = $request->query('pagination', false);
             $query = notification::with('user_receiver');
             $notification = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
             if ($page > $notification->lastPage()) {

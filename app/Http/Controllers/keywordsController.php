@@ -20,7 +20,12 @@ class keywordsController extends Controller
      *     description="
      *      - Endpoint này cho phép lấy ra các keywords.
      *      - Trả về thông tin keywords,
-     *      - Tất cả role đều được sử dụng",
+     *      - Tất cả role đều được sử dụng
+     *     - Sẽ có 1 số option param sau
+     *     - page=<số trang> chuyển sang trang cần
+     *     - limit=<số record> số record muốn lấy trong 1 trang
+     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>
+     *     ",
      *     @OA\Response(
      *         response=200,
      *         description="Successful response with keywords data",
@@ -67,7 +72,7 @@ class keywordsController extends Controller
         try {
             $limit = $request->query('limit', 10);
             $page = $request->query('search', "");
-            $status = $request->query('status', false);
+            $status = $request->query('pagination', false);
             $keywords = ($status) ? keywords::all(): keywords::paginate($limit, ['*'], 'page', $page);
             if (!$status && $page > $keywords->lastPage()) {
                 $page = 1;
@@ -91,7 +96,13 @@ class keywordsController extends Controller
      *     path="/api/searchKeyword?search=tukhoa1",
      *     summary="Lấy ra 10 keywords nổi bật",
      *     tags={"keywords"},
-     *     description="Endpoint này cho phép lấy ra các keywords nổi bật. Trả về thông tin keywords và sự kiện của keywords đó. Tất cả role đều được sử dụng",
+     *     description="Endpoint này cho phép lấy ra các keywords nổi bật. Trả về thông tin keywords và sự kiện của keywords đó. Tất cả role đều được sử dụng
+     *     - Sẽ có 1 số option param sau
+     *     - page=<số trang> chuyển sang trang cần
+     *     - limit=<số record> số record muốn lấy trong 1 trang
+     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>
+     *     - search=<text search> nội dung cần search mặc định thì sẽ là tất cả
+     *     ",
      *     @OA\Parameter(
      *         name="search",
      *         in="query",
@@ -175,7 +186,7 @@ class keywordsController extends Controller
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
             $search = $request->query('search', "");
-            $status = $request->query('status', false);
+            $status = $request->query('pagination', false);
             //return $page;
 
             $query = keywords::with([

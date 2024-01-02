@@ -124,7 +124,7 @@
                     "Attendances"
                 ],
                 "summary": "Lấy tất cả các bản ghi theo id sự kiện",
-                "description": "\n     *      - id_event là id sự kiện\n     *      - Endpoint trả về thôn tìn người dùng tham gia sự kiện.\n     *      - Trả về thông tin của người dùng đã tham gia sự kiện.\n     *      - Role được sử dụng là role nhân viên ,quản lí ",
+                "description": "\n     *      - id_event là id sự kiện\n     *      - Endpoint trả về thôn tìn người dùng tham gia sự kiện.\n     *      - Trả về thông tin của người dùng đã tham gia sự kiện.\n     *      - Role được sử dụng là role nhân viên ,quản lí\n     *     - Sẽ có 1 số option param sau\n     *     - page=<số trang> chuyển sang trang cần\n     *     - limit=<số record> số record muốn lấy trong 1 trang\n     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>\n     *     ",
                 "operationId": "d30a7d4f47b44ef1170d7215b2246543",
                 "responses": {
                     "200": {
@@ -1262,7 +1262,7 @@
                     "Event"
                 ],
                 "summary": "Lấy tất cả các sự kiện",
-                "description": "\n     *      - Endpoint trả về thông tin của tất cả các sự kiện\n     *      - Role được sử dụng là role của tất cả\n     *      - Trả về thông tin của tất cả các sự kiện đã diễn ra\n     *     - StatusJoin là xác đinh người dùng đang login vào đã tham gia những sự kiện nào\n     *     - Nếu là 1 thì là trạng thái người dùng đó đã tham gia\n     *     - 0 là trạng thái người dùng đó không tham gia\n     * ",
+                "description": "\n     *      - Endpoint trả về thông tin của tất cả các sự kiện\n     *      - Role được sử dụng là role của tất cả\n     *      - Trả về thông tin của tất cả các sự kiện đã diễn ra\n     *     - StatusJoin là xác đinh người dùng đang login vào đã tham gia những sự kiện nào\n     *     - Nếu là 1 thì là trạng thái người dùng đó đã tham gia\n     *     - 0 là trạng thái người dùng đó không tham gia\n     *     - Sẽ có 1 số option param sau\n     *     - page=<số trang> chuyển sang trang cần\n     *     - limit=<số record> số record muốn lấy trong 1 trang\n     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>\n     *     - search=<nội dung muốn tìm kiếm >\n     *     - sort=<latest|oldest> mặc định sẽ là latest sẽ là sắp xếp ngày đăng mới nhất(oldest là cũ nhất)\n     * ",
                 "operationId": "1713890b60b4f32dcbc6113136f80b49",
                 "responses": {
                     "200": {
@@ -1921,7 +1921,7 @@
                     "Event"
                 ],
                 "summary": "Tìm kiếm sự kiện theo tên",
-                "description": "Request cần nhập vào là tên sự kiện. Tên sự kiện chỉ cần nhập gần giống, không nhất thiết phải giống hẳn. Endpoint trả ra là những sự kiện có tên dạng vậy",
+                "description": "Request cần nhập vào là tên sự kiện. Tên sự kiện chỉ cần nhập gần giống, không nhất thiết phải giống hẳn. Endpoint trả ra là những sự kiện có tên dạng vậy\n     *     - Sẽ có 1 số option param sau\n     *     - page=<số trang> chuyển sang trang cần\n     *     - limit=<số record> số record muốn lấy trong 1 trang\n     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>\n     *     ",
                 "operationId": "Tìm kiếm sự kiện",
                 "requestBody": {
                     "required": true,
@@ -2957,7 +2957,7 @@
                     "Event"
                 ],
                 "summary": "Thống kê sự kiện ",
-                "description": "\n     * - Endpoint trả về các bản ghi sự kiện\n     * -Role đước sử dụng quản lí, nhân viên\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * -attendances_count là số sinh viên tham gia\n     *  - attendances là thông tin của các sinh viên tham gia\n     *  - feedback là thông tin của các feedback của sinh viên\n     * - start_time có thể rỗng\n     * - end_time có thể rỗng\n     * - Nhưng nếu nhập start_time thì bắt buộc phải nhập end_time\n     * - Nếu không nhập cả start_time và end_time thì sẽ là thống kê của tuần hiện tại\n     * ",
+                "description": "\n     * - Endpoint trả về các bản ghi sự kiện\n     * -Role đước sử dụng quản lí, nhân viên\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * -attendances_count là số sinh viên tham gia\n     *  - attendances là thông tin của các sinh viên tham gia\n     *  - feedback là thông tin của các feedback của sinh viên\n     * - start_time có thể rỗng\n     * - end_time có thể rỗng\n     * - Nhưng nếu nhập start_time thì bắt buộc phải nhập end_time\n     * - Nếu không nhập cả start_time và end_time thì sẽ là thống kê của tuần hiện tại\n     *     - Sẽ có 1 số option param sau\n     *     - page=<số trang> chuyển sang trang cần\n     *     - limit=<số record> số record muốn lấy trong 1 trang\n     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>\n     * ",
                 "operationId": "eventStatistics",
                 "requestBody": {
                     "required": true,
@@ -4271,7 +4271,7 @@
                     "keywords"
                 ],
                 "summary": "Lấy ra tất cả các keywords",
-                "description": "\n     *      - Endpoint này cho phép lấy ra các keywords.\n     *      - Trả về thông tin keywords,\n     *      - Tất cả role đều được sử dụng",
+                "description": "\n     *      - Endpoint này cho phép lấy ra các keywords.\n     *      - Trả về thông tin keywords,\n     *      - Tất cả role đều được sử dụng\n     *     - Sẽ có 1 số option param sau\n     *     - page=<số trang> chuyển sang trang cần\n     *     - limit=<số record> số record muốn lấy trong 1 trang\n     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>\n     *     ",
                 "operationId": "6a6847931b539a1bdec255e64808fa6a",
                 "responses": {
                     "200": {
@@ -4484,7 +4484,7 @@
                     "keywords"
                 ],
                 "summary": "Lấy ra 10 keywords nổi bật",
-                "description": "Endpoint này cho phép lấy ra các keywords nổi bật. Trả về thông tin keywords và sự kiện của keywords đó. Tất cả role đều được sử dụng",
+                "description": "Endpoint này cho phép lấy ra các keywords nổi bật. Trả về thông tin keywords và sự kiện của keywords đó. Tất cả role đều được sử dụng\n     *     - Sẽ có 1 số option param sau\n     *     - page=<số trang> chuyển sang trang cần\n     *     - limit=<số record> số record muốn lấy trong 1 trang\n     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>\n     *     - search=<text search> nội dung cần search mặc định thì sẽ là tất cả\n     *     ",
                 "operationId": "375480ae04488bcde929a70695673b94",
                 "parameters": [
                     {
@@ -5050,7 +5050,7 @@
                     "notification"
                 ],
                 "summary": "Get all set notifications",
-                "description": "\n     *      - This endpoint retrieves information about all pre-set notifications.\n     *      - Returns information about users who have set notifications.\n     *      - Roles: Both Administrator and Student\n     *      - id is the ID of the user making the request.",
+                "description": "\n     *      - This endpoint retrieves information about all pre-set notifications.\n     *      - Returns information about users who have set notifications.\n     *      - Roles: Both Administrator and Student\n     *      - id is the ID of the user making the request.\n     *      - Sẽ có 1 số option param sau\n     *     - page=<số trang> chuyển sang trang cần\n     *     - limit=<số record> số record muốn lấy trong 1 trang\n     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>\n     *     ",
                 "operationId": "6e9018b922157c1b7864903e27267049",
                 "parameters": [
                     {
@@ -6024,7 +6024,7 @@
                     "Participants"
                 ],
                 "summary": "Lấy tất cả bản ghi",
-                "description": "\n     *      - Endpoint trả về thôn tin của tất cả người dùng.\n     *      - Role được sử dụng là role quản lí ",
+                "description": "\n     *      - Endpoint trả về thôn tin của tất cả người dùng.\n     *      - Role được sử dụng là role quản lí\n     *      - Sẽ có 1 số option param sau\n     *     - page=<số trang> chuyển sang trang cần\n     *     - limit=<số record> số record muốn lấy trong 1 trang\n     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>\n     *     ",
                 "operationId": "21e1cd188747fc59953037ea2feb3072",
                 "responses": {
                     "200": {
@@ -6291,7 +6291,7 @@
                     "Participants"
                 ],
                 "summary": "Tìm kiếm người dùng theo email hoặc số điện thoại",
-                "description": "\n * -Tìm kiếm theo post\n * -Request là email và phone\n * -email là email của người cần tìm, không cần nhập quá giống\n * -phone là số diện thoại của người cần tìm, không cần nhập quá giống\n * -Ta sẽ tìm kiếm theo SDT hoặc Email\n * -Role là tất cả các role\n * ",
+                "description": "\n * -Tìm kiếm theo post\n * -Request là email và phone\n * -email là email của người cần tìm, không cần nhập quá giống\n * -phone là số diện thoại của người cần tìm, không cần nhập quá giống\n * -Ta sẽ tìm kiếm theo SDT hoặc Email\n * -Role là tất cả các role\n *     - Sẽ có 1 số option param sau\n *     - page=<số trang> chuyển sang trang cần\n *     - limit=<số record> số record muốn lấy trong 1 trang\n *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>\n * ",
                 "operationId": "getUserByEmailAndPhone",
                 "requestBody": {
                     "required": true,
@@ -7377,7 +7377,7 @@
                     "Resource"
                 ],
                 "summary": "Nhận tài nguyên cụ thể bằng ID sự kiện.",
-                "description": "\n     * - Endpoint trả về tất cả ảnh của một sự kiện\n     * -event_id là id của sự kiện\n     * -Role được sử dụng là tất cả các role\n     * ",
+                "description": "\n     * - Endpoint trả về tất cả ảnh của một sự kiện\n     * -event_id là id của sự kiện\n     * -Role được sử dụng là tất cả các role\n        *     - Sẽ có 1 số option param sau\n        *     - page=<số trang> chuyển sang trang cần\n        *     - limit=<số record> số record muốn lấy trong 1 trang\n        *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>\n     * ",
                 "operationId": "getResourceByEventId",
                 "parameters": [
                     {

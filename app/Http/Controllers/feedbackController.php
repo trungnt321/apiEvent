@@ -90,7 +90,7 @@ class feedbackController extends Controller
         try {
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $status = $request->query('status', false);
+            $status = $request->query('pagination', false);
             $query = feedback::where('event_id',$id_event)->with('user');
              $feedback = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
             if (!$status && $page > $feedback->lastPage()) {

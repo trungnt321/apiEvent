@@ -79,7 +79,7 @@ class resourceController extends Controller
         try {
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $status = $request->query('status', false);
+            $status = $request->query('pagination', false);
             $resource = ($status) ? resource::all() :  resource::paginate($limit, ['*'], 'page', $page);
             if ($page > $resource->lastPage()) {
                 $page = 1;
@@ -309,6 +309,10 @@ class resourceController extends Controller
      * - Endpoint trả về tất cả ảnh của một sự kiện
      * -event_id là id của sự kiện
      * -Role được sử dụng là tất cả các role
+        *     - Sẽ có 1 số option param sau
+        *     - page=<số trang> chuyển sang trang cần
+        *     - limit=<số record> số record muốn lấy trong 1 trang
+        *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>
      * ",
      *      @OA\Parameter(
      *          name="event_id",
@@ -371,7 +375,7 @@ class resourceController extends Controller
         try{
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
-            $status = $request->query('status', false);
+            $status = $request->query('pagination', false);
             $query = resource::where('event_id',$event_id);
             $resourceById = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
             if ($page > $resourceById->lastPage()) {
