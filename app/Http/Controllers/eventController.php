@@ -1173,6 +1173,7 @@ class eventController extends Controller
     public function update(Request $request, $id)
     {
         //Check validate
+//        dd($request->all());
         $validate = Validator::make($request->all(), [
             'name' => 'required',
             'location' => ['required'],
@@ -1227,7 +1228,7 @@ class eventController extends Controller
         $logUserRole = auth()->user()->role;
         if ($logUserRole == 1 || $logUserRole == 2) {
             //Check role
-            $event = event::findOrFail($id)->with('user');
+            $event = event::with('user')->findOrFail($id);
             try {
                 //Xóa ảnh
                 $imagePath = public_path('Upload/' . $event->banner);
