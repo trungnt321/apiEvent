@@ -421,7 +421,7 @@ class resourceController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             @OA\Property(property="name", type="integer", example="1"),
-     *             @OA\Property(property="url", type="string", example="anh1.jpg")
+     *             @OA\Property(property="url", type="string", example="anh1.jpg"),
      *             @OA\Property(property="event_id", type="integer", example="2")
      *         )
      *     ),
