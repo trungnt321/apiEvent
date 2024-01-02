@@ -20,7 +20,8 @@ class GoogleController extends Controller
         $this->middleware('auth:api',[
             'except' => [
                 "loginCallback",
-                "getGoogleSignInUrl"
+                "getGoogleSignInUrl",
+                "callback"
             ]
         ]);
     }
@@ -153,6 +154,89 @@ class GoogleController extends Controller
 //
             if($finduser){
                $token = Auth::login($finduser);
+//                $finduser->token = auth()->user()->createToken("API Token")->accessToken;
+                return response()->json([
+                    'metadata' => [
+                        'access_token' => $token,
+                        'token_type' => 'bearer',
+                        'user' => auth()->user()
+                    ],
+                    'message' => 'Đăng nhập thành công',
+                    'status' => 'success',
+                    'statusCode' => Response::HTTP_OK
+                ], Response::HTTP_OK);
+            }else{
+                $newUser = User::create([
+                    'email' => $googleUser->email,
+                    'name' => $googleUser->name,
+                    'google_id'=> $googleUser->id,
+                    'password'=> bcrypt('123'),
+                    'avatar' => $googleUser->avatar
+                ]);
+//                $newUser->token = $newUser->createToken('API Token')->accessToken;
+//                $newUser->token = $newUser->createToken('API Token')->accessToken;
+                $token = Auth::login($newUser);
+                return response()->json([
+                    'metadata' => [
+                        'access_token' => $token,
+                        'token_type' => 'bearer',
+                        'user' => auth()->user()
+                    ],
+                    'message' => 'Đăng ký thành công',
+                    'status' => 'success',
+                    'statusCode' => Response::HTTP_OK
+                ], Response::HTTP_OK);
+
+            }
+//            $user = User::firstOrCreate(
+//                [
+//                    'email' => $googleUser->email,
+//                    'name' => $googleUser->name,
+//                    'google_id'=> $googleUser->id,
+//                    'password'=> bcrypt('123'),
+//                    'avatar' => $googleUser->avatar
+//                ]
+//            );
+//            return response()->json([
+//                'status' => __('google sign in successful'),
+//                'data' => $user,
+//            ], Response::HTTP_CREATED);
+
+        } catch (\Exception $exception) {
+            return response([
+                "status" => "error",
+                "message" =>$exception->getMessage(),
+                'statusCode' => Response::HTTP_BAD_REQUEST
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function callback()
+    {
+        try {
+//        $testToekn = 'ya29.a0AfB_byBR-TgPRUsUTpYWO7e8ni_1UkI_8SrcdUw2_tkxCGOvRgBtop6tKHRVxN-ahtFKFLCxn77eX5-mb-nnVAh1ZdYU97CYIxbeQG-CUCLfjaV58lPYrZtS4ygtMghqW76YG2WAXs7sZs_2hbtg-A0L1ZOPdanCMzfVaCgYKAUkSARESFQHGX2MiIyPhfqchpJX8aY2AIaChAA0171';
+//            $state = $request->input('state');
+//            dd($request->header('Authorization'));
+            $googleUser = Socialite::driver('google')->stateless()->user();
+//            dd($googleUser->id);
+//            echo $googleUser->token;
+//            die();
+//            $finduser = User::where('google_id', $googleUser->id)->first();
+//            dd($googleUser->token);
+//            $request->header('Authorization');
+//            $googleUser = Http::get('https://www.googleapis.com/oauth2/v3/userinfo?access_token='.$tokenapi);
+//            dd($googleUser->failed());
+//            if($googleUser->failed()){
+//                return response([
+//                    "status" => "error",
+//                    "message" => "Xác thực thất bại",
+//                    'statusCode' => Response::HTTP_BAD_REQUEST
+//                ], Response::HTTP_BAD_REQUEST);
+//            }
+            $finduser = User::where('google_id', $googleUser->id)->first();
+//
+            if($finduser){
+                $token = Auth::login($finduser);
 //                $finduser->token = auth()->user()->createToken("API Token")->accessToken;
                 return response()->json([
                     'metadata' => [

@@ -6,6 +6,7 @@ use App\Models\feedback;
 use Illuminate\Http\Request;
 use App\Http\Resources\feedbackResource;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -121,14 +122,12 @@ class feedbackController extends Controller
      *      - Trả về thông tin các phản hồi của sự kiện đó.
      *      - Role được sử dụng quản quản lí,nhân viên,sinh viên
      *      - id_event là id sự kiện
-     *      - user_id là id của người dùng
      *      - content là nội dung phản hồi của người dùng đó",
      *     operationId="storeFeedback",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
      *             @OA\Property(property="event_id", type="integer", example="1"),
-     *             @OA\Property(property="user_id", type="integer", example="2"),
      *             @OA\Property(property="content", type="string", example="Feedback content"),
      *         )
      *     ),
@@ -182,8 +181,7 @@ class feedbackController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'content' => 'required',
-                'event_id' => 'required|exists:events,id',
-                'user_id' => 'required|exists:users,id',
+                'event_id' => 'required|exists:events,id'
             ], [
                 'content.required' => 'Nội dung không được để trống',
                 'event_id.required' => 'ID của event không được để trống',
@@ -200,7 +198,11 @@ class feedbackController extends Controller
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
-            $feedback = feedback::create($request->all());
+            $feedback = feedback::create([
+                'content' => $request->input('content'),
+                'event_id' => $request->event_id,
+                'user_id' => Auth::user()->id
+            ]);
             $feedbackWithUser = feedback::with('user')->find($feedback->id);
             return response()->json([
                 'metadata' => $feedbackWithUser,
@@ -403,8 +405,7 @@ class feedbackController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'content' => 'required',
-                'event_id' => 'required|exists:events,id',
-                'user_id' => 'required|exists:users,id',
+                'event_id' => 'required|exists:events,id'
             ], [
                 'content.required' => 'Nội dung không được để trống',
                 'event_id.required' => 'ID của event không được để trống',
@@ -421,7 +422,11 @@ class feedbackController extends Controller
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
-            $feedback->update($request->all());
+            $feedback->update([
+                'content' => $request->input('content'),
+                'event_id' => $request->event_id,
+                'user_id' => Auth::user()->id
+            ]);
             $feedbackWithUser = feedback::with('user')->find($id);
             return response()->json([
                 'metadata' => $feedbackWithUser,

@@ -31,7 +31,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // Google Sign In
 Route::post('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignInUrl']);
 Route::get('/auth/google', [GoogleController::class, 'loginCallback']);
-Route::get('/callback', [GoogleController::class, 'loginCallback']);
+Route::get('/callback', [GoogleController::class, 'callback']);
 //
 //Route::post('register',[UserAuthController::class,'register']);
 // Route::post('login',[UserAuthController::class,'login']);
@@ -58,7 +58,7 @@ Route::middleware('auth:api')->prefix('feedback')->group(function() {
 //Route::apiResource('notification',notificationController::class)->middleware('auth:api');
 Route::middleware('auth:api')->prefix('notification')->group(function() {
     Route::post('/send',[notificationController::class,'create']);
-    Route::get('/{id}',[notificationController::class,'index']);
+    Route::get('/',[notificationController::class,'index']);
     Route::post('/',[notificationController::class,'store']);
     Route::get('/show/{id}',[notificationController::class,'show']);
     Route::put('/{id}',[notificationController::class,'update']);

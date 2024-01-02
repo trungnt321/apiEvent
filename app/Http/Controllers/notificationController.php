@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailApi;
 use Illuminate\Support\Facades\Validator;
@@ -15,14 +16,13 @@ class notificationController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/notification/{id}",
-     *     summary="Get all set notifications",
+     *     path="/api/notification",
+     *     summary="Get all set notification",
      *     tags={"notification"},
      *     description="
-     *      - This endpoint retrieves information about all pre-set notifications.
-     *      - Returns information about users who have set notifications.
-     *      - Roles: Both Administrator and Student
-     *      - id is the ID of the user making the request.
+     *      - endpoint này trả về các thông báo đang cài đặt.
+     *      - Trả về thông tin về người dùng đã đặt thông báo.
+     *      - Vai trò: Quản lí và nhân viên
      *      - Sẽ có 1 số option param sau
      *     - page=<số trang> chuyển sang trang cần
      *     - limit=<số record> số record muốn lấy trong 1 trang
@@ -99,11 +99,10 @@ class notificationController extends Controller
      * )
      */
 
-    public function index($id,Request $request)
+    public function index(Request $request)
     {
         try {
-            $user =  User::find($id);
-            if($user->role == 0){
+            if(Auth::user()->role == 0){
                 return response([
                     "status" => "error",
                     "message" => "Role người Get không hợp lệ.Vui lòng thử lại!!",
@@ -165,8 +164,7 @@ class notificationController extends Controller
      *      - Role được sử dụng là cả hai role nhân viên ,quản lí
      *      - title là tiêu đề của email muốn gửi
      *      - content là nội dung muốn gửi
-     *      - time_send là thời gian gửi
-     *      - create_by là id người thực hiện tạo",
+     *      - time_send là thời gian gửi",
      *     operationId="storeNotification",
      *     @OA\RequestBody(
      *         required=true,
@@ -174,8 +172,7 @@ class notificationController extends Controller
      *             @OA\Property(property="content", type="string", example="Notification content"),
      *              @OA\Property(property="title", type="string", example="title content"),
      *             @OA\Property(property="time_send", type="string", format="date-time", example="2023-11-28T17:02:29"),
-     *             @OA\Property(property="receiver_id", type="integer", example=1),
-     *             @OA\Property(property="create_by", type="integer", example=1)
+     *             @OA\Property(property="receiver_id", type="integer", example=1)
      *         )
      *     ),
      *     @OA\Response(
@@ -255,7 +252,6 @@ class notificationController extends Controller
                 'content' => 'required',
                 'time_send' => 'required',
                 'receiver_id' => 'required|exists:users,id',
-                "create_by" =>  'required|exists:users,id',
             ], [
                 'title.required' => 'Tiêu để không được để trống',
                 'content.required' => 'Nội dung không được để trống',
@@ -274,7 +270,7 @@ class notificationController extends Controller
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
-            $user =  User::find($request->create_by);
+            $user =  Auth::user();
 
             if($user->role == 0){
                 return response([
@@ -284,7 +280,13 @@ class notificationController extends Controller
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
-            notification::create($request->all());
+            notification::create([
+                'title' => $request->title,
+                'content' => $request->input('content'),
+                'time_send' => $request->time_send,
+                'receiver_id' => $request->receiver_id,
+                'create_by' => Auth::user()->id
+            ]);
             $notification = notification::with('user_receiver')->get();
             return response()->json([
                 'metadata' => $notification,
@@ -315,8 +317,7 @@ class notificationController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="title", type="string", example="Email Title"),
      *             @OA\Property(property="message", type="string", example="Email Content"),
-     *             @OA\Property(property="email", type="string", format="email", example="user@example.com"),
-     *             @OA\Property(property="create_by", type="int", format="email", example="user@example.com")
+     *             @OA\Property(property="email", type="string", format="email", example="user@example.com")
      *         )
      *     ),
      *     @OA\Response(
@@ -345,10 +346,9 @@ class notificationController extends Controller
         try {
 
             $validator = Validator::make($request->all(), [
-                'title' => 'required|exists:events,id',
-                'message' => 'required|exists:users,email',
-                'email' => 'required|email',
-                "create_by" => 'required|exists:users,id',
+                'title' => 'required',
+                'message' => 'required',
+                'email' => 'required|email'
             ], [
                 'title.required' => 'Id sự kiện không để trống.',
                 'message.required' => 'Email không để trống.',
@@ -371,9 +371,8 @@ class notificationController extends Controller
                 'message' => $request->message,
             ];
             Mail::to($request->email)->send(new EmailApi($data));
-            $user =  User::find($request->create_by);
 
-            if($user->role == 0){
+            if(Auth::user()->role == 0){
                 return response([
                     "status" => "error",
                     "message" => "Role người tạo không hợp lệ.Vui lòng thử lại!!",
@@ -397,7 +396,7 @@ class notificationController extends Controller
     }
     /**
      * @OA\Get(
-     *     path="/api/notifications/show/{id}",
+     *     path="/api/notification/show/{id}",
      *     tags={"notification"},
      *     summary="Lấy ra 1 ghi trong notification",
      *     description="
@@ -464,7 +463,7 @@ class notificationController extends Controller
     public function show($id)
     {
         try {
-            $notification = notification::find($id)->with('user_receiver');
+            $notification = notification::with('user_receiver')->find($id);
             return response()->json([
                 'metadata' => $notification,
                 'message' => 'Lấy 1 bản ghi thành công',
@@ -484,7 +483,7 @@ class notificationController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/notifications/{id}",
+     *     path="/api/notification/{id}",
      *     tags={"notification"},
      *     summary="Cập nhật thông tin thông báo",
      *     description="
@@ -504,10 +503,10 @@ class notificationController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="title", type="string", example="Updated Title"),
-     *             @OA\Property(property="message", type="string", example="Updated Content"),
-     *             @OA\Property(property="email", type="string", format="email", example="updated@example.com"),
-     *             @OA\Property(property="id_user", type="integer", example=1),
+     *             @OA\Property(property="content", type="string", example="Notification content"),
+     *              @OA\Property(property="title", type="string", example="title content"),
+     *             @OA\Property(property="time_send", type="string", format="date-time", example="2023-11-28T17:02:29"),
+     *             @OA\Property(property="receiver_id", type="integer", example=1)
      *         )
      *     ),
      *     @OA\Response(
@@ -556,16 +555,17 @@ class notificationController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'title' => 'required',
-                'message' => 'required',
-                'email' => 'required|email',
-                'id_user' => 'required|exists:users,id',
+                'content' => 'required',
+                'time_send' => 'required',
+                'receiver_id' => 'required|exists:users,id',
             ], [
                 'title.required' => 'Tiêu để không được để trống',
-                'message.required' => 'Nội dung không được để trống',
-                'email.required' => 'Email không được để trống',
-                'email.email' => 'Email không đúng định dạng',
-                'id_user.required' => 'Id người thực hiện không được để trống',
-                'id_user.email' => 'id người thực hiện không tồn tại trong hệ thống',
+                'content.required' => 'Nội dung không được để trống',
+                'receiver_id.required' => 'ID của người dùng không được để trống',
+                'receiver_id.exists' => 'ID của người dùng không tồn tại',
+                'event_id.exists' => 'Sự kiện không tồn tại',
+                'create_by.required' => 'ID của người tạo không được để trống',
+                'create_by.exists' => 'ID của người tạo không tồn tại'
             ]);
 
             if ($validator->fails()) {
@@ -576,16 +576,22 @@ class notificationController extends Controller
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
-            $user =  User::find($request->id_user);
 
-            if($user->role == 0){
+            if(Auth::user()->role == 0){
                 return response([
                     "status" => "error",
                     "message" => "Role người thực hiện không hợp lệ.Vui lòng thử lại!!",
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-            $notification->update($request->all());
+            $notification->update([
+                'title' => $request->title,
+                'content' => $request->input('content'),
+                'time_send' => $request->time_send,
+                'receiver_id' => $request->receiver_id,
+                'create_by' => Auth::user()->id,
+                'updated_at' => Carbon::now()
+            ]);
             $notification = notification::with('user_receiver')->get();
             return response()->json([
                 'metadata' => $notification,
@@ -605,7 +611,7 @@ class notificationController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/notifications/{id}/{id_user}",
+     *     path="/api/notification/{id}",
      *     tags={"notification"},
      *     summary="Xóa thông báo",
      *     description="Xóa 1 thông báo đang tham gia sự kiện",
@@ -676,7 +682,7 @@ class notificationController extends Controller
      * )
      */
 
-    public function destroy($id,$id_user)
+    public function destroy($id)
     {
         try {
             $notification = notification::find($id);
@@ -687,8 +693,7 @@ class notificationController extends Controller
                     'statusCode' => Response::HTTP_NOT_FOUND
                 ], Response::HTTP_NOT_FOUND);
             }
-            $user = User::find($id_user);
-            if($user->role == 0){
+            if(Auth::user()->role == 0){
                 return response([
                     "status" => "error",
                     "message" => "Role người xóa không hợp lệ.Vui lòng thử lại!!",

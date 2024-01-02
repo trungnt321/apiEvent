@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\atendance;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
@@ -269,14 +270,12 @@ class atendanceController extends Controller
      *          - Trả về data của sinh viên sau khi được thêm mới bằng email
      *          - event_id là id sự kiện tham gia
      *          - email là email của người muốn thêm (Lưu ý : phải có trong hệ thống)
-     *          - create_by là id của người thêm
      *          ",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
      *             @OA\Property(property="event_id", type="integer", example=1, description="Id của sự kiện."),
-     *             @OA\Property(property="email", type="string", example="john.doe@example.com", description="Email của sinh viên."),
-     *             @OA\Property(property="create_by", type="int", example="1", description="Id người tạo")
+     *             @OA\Property(property="email", type="string", example="john.doe@example.com", description="Email của sinh viên.")
      *         )
      *     ),
      *     @OA\Response(
@@ -341,8 +340,7 @@ class atendanceController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'event_id' => 'required|exists:events,id',
-                'email' => 'required|exists:users,email',
-                "create_by" => 'required|exists:users,id',
+                'email' => 'required|exists:users,email'
             ], [
                 'event_id.required' => 'Id sự kiện không để trống.',
                 'event_id.exists' => 'Id sự kiện không tồn tại.',
@@ -361,9 +359,9 @@ class atendanceController extends Controller
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
-            $user =  User::find($request->create_by);
 
-            if($user->role == 0){
+
+            if(Auth::user()->role == 0){
                 return response([
                     "status" => "error",
                     "message" => "Role người tạo không hợp lệ.Vui lòng thử lại!!",
@@ -515,8 +513,7 @@ class atendanceController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             @OA\Property(property="event_id", type="integer", example="1"),
-     *             @OA\Property(property="user_id", type="integer", example="2"),
-     *             @OA\Property(property="update_by", type="integer", example="2")
+     *             @OA\Property(property="user_id", type="integer", example="2")
      *         )
      *     ),
      *     @OA\Response(
@@ -560,21 +557,42 @@ class atendanceController extends Controller
      * )
      */
 
-    public function update(Request $request, atendance $atendance)
+    public function update(Request $request, $id)
     {
         try {
-            $user = User::find(Auth::user()->id);
-            if($user->role == 0){
+
+            $validator = Validator::make($request->all(), [
+                'event_id' => 'required|exists:events,id',
+                'user_id' => 'required|exists:users,id'
+
+            ], [
+                'user_id.required' => 'Không để trống id người dùng',
+                'user_id.exists' => 'Người Dùng không tồn tại',
+                'event_id.required' => 'Không để trống id Sự kiện',
+                'event_id.exists' => 'Sự kiện không tồn tại'
+            ]);
+
+            if ($validator->fails()) {
                 return response([
                     "status" => "error",
-                    "message" => "Role người tạo không hợp lệ.Vui lòng thử lại!!",
+                    "message" => $validator->errors()->all(),
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-            $atendance->update([
-                "event_id" => $request->event_id,
-                "user_id" => $request->user_id
-            ]);
+
+
+            if(Auth::user()->role == 0){
+                return response([
+                    "status" => "error",
+                    "message" => "Role người thực hiện không hợp lệ.Vui lòng thử lại!!",
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+            $atendance = atendance::findOrFail($id);
+            $atendance->event_id = $request->event_id;
+            $atendance->user_id = $request->user_id;
+            $atendance->updated_at =Carbon::now();
+            $atendance->save();
 
             $usersInEvent = atendance::where('event_id', $request->event_id)
                 ->with('user') // Đảm bảo Eloquent trả về thông tin người dùng liên quan
