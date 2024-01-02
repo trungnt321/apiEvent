@@ -6999,11 +6999,15 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "event_id": {
+                                    "name": {
                                         "type": "integer",
                                         "example": "1"
                                     },
-                                    "user_id": {
+                                    "url": {
+                                        "type": "string",
+                                        "example": "anh1.jpg"
+                                    },
+                                    "event_id": {
                                         "type": "integer",
                                         "example": "2"
                                     }
