@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\atendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -160,11 +161,11 @@ class eventController extends Controller
                     ->paginate($limit, ['*'], 'page', $page);
             }
 
-            $event->map(function ($event) {
-                $imageUrl = asset("Upload/{$event->banner}");
-                $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
-                return $event;
-            });
+//            $event->map(function ($event) {
+//                $imageUrl = asset("Upload/{$event->banner}");
+//                $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
+//                return $event;
+//            });
             return response()->json(handleData($status,$event), Response::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json([
@@ -404,11 +405,11 @@ class eventController extends Controller
                 $page = 1;
                 $event = event::where('name', 'like', "%{$request->name}%")->withCount('attendances')->with('user')->paginate($limit, ['*'], 'page', $page);
             }
-            $event->map(function ($event) {
-                $imageUrl = asset("Upload/{$event->banner}");
-                $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
-                return $event;
-            });
+//            $event->map(function ($event) {
+//                $imageUrl = url(Storage::url("Upload/{$event->banner}"));
+//                $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
+//                return $event;
+//            });
             return response()->json(handleData($status,$event), Response::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json([
@@ -533,10 +534,14 @@ class eventController extends Controller
                 $event = Event::findOrFail($request->id);
                 $imageName = time() . '.' . pathinfo($event->banner, PATHINFO_EXTENSION);
                 $imageUrl = asset("Upload/{$imageName}");
-                $sourcePath = public_path('Upload\\') . $event->banner; // Đường dẫn tệp tin hiện tại
-                $destinationPath = public_path('Upload\\') . $imageName; // Đường dẫn tới tệp tin mới
-                $success = File::copy($sourcePath, $destinationPath);
-
+//                $sourcePath =  Storage::path("Upload/{$event->banner}"); // Đường dẫn tệp tin hiện tại
+//                $destinationPath = Storage::path("Upload/{$imageName}"); // Đường dẫn tới tệp tin mới
+                $sourcePath =  "Upload/{$event->banner}"; // Đường dẫn tệp tin hiện tại
+                $destinationPath = "Upload/{$imageName}"; // Đường dẫn tới tệp tin mới
+//                dd($sourcePath,$destinationPath);
+//                $success = File::copy($sourcePath, $destinationPath);
+//                Storage::url("Upload/{$imageName}");
+                Storage::disk('public')->copy($sourcePath, $destinationPath);
                 $newEventData = $event->toArray();
 
                 $newEventData['status'] = 2;
@@ -732,17 +737,19 @@ class eventController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         $logUserRole = auth()->user()->role;
-        return $logUserRole;
+//        return $logUserRole;
         if ($logUserRole == 1 || $logUserRole == 2) {
             //Only staff and admin can make event
             try {
                 $imageName = time() . '.' . $request->banner->extension();
-                $request->banner->move(public_path('Upload'), $imageName);
+//                $request->banner->move(public_path('Upload'), $imageName);
+                $request->banner->storeAs('Upload', $imageName, 'public');
                 $resourceData = $request->all();
                 $resourceData['banner'] = $imageName;
                 $event = event::create($resourceData);
                 $returnData = event::withCount('attendances')->with('user')->findOrFail($event->id);
-                $returnData->banner = asset("Upload/{$returnData->banner}");
+//                asset("Upload/{$returnData->banner}")
+                $returnData->banner = $imageName;
 //                dd($request->keywords);
                 if(!empty($request->keywords)){
 //                    dd($request->keywords);
@@ -867,7 +874,7 @@ class eventController extends Controller
                 ->with('keywords')
                 ->with('user')
                 ->findOrFail($id);
-            $event->banner = url("Upload/{$event->banner}");
+//            $event->banner = url("Upload/{$event->banner}");
             return response()->json([
                 'metadata' => $event,
                 'message' => 'Get One Record Successfully',
@@ -1035,11 +1042,11 @@ class eventController extends Controller
                     ->with('user')
                     ->paginate($limit, ['*'], 'page', $page);
             }
-            $eventInWeek->map(function ($event) {
-                $imageUrl = asset("Upload/{$event->banner}");
-                $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
-                return $event;
-            });
+//            $eventInWeek->map(function ($event) {
+//                $imageUrl = asset("Upload/{$event->banner}");
+//                $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
+//                return $event;
+//            });
             return response()->json(handleData($status,$eventInWeek), Response::HTTP_OK);
         }
         $validator = Validator::make($request->all(), [
@@ -1065,11 +1072,11 @@ class eventController extends Controller
             ->with('keywords')
             ->with('user')
             ->paginate($limit, ['*'], 'page', $page);
-        $eventInStatistic->map(function ($event) {
-            $imageUrl = asset("Upload/{$event->banner}");
-            $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
-            return $event;
-        });
+//        $eventInStatistic->map(function ($event) {
+//            $imageUrl = asset("Upload/{$event->banner}");
+//            $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
+//            return $event;
+//        });
         return response()->json([
             'metadata' => [
                 'docs' => $eventInStatistic->items(),
@@ -1089,7 +1096,7 @@ class eventController extends Controller
 
     /**
      * /**
-     * @OA\Post(
+     * @OA\Put(
      *     path="/api/event/{id}",
      *     operationId="updateEvent",
      *     tags={"Event"},
@@ -1103,6 +1110,7 @@ class eventController extends Controller
      * -user_id là id của user tổ chức sự kiện này
      * -start_time là thời gian bắt đầu sự kiện
      * -end_time là thời gian kết thúc sự kiện
+     * -Banner là ảnh chuyển qua mã base 64
      * -keywords là mảng chứa id keyword cần cập nhật ( Lưu ý : phải tồn tại keywords đó)
      * ",
      *     operationId="eventPut",
@@ -1189,7 +1197,7 @@ class eventController extends Controller
     public function update(Request $request, $id)
     {
         //Check validate
-        return $request->all();
+//        dd($request->all());
         $validate = Validator::make($request->all(), [
             'name' => 'required',
             'location' => ['required'],
@@ -1247,17 +1255,34 @@ class eventController extends Controller
             $event = event::with('user')->findOrFail($id);
             try {
                 //Xóa ảnh
-                $imagePath = public_path('Upload/' . $event->banner);
-                File::delete($imagePath);
-
+//                $imagePath = public_path('Upload/' . $event->banner);
+//                File::delete($imagePath);
+                Storage::disk('public')->delete('Upload/' .$event->getRawOriginal('banner'));
                 //Thêm ảnh mới
-                $imageName = time() . '.' . $request->banner->extension();
-                $request->banner->move(public_path('Upload'), $imageName);
+                $image_64 = $request->banner; //your base64 encoded data
 
+                $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png .pdf
+
+                $replace = substr($image_64, 0, strpos($image_64, ',')+1);
+
+// find substring fro replace here eg: data:image/png;base64,
+
+                $image = str_replace($replace, '', $image_64);
+
+                $image = str_replace(' ', '+', $image);
+
+                $imageName = Str::random(10).'.'.$extension;
+//                $img = base64_decode($image);
+//                $imageName = time() . '.' . $request->banner->extension();
+//                $request->banner->move(public_path('Upload'), $img);
+                Storage::disk('public')->put('Upload/' . $imageName, base64_decode($image));
+//                $imageUrl = Storage::url($imagePath);
                 $resourceData = $request->all();
                 $resourceData['banner'] = $imageName;
                 $event->update($resourceData);
-                $event->banner = url("Upload/{$event->banner}");
+//                url("Upload/{$event->banner}")
+                $event->banner = url(Storage::url("Upload/{$imageName}"));
+//                dd($event->banner);
                 if(!empty($request->keywords)){
                     events_keywords::where("event_id",$event->id)->delete();
                     $dataKeywords = collect($request->keywords)->map(function ($keywordId) use ($event) {
@@ -1388,16 +1413,19 @@ class eventController extends Controller
                 ], Response::HTTP_FORBIDDEN);
             }
             //Xóa ảnh
-            $imagePath = public_path('Upload/' . $event->banner);
-            File::delete($imagePath);
+//            dd($event->getRawOriginal('banner'));
+
+//            $imagePath = public_path('Upload/' . $event->banner);
+//            File::delete($imagePath);
+            Storage::disk('public')->delete('Upload/' .$event->getRawOriginal('banner'));
             events_keywords::where("event_id",$event->id)->delete();
             $event->delete();
             $restOfEvents = event::with('user')->get();
-            $restOfEvents->map(function ($event) {
-                $imageUrl = asset("Upload/{$event->banner}");
-                $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
-                return $event;
-            });
+//            $restOfEvents->map(function ($event) {
+//                $imageUrl = asset("Upload/{$event->banner}");
+//                $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
+//                return $event;
+//            });
             return response()->json([
                 'metadata' => $restOfEvents,
                 'message' => 'Xóa bản ghi thành công',

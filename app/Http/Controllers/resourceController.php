@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\resource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -84,11 +85,11 @@ class resourceController extends Controller
                 $page = 1;
                 $resource = resource::paginate($limit, ['*'], 'page', $page);
             }
-            $resource->map(function ($resource) {
-                $imageUrl = asset("Upload/{$resource->url}");
-                $resource->url = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
-                return $resource;
-            });
+//            $resource->map(function ($resource) {
+//                $imageUrl = asset("Upload/{$resource->url}");
+//                $resource->url = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
+//                return $resource;
+//            });
             return response()->json(handleData($status,$resource),Response::HTTP_OK);
         }catch(\Exception $e) {
             return response()->json([
@@ -180,12 +181,13 @@ class resourceController extends Controller
             }
             if(auth()->user()->role == 1 || auth()->user()->role == 2){
                 $imageName = time().'.'.$request->url->extension();
-                $request->url->move(public_path('Upload'), $imageName);
+                $request->url->storeAs('Upload', $imageName, 'public');
+//                $request->url->move(public_path('Upload'), $imageName);
                 $resourceData = $request->all();
                 $resourceData['url'] = $imageName;
                 $resource = resource::create($resourceData);
 
-                $resource->url = url("Upload/{$resource->url}");
+//                $resource->url = url("Upload/{$resource->url}");
                 return response()->json([
                     'metadata' => $resource,
                     'message' => 'Create Record Successfully',
@@ -280,7 +282,7 @@ class resourceController extends Controller
                     'statusCode' => Response::HTTP_NOT_FOUND
                 ], Response::HTTP_NOT_FOUND);
             }
-            $resource->url = url("Upload/{$resource->url}");
+//            $resource->url = url("Upload/{$resource->url}");
             return response()->json([
                 'metadata' => $resource,
                 'message' => 'Get One Record Successfully',
@@ -376,11 +378,11 @@ class resourceController extends Controller
                 $page = 1;
                 $resourceById = resource::where('event_id',$event_id)->paginate($limit, ['*'], 'page', $page);
             }
-            $resourceById->map(function ($resourceById) {
-                $imageUrl = asset("Upload/{$resourceById->url}");
-                $resourceById->url = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
-                return $resourceById;
-            });;
+//            $resourceById->map(function ($resourceById) {
+//                $imageUrl = asset("Upload/{$resourceById->url}");
+//                $resourceById->url = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
+//                return $resourceById;
+//            });;
             return response()->json(handleData($status,$resourceById), Response::HTTP_OK);
         }catch(\Exception $e){
             return response([
@@ -401,7 +403,9 @@ class resourceController extends Controller
      *      description="
      * -Endpoint trả về hình ảnh mà mình đã sửa
      * -Role được sử dụng là role nhân viên và quản lí
-     * -Ảnh mới sẽ được thêm vào đồng thời xóa đi ảnh cũ",
+     * -Ảnh mới sẽ được thêm vào đồng thời xóa đi ảnh cũ
+        * -Ảnh mới sẽ là ảnh được chuyển đổi sang mã base 64
+        *     ",
     *       @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -459,7 +463,7 @@ class resourceController extends Controller
         try{
             $validate = Validator::make($request->all(),[
                 'name'=>'required',
-                'url'=>'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'url'=>'required',
                 'event_id'=>[
                     'required',
                     Rule::exists('events', 'id'),
@@ -489,18 +493,30 @@ class resourceController extends Controller
 
             if(auth()->user()->role != 0){
                 //Xóa ảnh
-                $imagePath = public_path('Upload/'.$resource->url);
-                File::delete($imagePath);
-
+//                $imagePath = public_path('Upload/'.$resource->url);
+//                File::delete($imagePath);
+                Storage::disk('public')->delete('Upload/' .$resource->getRawOriginal('url'));
                 //Thêm ảnh mới
-                $imageName = time().'.'.$request->url->extension();
-                $request->url->move(public_path('Upload'), $imageName);
+                $image_64 = $request->url; //your base64 encoded data
 
+                $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png .pdf
+
+                $replace = substr($image_64, 0, strpos($image_64, ',')+1);
+
+// find substring fro replace here eg: data:image/png;base64,
+
+                $image = str_replace($replace, '', $image_64);
+
+                $image = str_replace(' ', '+', $image);
+
+                $imageName = Str::random(10).'.'.$extension;
+//                $request->url->move(public_path('Upload'), $imageName);
+                Storage::disk('public')->put('Upload/' . $imageName, base64_decode($image));
                 $resourceData = $request->all();
                 $resourceData['url'] = $imageName;
                 $resource->update($resourceData);
 
-                $resource->url = url("Upload/{$resource->url}");
+//                $resource->url = url("Upload/{$resource->url}");
                 return response()->json([
                     'metadata' => $resource,
                     'message' => 'Update Record Successfully',
@@ -588,8 +604,9 @@ class resourceController extends Controller
                 ], Response::HTTP_NOT_FOUND);
             }
             //Xóa ảnh
-            $imagePath = public_path('Upload/'.$resource->url);
-            File::delete($imagePath);
+//            $imagePath = public_path('Upload/'.$resource->url);
+//            File::delete($imagePath);
+            Storage::disk('public')->delete('Upload/' .$resource->getRawOriginal('url'));
             $resource->delete();
             return response()->json([
                 'message' => 'Delete One Record Successfully',
