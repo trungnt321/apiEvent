@@ -1485,10 +1485,6 @@
                                         "type": "string",
                                         "example": "0983467584"
                                     },
-                                    "user_id": {
-                                        "type": "integer",
-                                        "example": 2
-                                    },
                                     "banner": {
                                         "type": "string",
                                         "format": "binary",
@@ -1695,29 +1691,13 @@
             }
         },
         "/api/event/notification": {
-            "post": {
+            "get": {
                 "tags": [
                     "Event"
                 ],
                 "summary": "lấy ra sự kiện sắp diễn ra  trước 24h ",
-                "description": "\n     * - Endpoint trả về các bản ghi sự kiện diễn ra trước 24h\n     * -Role được sử dụng quản lí, nhân viên\n     * -id_user_get là id của người thực hiện lấy thông báo\n     * - user trả về là thông tin của người tạo sự kiện\n     * ",
+                "description": "\n     * - Endpoint trả về các bản ghi sự kiện diễn ra trước 24h\n     * -Role được sử dụng quản lí, nhân viên\n     * - user trả về là thông tin của người tạo sự kiện\n     * ",
                 "operationId": "notificationEvent24h",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "id_user_get": {
-                                        "type": "integer",
-                                        "example": "1"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
                         "description": "Dữ liệu trả về thành công",
@@ -2130,7 +2110,7 @@
                     "Event"
                 ],
                 "summary": "Thêm mới bản ghi với dữ liệu được cung cấp",
-                "description": "\n     * - Endpoint trả về bản ghi mới được thêm vào\n     * -Role đước sử dụng là nhân viên, quản lí\n     * -id là id của sự kiện cần được tạo lại\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -banner là ảnh của sự kiện\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * ",
+                "description": "\n     * - Endpoint trả về bản ghi mới được thêm vào\n     * -Role đước sử dụng là nhân viên, quản lí\n     * -id là id của sự kiện cần được tạo lại\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -banner là ảnh của sự kiện\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * ",
                 "operationId": "recreateEvent",
                 "requestBody": {
                     "required": true,
@@ -2141,10 +2121,6 @@
                                     "id": {
                                         "type": "interger",
                                         "example": 1
-                                    },
-                                    "user_id": {
-                                        "type": "integer",
-                                        "example": 2
                                     },
                                     "start_time": {
                                         "type": "string",
@@ -2516,7 +2492,7 @@
                     "Event"
                 ],
                 "summary": "Sửa dữ liệu của một sự kiện ",
-                "description": "\n     * -Endpoint trả về dữ liệu bản ghi mới được sửa đổi\n     * -Role quy định là role nhân viên, quản lí\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -user_id là id của user tổ chức sự kiện này\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * -Banner là ảnh chuyển qua mã base 64\n     * -keywords là mảng chứa id keyword cần cập nhật ( Lưu ý : phải tồn tại keywords đó)\n     * ",
+                "description": "\n     * -Endpoint trả về dữ liệu bản ghi mới được sửa đổi\n     * -Role quy định là role nhân viên, quản lí\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * -Banner là ảnh chuyển qua mã base 64\n     * -keywords là mảng chứa id keyword cần cập nhật ( Lưu ý : phải tồn tại keywords đó)\n     * ",
                 "operationId": "eventPut",
                 "parameters": [
                     {
@@ -2554,10 +2530,6 @@
                                     "banner": {
                                         "type": "string",
                                         "example": "anh1.jpg"
-                                    },
-                                    "user_id": {
-                                        "type": "integer",
-                                        "example": 2
                                     },
                                     "start_time": {
                                         "type": "string",

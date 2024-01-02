@@ -192,23 +192,16 @@ class eventController extends Controller
     }
 
     /**
-     * @OA\Post(
+     * @OA\Get(
      *     path="/api/event/notification",
      *     tags={"Event"},
      *     summary="lấy ra sự kiện sắp diễn ra  trước 24h ",
      *     description="
      * - Endpoint trả về các bản ghi sự kiện diễn ra trước 24h
      * -Role được sử dụng quản lí, nhân viên
-     * -id_user_get là id của người thực hiện lấy thông báo
      * - user trả về là thông tin của người tạo sự kiện
      * ",
      *     operationId="notificationEvent24h",
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="id_user_get", type="integer", example="1"),
-     *         )
-     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Dữ liệu trả về thành công",
@@ -273,23 +266,23 @@ class eventController extends Controller
     {
         try {
 
-            $validator = Validator::make($request->all(), [
-                'id_user_get' => 'required'
-            ], [
-                'id_user_get.required' => 'id người lấy thông báo không được để trống',
-            ]);
-            if ($validator->fails()) {
-                return response([
-                    "status" => "error",
-                    "message" => $validator->errors()->all(),
-                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
-                ], Response::HTTP_INTERNAL_SERVER_ERROR);
-            }
+//            $validator = Validator::make($request->all(), [
+//                'id_user_get' => 'required'
+//            ], [
+//                'id_user_get.required' => 'id người lấy thông báo không được để trống',
+//            ]);
+//            if ($validator->fails()) {
+//                return response([
+//                    "status" => "error",
+//                    "message" => $validator->errors()->all(),
+//                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+//                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+//            }
             $currentDateTime = \Illuminate\Support\Carbon::now();
             $dateCr = $currentDateTime->toDateTimeString();
             $fiveHoursAhead = $currentDateTime->addHours(24)->toDateTimeString();
-            $user = User::find($request->id_user_get);
-            if ($user->role == 0) {
+//            $user = User::find($request->id_user_get);
+            if (Auth::user()->role == 0) {
                 return response([
                     "status" => "error",
                     "message" => "Role người dùng không hợp lệ",
@@ -452,7 +445,6 @@ class eventController extends Controller
      * -location là nơi tổ chức sự kiện
      * -contact là liên lạc bằng số điện thoại
      * -banner là ảnh của sự kiện
-     * -user_id là id của user tổ chức sự kiện này
      * -start_time là thời gian bắt đầu sự kiện
      * -end_time là thời gian kết thúc sự kiện
      * ",
@@ -461,7 +453,6 @@ class eventController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             @OA\Property(property="id", type="interger", example=1),
-     *             @OA\Property(property="user_id", type="integer", example=2),
      *             @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *             @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *         )
@@ -528,8 +519,7 @@ class eventController extends Controller
             $validator = Validator::make($request->all(), [
                 'id' => 'required',
                 'start_time' => 'required',
-                'end_time' => 'required|after:start_time',
-                'user_id' => 'required'
+                'end_time' => 'required|after:start_time'
             ], [
                 'id.required' => 'Không được để trống id của sự kiện cần tạo lại',
                 'start_time.required' => 'Không được để trống thời gian bắt đầu',
@@ -561,7 +551,7 @@ class eventController extends Controller
                 $newEventData = $event->toArray();
 
                 $newEventData['status'] = 2;
-                $newEventData['user_id'] = $request->user_id;
+                $newEventData['user_id'] = Auth::user()->id;
                 $newEventData['start_time'] = $request->start_time;
                 $newEventData['end_time'] = $request->end_time;
                 $newEventData['banner'] = $imageName;
@@ -617,7 +607,6 @@ class eventController extends Controller
      *             @OA\Property(property="name", type="string", example="Event Name"),
      *             @OA\Property(property="location", type="string", example="Hai Phong"),
      *             @OA\Property(property="contact", type="string", example="0983467584"),
-     *             @OA\Property(property="user_id", type="integer", example=2),
      *             @OA\Property(property="banner", type="string",format = "binary", example="anh1.jpg"),
      *             @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
      *             @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
@@ -711,12 +700,6 @@ class eventController extends Controller
                 'required',
                 'regex:/^(\+?\d{1,3}[- ]?)?\d{10}$/'
             ],
-            'user_id' => [
-                'required',
-                Rule::exists('users', 'id')->where(function ($query) {
-                    $query->whereIn('role', [1, 2]);
-                })
-            ],
         'banner' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'start_time' => ['required'],
             'end_time' => ['required', 'after:start_time'],
@@ -762,6 +745,7 @@ class eventController extends Controller
                 $request->banner->storeAs('Upload', $imageName, 'public');
                 $resourceData = $request->all();
                 $resourceData['banner'] = $imageName;
+                $resourceData['user_id'] = Auth::user()->id;
                 $event = event::create($resourceData);
                 $returnData = event::withCount('attendances')->with('user')->findOrFail($event->id);
 //                asset("Upload/{$returnData->banner}")
@@ -1127,7 +1111,6 @@ class eventController extends Controller
      * -name là tên sự kiện
      * -location là nơi tổ chức sự kiện
      * -contact là liên lạc bằng số điện thoại
-     * -user_id là id của user tổ chức sự kiện này
      * -start_time là thời gian bắt đầu sự kiện
      * -end_time là thời gian kết thúc sự kiện
      * -Banner là ảnh chuyển qua mã base 64
@@ -1149,7 +1132,6 @@ class eventController extends Controller
      *             @OA\Property(property="contact", type="string", example="0983118678"),
      *             @OA\Property(property="status", type="integer", example=0),
      * @OA\Property(property="banner", type="string", example="anh1.jpg"),
-     *             @OA\Property(property="user_id", type="integer", example=2),
      *             @OA\Property(property="start_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
      *             @OA\Property(property="end_time", type="string", format="date-time", example="2023-11-23 11:20:22"),
      *                                   @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
@@ -1229,12 +1211,6 @@ class eventController extends Controller
                 'required',
                 Rule::in([0, 1, 2])
             ],
-            'user_id' => [
-                'required',
-                Rule::exists('users', 'id')->where(function ($query) {
-                    $query->whereIn('role', [1, 2]);
-                })
-            ],
             'banner' => 'required',
             'start_time' => ['required'],
             'end_time' => ['required', 'after:start_time'],
@@ -1299,6 +1275,7 @@ class eventController extends Controller
 //                $imageUrl = Storage::url($imagePath);
                 $resourceData = $request->all();
                 $resourceData['banner'] = $imageName;
+                $resourceData['user_id'] = Auth::user()->id;
                 $event->update($resourceData);
 //                url("Upload/{$event->banner}")
 //                $event->banner = url(Storage::url("Upload/{$imageName}"));

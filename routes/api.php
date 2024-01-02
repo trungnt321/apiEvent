@@ -78,7 +78,7 @@ Route::prefix('event')->group(function() {
     Route::middleware(['auth:api'])->group(function () {
         Route::get('/',[eventController::class,'index']);
         Route::post('/', [eventController::class, 'store']);
-        Route::post('/notification', [eventController::class, 'indexNotification']);
+        Route::get('/notification', [eventController::class, 'indexNotification']);
         Route::put('/{id}', [eventController::class, 'update']);
         Route::delete('/{id}', [eventController::class, 'destroy']);
     });
