@@ -1036,7 +1036,11 @@ class eventController extends Controller
                 ->where('start_time', '<=', $lastDayOfWeekNumber)
                 ->with('feedback')
                 ->withCount('attendances')
-                ->with('attendances')
+                ->with([
+                    'attendances' => function ($query) {
+                        $query->with('user');
+                    }
+                ])
                 ->with('keywords')
                 ->with('user');
             $eventInWeek = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
@@ -1046,7 +1050,11 @@ class eventController extends Controller
                     ->where('start_time', '<=', $lastDayOfWeekNumber)
                     ->with('feedback')
                     ->withCount('attendances')
-                    ->with('attendances')
+                    ->with([
+                        'attendances' => function ($query) {
+                            $query->with('user');
+                        }
+                    ])
                     ->with('keywords')
                     ->with('user')
                     ->paginate($limit, ['*'], 'page', $page);
@@ -1077,7 +1085,11 @@ class eventController extends Controller
             ->where('start_time', '<=', $request->end_time)
             ->with('feedback')
             ->withCount('attendances')
-            ->with('attendances')
+            ->with([
+                'attendances' => function ($query) {
+                    $query->with('user');
+                }
+            ])
             ->with('keywords')
             ->with('user')
             ->paginate($limit, ['*'], 'page', $page);
