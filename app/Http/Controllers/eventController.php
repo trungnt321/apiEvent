@@ -1301,7 +1301,7 @@ class eventController extends Controller
                 $resourceData['banner'] = $imageName;
                 $event->update($resourceData);
 //                url("Upload/{$event->banner}")
-                $event->banner = url(Storage::url("Upload/{$imageName}"));
+//                $event->banner = url(Storage::url("Upload/{$imageName}"));
 //                dd($event->banner);
                 if(!empty($request->keywords)){
                     events_keywords::where("event_id",$event->id)->delete();
