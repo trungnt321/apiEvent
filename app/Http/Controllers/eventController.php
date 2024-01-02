@@ -867,9 +867,15 @@ class eventController extends Controller
     public function show($id)
     {
         try {
+
+
             $event = event::withCount('attendances')
                 ->with('feedback')
-                ->with('attendances')
+                ->with([
+                'attendances' => function ($query) {
+                $query->with('user');
+            }
+            ])
                 ->with('keywords')
                 ->with('user')
                 ->findOrFail($id);
