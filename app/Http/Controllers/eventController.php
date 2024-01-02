@@ -1189,7 +1189,7 @@ class eventController extends Controller
     public function update(Request $request, $id)
     {
         //Check validate
-//        dd($request->all());
+        dd($request->all());
         $validate = Validator::make($request->all(), [
             'name' => 'required',
             'location' => ['required'],
