@@ -391,7 +391,11 @@ class keywordsController extends Controller
     public function show(string $id)
     {
         try {
-            $keywords = keywords::find($id);
+            $keywords = keywords::with([
+                'events' => function ($query) {
+                    $query->withCount('attendances')->with('user');
+                }
+            ])->find($id);
             $user =  Auth::user();
             if($user->role == 0){
                 return response([
