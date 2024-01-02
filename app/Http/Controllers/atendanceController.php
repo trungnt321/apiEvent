@@ -149,14 +149,12 @@ class atendanceController extends Controller
      *      description="
      *      - Endpoint trả về danh sách dữ liệu dữ liệu người dùng của sự kiện đó
      *      - Role được sử dụng là role nhân viên ,quản lí ,sinh viên
-     *     - event_id là id sự kiện tham gia
-     *     - user_id là id của người dùng tham gia sự kiện",
+     *     - event_id là id sự kiện tham gia",
      *     operationId="storeAttendance",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="event_id", type="integer", example="1"),
-     *             @OA\Property(property="user_id", type="integer", example="2"),
+     *             @OA\Property(property="event_id", type="integer", example="1")
      *         )
      *     ),
      *     @OA\Response(
@@ -206,11 +204,10 @@ class atendanceController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'event_id' => 'required|exists:events,id',
-                'user_id' => 'required|exists:users,id',
             ], [
                 'event_id.required' => 'Id sự kiện không được để trống',
-                'user_id.required' => 'Id người dùng không được để trống.',
-                'user_id.exists' => 'Người dùng không tồn tại.',
+//                'user_id.required' => 'Id người dùng không được để trống.',
+//                'user_id.exists' => 'Người dùng không tồn tại.',
                 'event_id.exists' => 'Sự kiện không tồn tại.'
             ]);
 
@@ -222,7 +219,7 @@ class atendanceController extends Controller
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-            $atendance = atendance::where('user_id',$request->user_id)->where('event_id',$request->event_id)->first();
+            $atendance = atendance::where('user_id',Auth::user()->id)->where('event_id',$request->event_id)->first();
             if($atendance){
                 return response([
                     "status" => "error",
@@ -230,7 +227,11 @@ class atendanceController extends Controller
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-           atendance::create($request->all());
+
+           atendance::create([
+               'user_id' => Auth::user()->id,
+               'event_id' => $request->event_id
+           ]);
             $usersInEvent = atendance::where('event_id', $request->event_id)
                 ->with('user')
                 ->get();
@@ -468,9 +469,9 @@ class atendanceController extends Controller
     public function show($id)
     {
         try {
-            $usersInEvent = atendance::findOrFail($id)
-                ->with('user')
-                ->get();
+
+            $usersInEvent = atendance::with('user')->findOrFail($id);
+//            dd($usersInEvent);
             return response()->json([
                 'metadata' => $usersInEvent,
                 'message' => 'Lấy 1 bản ghi thành công',
@@ -557,7 +558,7 @@ class atendanceController extends Controller
     public function update(Request $request, atendance $atendance)
     {
         try {
-            $user = User::find($request->update_by);
+            $user = User::find(Auth::user()->id);
             if($user->role == 0){
                 return response([
                     "status" => "error",

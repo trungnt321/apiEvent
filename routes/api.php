@@ -79,7 +79,7 @@ Route::prefix('event')->group(function() {
         Route::get('/',[eventController::class,'index']);
         Route::post('/', [eventController::class, 'store']);
         Route::post('/notification', [eventController::class, 'indexNotification']);
-        Route::post('/{id}', [eventController::class, 'update']);
+        Route::put('/{id}', [eventController::class, 'update']);
         Route::delete('/{id}', [eventController::class, 'destroy']);
     });
 });

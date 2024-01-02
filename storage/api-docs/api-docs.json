@@ -296,7 +296,7 @@
                     "Attendances"
                 ],
                 "summary": "Thêm người dùng vào sự kiện có sẵn",
-                "description": "\n     *      - Endpoint trả về danh sách dữ liệu dữ liệu người dùng của sự kiện đó\n     *      - Role được sử dụng là role nhân viên ,quản lí ,sinh viên\n     *     - event_id là id sự kiện tham gia\n     *     - user_id là id của người dùng tham gia sự kiện",
+                "description": "\n     *      - Endpoint trả về danh sách dữ liệu dữ liệu người dùng của sự kiện đó\n     *      - Role được sử dụng là role nhân viên ,quản lí ,sinh viên\n     *     - event_id là id sự kiện tham gia",
                 "operationId": "storeAttendance",
                 "requestBody": {
                     "required": true,
@@ -307,10 +307,6 @@
                                     "event_id": {
                                         "type": "integer",
                                         "example": "1"
-                                    },
-                                    "user_id": {
-                                        "type": "integer",
-                                        "example": "2"
                                     }
                                 },
                                 "type": "object"
