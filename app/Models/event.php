@@ -11,9 +11,9 @@ class event extends Model
     use HasFactory;
     protected $fillable = ['name','location','contact','description','content','status','banner','user_id','start_time','end_time'];
 
-    protected $casts = [
-        'banner' => Image::class,
-    ];
+//    protected $casts = [
+//        'banner' => Image::class,
+//    ];
     public function user()
     {
         return $this->belongsTo(User::class);

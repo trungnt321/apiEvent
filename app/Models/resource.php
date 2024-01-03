@@ -12,7 +12,7 @@ class resource extends Model
 
     protected $fillable = ['name','url','event_id'];
 
-    protected $casts = [
-        'url' => Image::class,
-    ];
+//    protected $casts = [
+//        'url' => Image::class,
+//    ];
 }

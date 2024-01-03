@@ -2110,7 +2110,7 @@
                     "Event"
                 ],
                 "summary": "Thêm mới bản ghi với dữ liệu được cung cấp",
-                "description": "\n     * - Endpoint trả về bản ghi mới được thêm vào\n     * -Role đước sử dụng là nhân viên, quản lí\n     * -id là id của sự kiện cần được tạo lại\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -banner là ảnh của sự kiện\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * ",
+                "description": "\n     * - Endpoint trả về bản ghi mới được thêm vào\n     * -Role đước sử dụng là nhân viên, quản lí\n     * -id là id của sự kiện cần được tạo lại\n     * -name là tên sự kiện\n     * -location là nơi tổ chức sự kiện\n     * -contact là liên lạc bằng số điện thoại\n     * -banner là đường dẫn ảnh của sự kiện\n     * -start_time là thời gian bắt đầu sự kiện\n     * -end_time là thời gian kết thúc sự kiện\n     * ",
                 "operationId": "recreateEvent",
                 "requestBody": {
                     "required": true,
@@ -6980,7 +6980,7 @@
                     "Resource"
                 ],
                 "summary": "Sửa dữ liệu bản ghi hình ảnh",
-                "description": "\n     * -Endpoint trả về hình ảnh mà mình đã sửa\n     * -Role được sử dụng là role nhân viên và quản lí\n     * -Ảnh mới sẽ được thêm vào đồng thời xóa đi ảnh cũ\n        * -Ảnh mới sẽ là ảnh được chuyển đổi sang mã base 64\n        *     ",
+                "description": "\n     * -Endpoint trả về hình ảnh mà mình đã sửa\n     * -Role được sử dụng là role nhân viên và quản lí\n        *     - url sẽ là đường dẫn hình ảnh\n        *     ",
                 "operationId": "updateResource",
                 "parameters": [
                     {

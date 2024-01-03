@@ -444,7 +444,7 @@ class eventController extends Controller
      * -name là tên sự kiện
      * -location là nơi tổ chức sự kiện
      * -contact là liên lạc bằng số điện thoại
-     * -banner là ảnh của sự kiện
+     * -banner là đường dẫn ảnh của sự kiện
      * -start_time là thời gian bắt đầu sự kiện
      * -end_time là thời gian kết thúc sự kiện
      * ",
@@ -538,23 +538,23 @@ class eventController extends Controller
             if ($logUserRole == 1 || $logUserRole == 2) {
                 //Tạo thêm ảnh mới
                 $event = Event::findOrFail($request->id);
-                $imageName = time() . '.' . pathinfo($event->banner, PATHINFO_EXTENSION);
-                $imageUrl = asset("Upload/{$imageName}");
+//                $imageName = time() . '.' . pathinfo($event->banner, PATHINFO_EXTENSION);
+//                $imageUrl = asset("Upload/{$imageName}");
 //                $sourcePath =  Storage::path("Upload/{$event->banner}"); // Đường dẫn tệp tin hiện tại
 //                $destinationPath = Storage::path("Upload/{$imageName}"); // Đường dẫn tới tệp tin mới
-                $sourcePath =  "Upload/{$event->banner}"; // Đường dẫn tệp tin hiện tại
-                $destinationPath = "Upload/{$imageName}"; // Đường dẫn tới tệp tin mới
+//                $sourcePath =  "Upload/{$event->banner}"; // Đường dẫn tệp tin hiện tại
+//                $destinationPath = "Upload/{$imageName}"; // Đường dẫn tới tệp tin mới
 //                dd($sourcePath,$destinationPath);
 //                $success = File::copy($sourcePath, $destinationPath);
 //                Storage::url("Upload/{$imageName}");
-                Storage::disk('public')->copy($sourcePath, $destinationPath);
+//                Storage::disk('public')->copy($sourcePath, $destinationPath);
                 $newEventData = $event->toArray();
 
                 $newEventData['status'] = 2;
                 $newEventData['user_id'] = Auth::user()->id;
                 $newEventData['start_time'] = $request->start_time;
                 $newEventData['end_time'] = $request->end_time;
-                $newEventData['banner'] = $imageName;
+//                $newEventData['banner'] = $imageName;
                 Event::create($newEventData);
 
                 $eventRecreate = Event::orderBy('id', 'desc')->with('user')->first();
@@ -699,7 +699,7 @@ class eventController extends Controller
                 'required',
                 'regex:/^(\+?\d{1,3}[- ]?)?\d{10}$/'
             ],
-        'banner' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'banner' => 'required',
             'start_time' => ['required'],
             'end_time' => ['required', 'after:start_time'],
             'description' => 'required',
@@ -739,16 +739,16 @@ class eventController extends Controller
         if ($logUserRole == 1 || $logUserRole == 2) {
             //Only staff and admin can make event
             try {
-                $imageName = time() . '.' . $request->banner->extension();
+//                $imageName = time() . '.' . $request->banner->extension();
 //                $request->banner->move(public_path('Upload'), $imageName);
-                $request->banner->storeAs('Upload', $imageName, 'public');
+//                $request->banner->storeAs('Upload', $imageName, 'public');
                 $resourceData = $request->all();
-                $resourceData['banner'] = $imageName;
+//                $resourceData['banner'] = $imageName;
                 $resourceData['user_id'] = Auth::user()->id;
                 $event = event::create($resourceData);
                 $returnData = event::withCount('attendances')->with('user')->findOrFail($event->id);
 //                asset("Upload/{$returnData->banner}")
-                $returnData->banner = $imageName;
+//                $returnData->banner = $imageName;
 //                dd($request->keywords);
                 if(!empty($request->keywords)){
 //                    dd($request->keywords);
@@ -1270,28 +1270,28 @@ class eventController extends Controller
                 //Xóa ảnh
 //                $imagePath = public_path('Upload/' . $event->banner);
 //                File::delete($imagePath);
-                Storage::disk('public')->delete('Upload/' .$event->getRawOriginal('banner'));
+//                Storage::disk('public')->delete('Upload/' .$event->getRawOriginal('banner'));
                 //Thêm ảnh mới
-                $image_64 = $request->banner; //your base64 encoded data
-
-                $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png .pdf
-
-                $replace = substr($image_64, 0, strpos($image_64, ',')+1);
+//                $image_64 = $request->banner; //your base64 encoded data
+//
+//                $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png .pdf
+//
+//                $replace = substr($image_64, 0, strpos($image_64, ',')+1);
 
 // find substring fro replace here eg: data:image/png;base64,
-
-                $image = str_replace($replace, '', $image_64);
-
-                $image = str_replace(' ', '+', $image);
-
-                $imageName = Str::random(10).'.'.$extension;
+//
+//                $image = str_replace($replace, '', $image_64);
+//
+//                $image = str_replace(' ', '+', $image);
+//
+//                $imageName = Str::random(10).'.'.$extension;
 //                $img = base64_decode($image);
 //                $imageName = time() . '.' . $request->banner->extension();
 //                $request->banner->move(public_path('Upload'), $img);
-                Storage::disk('public')->put('Upload/' . $imageName, base64_decode($image));
+//                Storage::disk('public')->put('Upload/' . $imageName, base64_decode($image));
 //                $imageUrl = Storage::url($imagePath);
                 $resourceData = $request->all();
-                $resourceData['banner'] = $imageName;
+//                $resourceData['banner'] = $imageName;
                 $resourceData['user_id'] = Auth::user()->id;
                 $event->update($resourceData);
 //                url("Upload/{$event->banner}")
@@ -1431,7 +1431,7 @@ class eventController extends Controller
 
 //            $imagePath = public_path('Upload/' . $event->banner);
 //            File::delete($imagePath);
-            Storage::disk('public')->delete('Upload/' .$event->getRawOriginal('banner'));
+//            Storage::disk('public')->delete('Upload/' .$event->getRawOriginal('banner'));
             events_keywords::where("event_id",$event->id)->delete();
             $event->delete();
             $restOfEvents = event::with('user')->get();

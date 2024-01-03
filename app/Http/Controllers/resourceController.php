@@ -180,11 +180,11 @@ class resourceController extends Controller
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
             if(auth()->user()->role == 1 || auth()->user()->role == 2){
-                $imageName = time().'.'.$request->url->extension();
-                $request->url->storeAs('Upload', $imageName, 'public');
+//                $imageName = time().'.'.$request->url->extension();
+//                $request->url->storeAs('Upload', $imageName, 'public');
 //                $request->url->move(public_path('Upload'), $imageName);
                 $resourceData = $request->all();
-                $resourceData['url'] = $imageName;
+//                $resourceData['url'] = $imageName;
                 $resource = resource::create($resourceData);
 
 //                $resource->url = url("Upload/{$resource->url}");
@@ -407,8 +407,7 @@ class resourceController extends Controller
      *      description="
      * -Endpoint trả về hình ảnh mà mình đã sửa
      * -Role được sử dụng là role nhân viên và quản lí
-     * -Ảnh mới sẽ được thêm vào đồng thời xóa đi ảnh cũ
-        * -Ảnh mới sẽ là ảnh được chuyển đổi sang mã base 64
+        *     - url sẽ là đường dẫn hình ảnh
         *     ",
     *       @OA\Parameter(
      *         name="id",
@@ -500,25 +499,25 @@ class resourceController extends Controller
                 //Xóa ảnh
 //                $imagePath = public_path('Upload/'.$resource->url);
 //                File::delete($imagePath);
-                Storage::disk('public')->delete('Upload/' .$resource->getRawOriginal('url'));
+//                Storage::disk('public')->delete('Upload/' .$resource->getRawOriginal('url'));
                 //Thêm ảnh mới
-                $image_64 = $request->url; //your base64 encoded data
-
-                $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png .pdf
-
-                $replace = substr($image_64, 0, strpos($image_64, ',')+1);
+//                $image_64 = $request->url; //your base64 encoded data
+//
+//                $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png .pdf
+//
+//                $replace = substr($image_64, 0, strpos($image_64, ',')+1);
 
 // find substring fro replace here eg: data:image/png;base64,
 
-                $image = str_replace($replace, '', $image_64);
-
-                $image = str_replace(' ', '+', $image);
-
-                $imageName = Str::random(10).'.'.$extension;
+//                $image = str_replace($replace, '', $image_64);
+//
+//                $image = str_replace(' ', '+', $image);
+//
+//                $imageName = Str::random(10).'.'.$extension;
 //                $request->url->move(public_path('Upload'), $imageName);
-                Storage::disk('public')->put('Upload/' . $imageName, base64_decode($image));
+//                Storage::disk('public')->put('Upload/' . $imageName, base64_decode($image));
                 $resourceData = $request->all();
-                $resourceData['url'] = $imageName;
+//                $resourceData['url'] = $imageName;
                 $resource->update($resourceData);
 
 //                $resource->url = url("Upload/{$resource->url}");
@@ -611,7 +610,7 @@ class resourceController extends Controller
             //Xóa ảnh
 //            $imagePath = public_path('Upload/'.$resource->url);
 //            File::delete($imagePath);
-            Storage::disk('public')->delete('Upload/' .$resource->getRawOriginal('url'));
+//            Storage::disk('public')->delete('Upload/' .$resource->getRawOriginal('url'));
             $resource->delete();
             return response()->json([
                 'message' => 'Delete One Record Successfully',
