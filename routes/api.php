@@ -73,6 +73,8 @@ Route::middleware('auth:api')->prefix('keywords')->group(function() {
     Route::put('/{id}',[keywordsController::class,'update']);
     Route::delete('/{id}',[keywordsController::class,'destroy']);
 });
+
+Route::get('eventJoin',[eventController::class,'eventJoin'])->middleware('auth:api');
 Route::prefix('event')->group(function() {
     Route::get('/{id}',[eventController::class,'show']);
     Route::middleware(['auth:api'])->group(function () {

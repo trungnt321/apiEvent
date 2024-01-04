@@ -193,6 +193,176 @@ class eventController extends Controller
 
     /**
      * @OA\Get(
+     *     path="/api/eventJoin",
+     *     summary="Lấy tất cả các sự kiện đang tham gia",
+     *     tags={"Event"},
+     *      description="
+     *      - Endpoint trả về thông tin của tất cả các sự kiện đang tham gia
+     *      - Role được sử dụng là role của tất cả
+     *      - Trả về thông tin của tất cả các sự kiện đã diễn ra
+     *     - StatusJoin là xác đinh người dùng đang login vào đã tham gia những sự kiện nào
+     *     - Nếu là 1 thì là trạng thái người dùng đó đã tham gia
+     *     - 0 là trạng thái người dùng đó không tham gia
+     *     - Sẽ có 1 số option param sau
+     *     - page=<số trang> chuyển sang trang cần
+     *     - limit=<số record> số record muốn lấy trong 1 trang
+     *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>
+     *     - search=<nội dung muốn tìm kiếm >
+     *     - sort=<latest|oldest> mặc định sẽ là latest sẽ là sắp xếp ngày đăng mới nhất(oldest là cũ nhất)
+     * ",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *              @OA\Property(property="status", type="string", example="success"),
+     *              @OA\Property(property="message", type="string", example="Lấy dữ liệu thành công"),
+     *              @OA\Property(property="statusCode", type="integer", example=200),
+     *              @OA\Property(property="metadata",type="object",
+     *              @OA\Property(property="docs", type="array",
+     *                  @OA\Items(
+     *                      type="object",
+     *                       @OA\Property(property="name", type="string", example="Event Name"),
+     *                       @OA\Property(property="location", type="string", example="Ha Noi"),
+     *                       @OA\Property(property="contact", type="string", example="0986567467"),
+     *                       @OA\Property(property="user_id", type="integer", example=2),
+     *                       @OA\Property(property="banner", type="string", example="http://127.0.0.1:8000/Upload/1702785355.jpg"),
+     *                       @OA\Property(property="start_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                       @OA\Property(property="end_time", type="string",format="date-time", example="2023-11-23 11:20:22"),
+     *                       @OA\Property(property="description", type="string", example="Sự kiện rất hoành tráng"),
+     *                       @OA\Property(property="content", type="string", example="Chào mừng tổng thống"),
+     *                       @OA\Property(property="attendances_count", type="interger", example=3),
+     *                       @OA\Property(property="status_join", type="interger", example=1),
+     *                       @OA\Property(
+     *                          property="user",
+     *                          type="object",
+     *                          @OA\Property(property="id", type="integer", example="1"),
+     *                          @OA\Property(property="name", type="string", example="Kurtis Legros IV"),
+     *                          @OA\Property(property="email", type="string", example="haudvph20519@fpt.edu.vn"),
+     *                          @OA\Property(property="phone", type="string", example="+1 (564) 267-3494"),
+     *                          @OA\Property(property="role", type="integer", example="1"),
+     *                          @OA\Property(property="google_id", type="string", example="137518716745268"),
+     *                          @OA\Property(property="avatar", type="string", example="https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"),
+     *                          @OA\Property(property="created_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z"),
+     *                          @OA\Property(property="updated_at", type="string", format="date-time", example="2023-12-02T08:55:45.000000Z")
+     *                      )
+     *                    )
+     *                  ),
+     * @OA\Property(property="totalDocs", type="integer", example=16),
+     *                 @OA\Property(property="limit", type="integer", example=10),
+     *                 @OA\Property(property="totalPages", type="integer", example=2),
+     *                 @OA\Property(property="page", type="integer", example=2),
+     *                 @OA\Property(property="pagingCounter", type="integer", example=2),
+     *                 @OA\Property(property="hasPrevPage", type="boolean", example=true),
+     *                 @OA\Property(property="hasNextPage", type="boolean", example=false)
+     *              )
+     *
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Không tìm thấy bản ghi",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Không tìm thấy bản ghi"),
+     *             @OA\Property(property="statusCode", type="integer", example=404)
+     *         )
+     *     ),
+     *      @OA\Response(
+     *         response=500,
+     *         description="Lỗi hệ thống",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Lỗi hệ thống"),
+     *             @OA\Property(property="statusCode", type="integer", example=500)
+     *         )
+     *     )
+     * )
+     */
+    public function eventJoin(Request $request){
+        try {
+            $page = $request->query('page', 1);
+            $limit = $request->query('limit', 10);
+            $status = $request->query('pagination', false);
+            $search = $request->query('search', '');
+            $sort = $request->query('sort', 'latest');
+            //return $page;
+
+            $query = event::where('name', 'like', "%{$search}%")
+                ->orWhere('location', 'like', "%{$search}%")
+                ->orWhere('contact', 'like', "%{$search}%")
+                ->orWhere('content', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%")
+                ->orWhere('start_time', 'like', "%{$search}%")
+                ->orWhere('end_time', 'like', "%{$search}%")
+                ->withCount('attendances')->with('user')->with('keywords');
+
+
+
+            $query->leftJoin('atendances', function ($join) {
+                $join->on('events.id', '=', 'atendances.event_id')
+                    ->where('atendances.user_id', '=', Auth::user()->id);
+            })
+                ->select('events.*')
+                ->selectSub(function ($query) {
+                    $query->selectRaw('IF(COUNT(atendances.id) > 0, 1, 0) as status_join')
+                        ->from('atendances')
+                        ->whereColumn('atendances.event_id', 'events.id')
+                        ->where('atendances.user_id', Auth::user()->id);
+                }, 'status_join');
+            $query->orderBy('id',($sort) == 'oldest' ? 'asc' : 'desc');
+            // having là câu lệnh lọc data < ở đây là lọc status_join sau khi đưa ra kết quả
+            $query->having('status_join', 1);
+            $event = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
+            if (!$status && $page > $event->lastPage()) {
+                $page = 1;
+                $event = event::where('name', 'like', "%{$search}%")
+                    ->orWhere('location', 'like', "%{$search}%")
+                    ->orWhere('contact', 'like', "%{$search}%")
+                    ->orWhere('content', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('start_time', 'like', "%{$search}%")
+                    ->orWhere('end_time', 'like', "%{$search}%")
+                    ->withCount('attendances')->with('user')->with('keywords')
+                    ->leftJoin('attendances', function ($join) {
+                        $join->on('events.id', '=', 'attendances.event_id')
+                            ->where('attendances.user_id', '=', Auth::user()->id);
+                    })
+                    ->select('events.*')
+                    ->selectSub(function ($query) {
+                        $query->selectRaw('IF(COUNT(attendances.id) > 0, 1, 0) as status_join')
+                            ->from('attendances')
+                            ->whereColumn('attendances.event_id', 'events.id')
+                            ->where('attendances.user_id', Auth::user()->id);
+                    }, 'status_join')
+
+                    ->having('status_join', 1)
+                    ->paginate($limit, ['*'], 'page', $page);
+            }
+
+//            $event->map(function ($event) {
+//                $imageUrl = asset("Upload/{$event->banner}");
+//                $event->banner = $imageUrl; // Thay đổi giá trị trường `url` của mỗi đối tượng
+//                return $event;
+//            });
+            return response()->json(handleData($status,$event), Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'status' => 'error',
+                'statusCode' => $e instanceof HttpException
+                    ? $e->getStatusCode()
+                    : Response::HTTP_INTERNAL_SERVER_ERROR
+            ],  $e instanceof HttpException
+                ? $e->getStatusCode()
+                : Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * @OA\Get(
      *     path="/api/event/notification",
      *     tags={"Event"},
      *     summary="lấy ra sự kiện sắp diễn ra  trước 24h ",
@@ -870,6 +1040,17 @@ class eventController extends Controller
 
 
             $event = event::withCount('attendances')
+                ->leftJoin('atendances', function ($join) {
+                    $join->on('events.id', '=', 'atendances.event_id')
+                        ->where('atendances.user_id', '=', Auth::user()->id);
+                })
+                    ->select('events.*')
+                    ->selectSub(function ($query) {
+                        $query->selectRaw('IF(COUNT(atendances.id) > 0, 1, 0) as status_join')
+                            ->from('atendances')
+                            ->whereColumn('atendances.event_id', 'events.id')
+                            ->where('atendances.user_id', Auth::user()->id);
+                    }, 'status_join')
                 ->with('feedback')
                 ->with([
                 'attendances' => function ($query) {
