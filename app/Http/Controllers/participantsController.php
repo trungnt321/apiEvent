@@ -25,6 +25,7 @@ class participantsController extends Controller
      *     - page=<số trang> chuyển sang trang cần
      *     - limit=<số record> số record muốn lấy trong 1 trang
      *     - pagination=true|false sẽ là trạng thái phân trang hoặc không phân trang <mặc định là false phân trang>
+     *     - role=0|1|2 khi truyền thêm param này sẽ là lọc data trả ra các user có role nào < Mặc định là role 0>
      *     ",
      *     @OA\Response(
      *         response=200,
@@ -84,6 +85,7 @@ class participantsController extends Controller
             $page = $request->query('page', 1);
             $limit = $request->query('limit', 10);
             $status = $request->query('pagination', false);
+            $role = $request->query('role', 0);
             if(auth()->user()->role != 2){
                 return response([
                     "status" => "error",
@@ -91,7 +93,14 @@ class participantsController extends Controller
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-            $users = ($status) ?  User::all() : User::paginate($limit, ['*'], 'page', $page);
+            $query = User::query();
+
+            if ($request->role != null) {
+                $query->where('role',$role);
+            }
+//            $users = ($status) ?  User::all() : User::paginate($limit, ['*'], 'page', $page);
+            $users = ($status) ? $query->get() : $query->paginate($limit, ['*'], 'page', $page);
+
             if (!$status && $page > $users->lastPage()) {
                 $page = 1;
                 $users = User::paginate($limit, ['*'], 'page', $page);
