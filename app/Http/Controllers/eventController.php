@@ -1051,7 +1051,11 @@ class eventController extends Controller
                             ->whereColumn('atendances.event_id', 'events.id')
                             ->where('atendances.user_id', Auth::user()->id);
                     }, 'status_join')
-                ->with('feedback')
+                ->with([
+                'feedback' => function ($query) {
+                $query->with('user');
+            }
+            ])
                 ->with([
                 'attendances' => function ($query) {
                 $query->with('user');
