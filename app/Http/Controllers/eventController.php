@@ -1302,7 +1302,7 @@ class eventController extends Controller
 
     /**
      * /**
-     * @OA\Put(
+     * @OA\Patch(
      *     path="/api/event/{id}",
      *     operationId="updateEvent",
      *     tags={"Event"},
@@ -1403,22 +1403,14 @@ class eventController extends Controller
         //Check validate
 //        dd($request->all());
         $validate = Validator::make($request->all(), [
-            'name' => 'required',
-            'location' => ['required'],
             'contact' => [
-                'required',
                 'regex:/^(\+?\d{1,3}[- ]?)?\d{10}$/'
             ],
             'status' => [
-                'required',
                 Rule::in([0, 1, 2])
             ],
-            'banner' => 'required',
-            'start_time' => ['required'],
-            'end_time' => ['required', 'after:start_time'],
-            'description' => ['required'],
-            'content' => ['required'],
-            'keywords' =>[   'array',
+            'end_time' => ['after:start_time'],
+            'keywords' =>['array',
                 'min:1', // ít nhất một phần tử trong mảng
                 Rule::exists('keywords', 'id')]
         ], [
@@ -1475,9 +1467,10 @@ class eventController extends Controller
 //                $request->banner->move(public_path('Upload'), $img);
 //                Storage::disk('public')->put('Upload/' . $imageName, base64_decode($image));
 //                $imageUrl = Storage::url($imagePath);
-                $resourceData = $request->all();
+                $resourceData = $request->only(['name', 'location','contact','status','banner','start_time','end_time','description','content','user_id','keywords']);
 //                $resourceData['banner'] = $imageName;
                 $resourceData['user_id'] = Auth::user()->id;
+//                $resourceData
                 $event->update($resourceData);
 //                url("Upload/{$event->banner}")
 //                $event->banner = url(Storage::url("Upload/{$imageName}"));

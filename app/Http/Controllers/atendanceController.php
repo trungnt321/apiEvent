@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Models\User;
 class atendanceController extends Controller
@@ -491,7 +492,7 @@ class atendanceController extends Controller
     }
 
     /**
-     * @OA\Put(
+     * @OA\Patch(
      *     path="/api/attendances/{atendance}",
      *     summary="Update an attendance record",
      *     tags={"Attendances"},
@@ -562,8 +563,8 @@ class atendanceController extends Controller
         try {
 
             $validator = Validator::make($request->all(), [
-                'event_id' => 'required|exists:events,id',
-                'user_id' => 'required|exists:users,id'
+                'event_id' => 'exists:events,id',
+                'user_id' => 'exists:users,id'
 
             ], [
                 'user_id.required' => 'Không để trống id người dùng',
@@ -589,10 +590,9 @@ class atendanceController extends Controller
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
             $atendance = atendance::findOrFail($id);
-            $atendance->event_id = $request->event_id;
-            $atendance->user_id = $request->user_id;
-            $atendance->updated_at =Carbon::now();
-            $atendance->save();
+            $data = $request->only(['event_id', 'user_id']);
+            $data['updated_at'] = Carbon::now();
+            $atendance->update($data);
 
             $usersInEvent = atendance::where('event_id', $request->event_id)
                 ->with('user') // Đảm bảo Eloquent trả về thông tin người dùng liên quan

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Models\keywords;
 class keywordsController extends Controller
@@ -427,7 +428,7 @@ class keywordsController extends Controller
     }
 
     /**
-     * @OA\Put(
+     * @OA\Patch(
      *     path="/api/keywords/{id}",
      *     tags={"keywords"},
      *     summary="Cập nhật lại keywords",
@@ -492,7 +493,7 @@ class keywordsController extends Controller
             $keywords = keywords::findOrFail($id);
 
             $validator = Validator::make($request->all(), [
-                'name' => 'required|unique:keywords,name|max:40'
+                'name' => 'unique:keywords,name|max:40'
             ], [
                 'name.required' => 'Không để trống tên từ khóa',
                 'name.unique' => 'Tên từ khóa đã tồn tại',
@@ -514,7 +515,7 @@ class keywordsController extends Controller
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-            $keywords->update($request->all());
+            $keywords->update($request->only(['name']));
             return response()->json([
                 'metadata' => $keywords,
                 'message' => 'Cập nhật keywords thành công',

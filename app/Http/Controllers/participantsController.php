@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Support\Facades\DB;
 
@@ -444,7 +445,7 @@ class participantsController extends Controller
     }
 
        /**
-     * @OA\Put(
+     * @OA\Patch(
      *      path="/api/participants/{id}",
      *      operationId="updateParticipants",
      *      tags={"Participants"},
@@ -528,19 +529,11 @@ class participantsController extends Controller
 
         //Validate cho request
         $validator = Validator::make($request->all(), [
-            'name' => [
-                'required'
-            ],
             'email' => [
-                'required',
                 'regex:~^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$~'
             ],
             'phone' => [
-                'required',
                 'regex:/^(\+?\d{1,3}[- ]?)?\d{10}$/'
-            ],
-            'role' =>[
-                'required'
             ]
         ], [
             'name.required' => 'Không để trống name của người dùng',
@@ -584,7 +577,7 @@ class participantsController extends Controller
             ], Response::HTTP_CONFLICT);
         }
         if($canUpdate == true){
-            $user->update($request->all());
+            $user->update($request->only(['name','email','password','phone','role']));
         }
         return response()->json([
             'metadata' => $user,

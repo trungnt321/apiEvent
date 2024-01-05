@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailApi;
 use Illuminate\Support\Facades\Validator;
 use App\Models\event;
+use OpenApi\Annotations as OA;
+
 class notificationController extends Controller
 {
     /**
@@ -482,7 +484,7 @@ class notificationController extends Controller
 
 
     /**
-     * @OA\Put(
+     * @OA\Patch(
      *     path="/api/notification/{id}",
      *     tags={"notification"},
      *     summary="Cập nhật thông tin thông báo",
@@ -554,10 +556,7 @@ class notificationController extends Controller
             $notification = notification::findOrFail($id);
 
             $validator = Validator::make($request->all(), [
-                'title' => 'required',
-                'content' => 'required',
-                'time_send' => 'required',
-                'receiver_id' => 'required|exists:users,id',
+                'receiver_id' => 'exists:users,id',
             ], [
                 'title.required' => 'Tiêu để không được để trống',
                 'content.required' => 'Nội dung không được để trống',
@@ -584,14 +583,10 @@ class notificationController extends Controller
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-            $notification->update([
-                'title' => $request->title,
-                'content' => $request->input('content'),
-                'time_send' => $request->time_send,
-                'receiver_id' => $request->receiver_id,
-                'create_by' => Auth::user()->id,
-                'updated_at' => Carbon::now()
-            ]);
+            $data = $request->only(['title', 'content', 'time_send', 'receiver_id']);
+            $data['create_by'] = Auth::user()->id;
+            $data['updated_at'] = Carbon::now();
+            $notification->update($data);
             $notification = notification::with('user_receiver')->get();
             return response()->json([
                 'metadata' => $notification,

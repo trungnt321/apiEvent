@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class feedbackController extends Controller
@@ -321,7 +322,7 @@ class feedbackController extends Controller
     }
 
     /**
-     * @OA\Put(
+     * @OA\Patch(
      *     path="/api/feedback/{id}",
      *     tags={"feedback"},
      *     summary="Cập nhật lại phản hồi",
@@ -404,8 +405,7 @@ class feedbackController extends Controller
             $feedback = feedback::findOrFail($id);
 
             $validator = Validator::make($request->all(), [
-                'content' => 'required',
-                'event_id' => 'required|exists:events,id'
+                'event_id' => 'exists:events,id'
             ], [
                 'content.required' => 'Nội dung không được để trống',
                 'event_id.required' => 'ID của event không được để trống',
@@ -421,12 +421,9 @@ class feedbackController extends Controller
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-
-            $feedback->update([
-                'content' => $request->input('content'),
-                'event_id' => $request->event_id,
-                'user_id' => Auth::user()->id
-            ]);
+            $data = $request->only(['content', 'event_id']);
+            $data['user_id'] = Auth::user()->id;
+            $feedback->update($data);
             $feedbackWithUser = feedback::with('user')->find($id);
             return response()->json([
                 'metadata' => $feedbackWithUser,

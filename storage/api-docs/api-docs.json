@@ -942,13 +942,13 @@
             }
         },
         "/api/attendances/{atendance}": {
-            "put": {
+            "patch": {
                 "tags": [
                     "Attendances"
                 ],
                 "summary": "Update an attendance record",
                 "description": "\n     *          - Endpoint này cho phép quản lí và nhân viên cập nhật thông tin người tham gia sự kiện\n     *          - Trả về data của tất cả người dùng thuộc sự kiện đó\n     *          - event_id là id sự kiện tham gia\n     *          - email là email của người muốn thêm (Lưu ý : phải có trong hệ thống)\n     *          - update_by là id của người cập nhật (Lưu ý : phải có trong hệ thống)\n     *          ",
-                "operationId": "03ced21461f51f2bf86a3bff9a5a6007",
+                "operationId": "57b82086d41fe405b88332ae34c004b8",
                 "parameters": [
                     {
                         "name": "atendance",
@@ -2701,7 +2701,193 @@
                     }
                 }
             },
-            "put": {
+            "delete": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Xóa một bản ghi",
+                "description": "\n     *          - Endpoint này sẽ xóa 1 sự kiện\n     *          - Role được sử dụng là role Quản lí\n     *          - Xóa thành công sẽ trả lại data là của các sự kiện còn lại\n     *          - id là id của event cần xóa\n     *          ",
+                "operationId": "fcf20ee4d1deab33b151a91c0299ef50",
+                "parameters": [
+                    {
+                        "name": "events",
+                        "in": "path",
+                        "description": "events record model",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Xóa một bản ghi thành công"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "metadata": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Event Name"
+                                                    },
+                                                    "location": {
+                                                        "type": "string",
+                                                        "example": "Ha Noi"
+                                                    },
+                                                    "contact": {
+                                                        "type": "string",
+                                                        "example": "0986567467"
+                                                    },
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "banner": {
+                                                        "type": "string",
+                                                        "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
+                                                    },
+                                                    "start_time": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-23 11:20:22"
+                                                    },
+                                                    "end_time": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-11-23 11:20:22"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Sự kiện rất hoành tráng"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "Chào mừng tổng thống"
+                                                    },
+                                                    "attendances_count": {
+                                                        "type": "interger",
+                                                        "example": 3
+                                                    },
+                                                    "user": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Kurtis Legros IV"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "haudvph20519@fpt.edu.vn"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string",
+                                                                "example": "+1 (564) 267-3494"
+                                                            },
+                                                            "role": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "google_id": {
+                                                                "type": "string",
+                                                                "example": "137518716745268"
+                                                            },
+                                                            "avatar": {
+                                                                "type": "string",
+                                                                "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2023-12-02T08:55:45.000000Z"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bản ghi không tồn tại",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bản ghi không tồn tại"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi hệ thống",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lỗi hệ thống"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
                 "tags": [
                     "Event"
                 ],
@@ -2904,192 +3090,6 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Bản ghi không tồn tại "
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 404
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Lỗi hệ thống",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Lỗi hệ thống"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Event"
-                ],
-                "summary": "Xóa một bản ghi",
-                "description": "\n     *          - Endpoint này sẽ xóa 1 sự kiện\n     *          - Role được sử dụng là role Quản lí\n     *          - Xóa thành công sẽ trả lại data là của các sự kiện còn lại\n     *          - id là id của event cần xóa\n     *          ",
-                "operationId": "fcf20ee4d1deab33b151a91c0299ef50",
-                "parameters": [
-                    {
-                        "name": "events",
-                        "in": "path",
-                        "description": "events record model",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Xóa một bản ghi thành công"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 200
-                                        },
-                                        "metadata": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string",
-                                                        "example": "Event Name"
-                                                    },
-                                                    "location": {
-                                                        "type": "string",
-                                                        "example": "Ha Noi"
-                                                    },
-                                                    "contact": {
-                                                        "type": "string",
-                                                        "example": "0986567467"
-                                                    },
-                                                    "user_id": {
-                                                        "type": "integer",
-                                                        "example": 2
-                                                    },
-                                                    "banner": {
-                                                        "type": "string",
-                                                        "example": "http://127.0.0.1:8000/Upload/1702785355.jpg"
-                                                    },
-                                                    "start_time": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2023-11-23 11:20:22"
-                                                    },
-                                                    "end_time": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2023-11-23 11:20:22"
-                                                    },
-                                                    "description": {
-                                                        "type": "string",
-                                                        "example": "Sự kiện rất hoành tráng"
-                                                    },
-                                                    "content": {
-                                                        "type": "string",
-                                                        "example": "Chào mừng tổng thống"
-                                                    },
-                                                    "attendances_count": {
-                                                        "type": "interger",
-                                                        "example": 3
-                                                    },
-                                                    "user": {
-                                                        "properties": {
-                                                            "id": {
-                                                                "type": "integer",
-                                                                "example": "1"
-                                                            },
-                                                            "name": {
-                                                                "type": "string",
-                                                                "example": "Kurtis Legros IV"
-                                                            },
-                                                            "email": {
-                                                                "type": "string",
-                                                                "example": "haudvph20519@fpt.edu.vn"
-                                                            },
-                                                            "phone": {
-                                                                "type": "string",
-                                                                "example": "+1 (564) 267-3494"
-                                                            },
-                                                            "role": {
-                                                                "type": "integer",
-                                                                "example": "1"
-                                                            },
-                                                            "google_id": {
-                                                                "type": "string",
-                                                                "example": "137518716745268"
-                                                            },
-                                                            "avatar": {
-                                                                "type": "string",
-                                                                "example": "https://lh3.googleusercontent.com/a/ACg8ocL2nrwZ_mNIBGYaLd8tnzAJLMR0g_UXSVhY_BN67ZWA=s96-c"
-                                                            },
-                                                            "created_at": {
-                                                                "type": "string",
-                                                                "format": "date-time",
-                                                                "example": "2023-12-02T08:55:45.000000Z"
-                                                            },
-                                                            "updated_at": {
-                                                                "type": "string",
-                                                                "format": "date-time",
-                                                                "example": "2023-12-02T08:55:45.000000Z"
-                                                            }
-                                                        },
-                                                        "type": "object"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Bản ghi không tồn tại",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Bản ghi không tồn tại"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -4160,7 +4160,100 @@
             }
         },
         "/api/feedback/{id}": {
-            "put": {
+            "delete": {
+                "tags": [
+                    "feedback"
+                ],
+                "summary": "Xóa bình luận",
+                "description": "\n     *      - Xóa 1 phản hồi bằng ID\n     *      - Trả về thông báo xóa thành công.\n     *      - Role được sử dụng quản quản lí,nhân viên,sinh viên\n     *      - id là của feedback đó",
+                "operationId": "deleteFeedback",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the feedback record",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Xóa phản hồi thành công"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bản ghi không tồn tại",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bản ghi không tồn tại"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
                 "tags": [
                     "feedback"
                 ],
@@ -4331,99 +4424,6 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Lỗi hệ thống"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "feedback"
-                ],
-                "summary": "Xóa bình luận",
-                "description": "\n     *      - Xóa 1 phản hồi bằng ID\n     *      - Trả về thông báo xóa thành công.\n     *      - Role được sử dụng quản quản lí,nhân viên,sinh viên\n     *      - id là của feedback đó",
-                "operationId": "deleteFeedback",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the feedback record",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Xóa phản hồi thành công"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Bản ghi không tồn tại",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Bản ghi không tồn tại"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 404
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Internal server error"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -4995,7 +4995,100 @@
                     }
                 }
             },
-            "put": {
+            "delete": {
+                "tags": [
+                    "keywords"
+                ],
+                "summary": "Xóa keywords",
+                "description": "\n     *      - Xóa 1 phản hồi bằng ID\n     *      - Trả về thông báo xóa thành công.\n     *      - Role được sử dụng quản quản lí\n     *      - id là của keywords đó",
+                "operationId": "deleteKeywords",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the keywords record",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Xóa keywords thành công"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bản ghi không tồn tại",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bản ghi không tồn tại"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal server error"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
                 "tags": [
                     "keywords"
                 ],
@@ -5110,99 +5203,6 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Lỗi hệ thống"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "keywords"
-                ],
-                "summary": "Xóa keywords",
-                "description": "\n     *      - Xóa 1 phản hồi bằng ID\n     *      - Trả về thông báo xóa thành công.\n     *      - Role được sử dụng quản quản lí\n     *      - id là của keywords đó",
-                "operationId": "deleteKeywords",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the keywords record",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Xóa keywords thành công"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Bản ghi không tồn tại",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Bản ghi không tồn tại"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 404
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Internal server error"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -5861,141 +5861,6 @@
             }
         },
         "/api/notification/{id}": {
-            "put": {
-                "tags": [
-                    "notification"
-                ],
-                "summary": "Cập nhật thông tin thông báo",
-                "description": "\n     *     - Cập nhật thông báo theo ID\n     *     - Data trả về là dữ liệu của các thông báo và dữ liệu của user đã được cài đặt\n     *     - id ở đây là id của thông báo\n     *     - Role được cập nhật là Quản lí và nhân viên\n     *     - id_user là id người thực hiện request update này",
-                "operationId": "updateNotificationById",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID thông báo",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "content": {
-                                        "type": "string",
-                                        "example": "Notification content"
-                                    },
-                                    "title": {
-                                        "type": "string",
-                                        "example": "title content"
-                                    },
-                                    "time_send": {
-                                        "type": "string",
-                                        "format": "date-time",
-                                        "example": "2023-11-28T17:02:29"
-                                    },
-                                    "receiver_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "metadata": {
-                                            "type": "object",
-                                            "example": {
-                                                "id": 1,
-                                                "title": "Title Cập nhật",
-                                                "content": "<h1 style='color:red;'>Test message</h1>",
-                                                "time_send": "2023-11-25 01:42:27",
-                                                "sent_at": "2023-11-25 01:50:33",
-                                                "receiver_id": 1,
-                                                "created_at": null,
-                                                "updated_at": "2023-11-24T18:50:33.000000Z"
-                                            }
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Update One Record Successfully"
-                                        },
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Record not exists",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Record not exists"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 404
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Internal server error"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
             "delete": {
                 "tags": [
                     "notification"
@@ -6164,6 +6029,141 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Lỗi hệ thống"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "notification"
+                ],
+                "summary": "Cập nhật thông tin thông báo",
+                "description": "\n     *     - Cập nhật thông báo theo ID\n     *     - Data trả về là dữ liệu của các thông báo và dữ liệu của user đã được cài đặt\n     *     - id ở đây là id của thông báo\n     *     - Role được cập nhật là Quản lí và nhân viên\n     *     - id_user là id người thực hiện request update này",
+                "operationId": "updateNotificationById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID thông báo",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "content": {
+                                        "type": "string",
+                                        "example": "Notification content"
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "example": "title content"
+                                    },
+                                    "time_send": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2023-11-28T17:02:29"
+                                    },
+                                    "receiver_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "metadata": {
+                                            "type": "object",
+                                            "example": {
+                                                "id": 1,
+                                                "title": "Title Cập nhật",
+                                                "content": "<h1 style='color:red;'>Test message</h1>",
+                                                "time_send": "2023-11-25 01:42:27",
+                                                "sent_at": "2023-11-25 01:50:33",
+                                                "receiver_id": 1,
+                                                "created_at": null,
+                                                "updated_at": "2023-11-24T18:50:33.000000Z"
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Update One Record Successfully"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Record not exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Record not exists"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal server error"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -6603,7 +6603,100 @@
                     }
                 }
             },
-            "put": {
+            "delete": {
+                "tags": [
+                    "Participants"
+                ],
+                "summary": "Xóa 1 bản ghi người dùng",
+                "description": "\n     * - id là id của người dùng\n     * - Role xóa chỉ có thể là quản lí\n     * ",
+                "operationId": "ec6365c5f315ce8381da73eafdc5ccb3",
+                "parameters": [
+                    {
+                        "name": "participants",
+                        "in": "path",
+                        "description": "Mô hình dữ liệu người dùng",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Xóa bản ghi thành công"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Record not exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bản ghi không tồn tại"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lỗi server"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
                 "tags": [
                     "Participants"
                 ],
@@ -6732,99 +6825,6 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Server error"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Participants"
-                ],
-                "summary": "Xóa 1 bản ghi người dùng",
-                "description": "\n     * - id là id của người dùng\n     * - Role xóa chỉ có thể là quản lí\n     * ",
-                "operationId": "ec6365c5f315ce8381da73eafdc5ccb3",
-                "parameters": [
-                    {
-                        "name": "participants",
-                        "in": "path",
-                        "description": "Mô hình dữ liệu người dùng",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Xóa bản ghi thành công"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Record not exists",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Bản ghi không tồn tại"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 404
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Lỗi server",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Lỗi server"
                                         },
                                         "statusCode": {
                                             "type": "integer",
@@ -7189,7 +7189,100 @@
                     }
                 }
             },
-            "put": {
+            "delete": {
+                "tags": [
+                    "Resource"
+                ],
+                "summary": "Delete an resource record",
+                "description": "\n     * -Xóa đi một ảnh theo một id cho trước\n     * -Ảnh sẽ xóa trong SQL, đồng thời xóa trong thư mục Backend\n     * -Role được sử dụng là tất cả các role\n     * ",
+                "operationId": "b5f4211417a955e75fcc743d170fcab5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID của mô hình tài nguyên",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Delete One Record Successfully"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bản ghi không tồn tại",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bản ghi không tồn tại"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi hệ thống",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lỗi hệ thống"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
                 "tags": [
                     "Resource"
                 ],
@@ -7262,99 +7355,6 @@
                                                 }
                                             },
                                             "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Bản ghi không tồn tại",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Bản ghi không tồn tại"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 404
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Lỗi hệ thống",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Lỗi hệ thống"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Resource"
-                ],
-                "summary": "Delete an resource record",
-                "description": "\n     * -Xóa đi một ảnh theo một id cho trước\n     * -Ảnh sẽ xóa trong SQL, đồng thời xóa trong thư mục Backend\n     * -Role được sử dụng là tất cả các role\n     * ",
-                "operationId": "b5f4211417a955e75fcc743d170fcab5",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID của mô hình tài nguyên",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Delete One Record Successfully"
-                                        },
-                                        "statusCode": {
-                                            "type": "integer",
-                                            "example": 200
                                         }
                                     },
                                     "type": "object"

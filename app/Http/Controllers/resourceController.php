@@ -6,6 +6,7 @@ use App\Models\resource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -161,7 +162,7 @@ class resourceController extends Controller
         try{
             $validate = Validator::make($request->all(),[
                 'name'=>'required',
-                'url'=>'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'url'=>'required',
                 'event_id'=>[
                     'required',
                     Rule::exists('events', 'id'),
@@ -399,7 +400,7 @@ class resourceController extends Controller
 
     }
        /**
-     * @OA\Put(
+     * @OA\Patch(
      *      path="/api/resource/{id}",
      *      operationId="updateResource",
      *      tags={"Resource"},
@@ -466,10 +467,7 @@ class resourceController extends Controller
     {
         try{
             $validate = Validator::make($request->all(),[
-                'name'=>'required',
-                'url'=>'required',
                 'event_id'=>[
-                    'required',
                     Rule::exists('events', 'id'),
                 ]
             ],[
@@ -516,7 +514,7 @@ class resourceController extends Controller
 //                $imageName = Str::random(10).'.'.$extension;
 //                $request->url->move(public_path('Upload'), $imageName);
 //                Storage::disk('public')->put('Upload/' . $imageName, base64_decode($image));
-                $resourceData = $request->all();
+                $resourceData = $request->only(['name','url','event_id']);
 //                $resourceData['url'] = $imageName;
                 $resource->update($resourceData);
 

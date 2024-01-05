@@ -44,7 +44,7 @@ Route::middleware('auth:api')->prefix('attendances')->group(function() {
     Route::post('/add',[atendanceController::class,'addEmail']);
     Route::post('/',[atendanceController::class,'store']);
     Route::get('/{id}',[atendanceController::class,'show']);
-    Route::put('/{id}',[atendanceController::class,'update']);
+    Route::patch('/{id}',[atendanceController::class,'update']);
     Route::delete('/{id}',[atendanceController::class,'destroy']);
 });
 //Route::apiResource('feedback',feedbackController::class)->middleware('auth:api');
@@ -52,7 +52,7 @@ Route::middleware('auth:api')->prefix('feedback')->group(function() {
     Route::get('/{id_event}',[feedbackController::class,'index']);
     Route::get('/show/{id}',[feedbackController::class,'show']);
     Route::post('/',[feedbackController::class,'store']);
-    Route::put('/{id}',[feedbackController::class,'update']);
+    Route::patch('/{id}',[feedbackController::class,'update']);
     Route::delete('/{id}',[feedbackController::class,'destroy']);
 });
 //Route::apiResource('notification',notificationController::class)->middleware('auth:api');
@@ -61,7 +61,7 @@ Route::middleware('auth:api')->prefix('notification')->group(function() {
     Route::get('/',[notificationController::class,'index']);
     Route::post('/',[notificationController::class,'store']);
     Route::get('/show/{id}',[notificationController::class,'show']);
-    Route::put('/{id}',[notificationController::class,'update']);
+    Route::patch('/{id}',[notificationController::class,'update']);
     Route::delete('/{id}',[notificationController::class,'destroy']);
 });
 
@@ -70,7 +70,7 @@ Route::middleware('auth:api')->prefix('keywords')->group(function() {
     Route::get('/',[keywordsController::class,'index']);
     Route::get('/{id}',[keywordsController::class,'show']);
     Route::post('/',[keywordsController::class,'store']);
-    Route::put('/{id}',[keywordsController::class,'update']);
+    Route::patch('/{id}',[keywordsController::class,'update']);
     Route::delete('/{id}',[keywordsController::class,'destroy']);
 });
 
@@ -81,7 +81,7 @@ Route::prefix('event')->group(function() {
         Route::get('/',[eventController::class,'index']);
         Route::post('/', [eventController::class, 'store']);
         Route::get('/notification', [eventController::class, 'indexNotification']);
-        Route::put('/{id}', [eventController::class, 'update']);
+        Route::patch('/{id}', [eventController::class, 'update']);
         Route::delete('/{id}', [eventController::class, 'destroy']);
     });
 });
