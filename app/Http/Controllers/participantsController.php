@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Response;
-use OpenApi\Annotations as OA;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Support\Facades\DB;
 
@@ -263,7 +262,6 @@ class participantsController extends Controller
 //     *         @OA\JsonContent(
 //     *              @OA\Property(property="name", type="string", example="Phuc La"),
 //     *                     @OA\Property(property="email", type="string", example="phuclaf@gmail.com"),
-//     *                     @OA\Property(property="password", type="string", example="123456"),
 //     *                     @OA\Property(property="phone", type="string", example="0983118272"),
 //     *                     @OA\Property(property="role", type="integer", example=1),
 //     *         )
@@ -301,76 +299,71 @@ class participantsController extends Controller
 //     *     ),
 //     * )
 //     */
-//    public function store(Request $request)
-//    {
-//        try {
-//            $logUser = auth()->user()->role;
-//            $userAdd = $request->role;
-//            $validator = Validator::make($request->all(), [
-//                'name' => [
-//                    'required'
-//                ],
-//                'email' => [
-//                    'required'
-//                ],
-//                'password' => [
-//                    'required',
-//                    'min:6'
-//                ],
-//                'phone' => [
-//                    'required',
-//                    'regex:/^(\+?\d{1,3}[- ]?)?\d{10}$/'
-//                ],
-//                'role' =>[
-//                    'required',
-//                    Rule::in([0,1,2])
-//                ]
-//            ], [
-//                'name.required' => 'Không để trống name của người dùng',
-//                'email.required' => 'Không để trống email của người dùng',
-//                'password.required' => 'Password không dược để trống',
-//                'phone.required'=> 'Số điện thoại không được để trống',
-//                'phone.regex'=> 'Số điện thoại không đúng định dạng',
-//                'role.required' => 'Role không được để trống',
-//                'role.in' => 'Role phải là 0 hoặc 1 hoặc 2'
-//            ]);
-//
-//            if($validator->fails()){
-//                return response([
-//                    "status" => "error",
-//                    "message" => $validator->errors()->all(),
-//                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
-//                ], Response::HTTP_INTERNAL_SERVER_ERROR);
-//            }
-//            if($logUser < $userAdd || $logUser == 0){
-//                //Nếu role thấp hơn hoặc role là sinh viên thì loại
-//                return response([
-//                    "status" => "error",
-//                    "message" => "Sai role ,Role không được là sinh viên, và người add phải có role lớn hơn người được add",
-//                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
-//                ], Response::HTTP_INTERNAL_SERVER_ERROR);
-//            }
-//            $data = $validator->validated();
-//            $data['password'] = bcrypt($request->password);
-//            $user = User::create($data);
-//            return response()->json([
-//                'metadata' => $user,
-//                'message' => 'Tạo mới bản ghi thành công',
-//                'status' => 'success',
-//                'statusCode' => Response::HTTP_OK
-//            ], Response::HTTP_OK);
-//        } catch (\Exception $e){
-//            return response()->json([
-//                'message' => $e->getMessage(),
-//                'status' => 'error',
-//                'statusCode' => $e instanceof HttpException
-//                    ? $e->getStatusCode()
-//                    : 500 // Internal Server Error by default
-//            ], $e instanceof HttpException
-//                ? $e->getStatusCode()
-//                : 500);
-//        }
-//    }
+    public function store(Request $request)
+    {
+        try {
+            $logUser = auth()->user()->role;
+            $userAdd = $request->role;
+            $validator = Validator::make($request->all(), [
+                'name' => [
+                    'required'
+                ],
+                'email' => [
+                    'required'
+                ],
+                'phone' => [
+                    'required',
+                    'regex:/^(\+?\d{1,3}[- ]?)?\d{10}$/'
+                ],
+                'role' =>[
+                    'required',
+                    Rule::in([0,1,2])
+                ]
+            ], [
+                'name.required' => 'Không để trống name của người dùng',
+                'email.required' => 'Không để trống email của người dùng',
+                'phone.required'=> 'Số điện thoại không được để trống',
+                'phone.regex'=> 'Số điện thoại không đúng định dạng',
+                'role.required' => 'Role không được để trống',
+                'role.in' => 'Role phải là 0 hoặc 1 hoặc 2'
+            ]);
+
+            if($validator->fails()){
+                return response([
+                    "status" => "error",
+                    "message" => $validator->errors()->all(),
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+            if($logUser < $userAdd || $logUser == 0){
+                //Nếu role thấp hơn hoặc role là sinh viên thì loại
+                return response([
+                    "status" => "error",
+                    "message" => "Sai role ,Role không được là sinh viên, và người add phải có role lớn hơn người được add",
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+            $data = $validator->validated();
+            $data['password'] = bcrypt($request->password);
+            $user = User::create($data);
+            return response()->json([
+                'metadata' => $user,
+                'message' => 'Tạo mới bản ghi thành công',
+                'status' => 'success',
+                'statusCode' => Response::HTTP_OK
+            ], Response::HTTP_OK);
+        } catch (\Exception $e){
+            return response()->json([
+                'message' => $e->getMessage(),
+                'status' => 'error',
+                'statusCode' => $e instanceof HttpException
+                    ? $e->getStatusCode()
+                    : 500 // Internal Server Error by default
+            ], $e instanceof HttpException
+                ? $e->getStatusCode()
+                : 500);
+        }
+    }
 
 /**
  * @OA\Get(
@@ -445,7 +438,7 @@ class participantsController extends Controller
     }
 
        /**
-     * @OA\Patch(
+     * @OA\Put(
      *      path="/api/participants/{id}",
      *      operationId="updateParticipants",
      *      tags={"Participants"},
@@ -529,11 +522,19 @@ class participantsController extends Controller
 
         //Validate cho request
         $validator = Validator::make($request->all(), [
+            'name' => [
+                'required'
+            ],
             'email' => [
+                'required',
                 'regex:~^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$~'
             ],
             'phone' => [
+                'required',
                 'regex:/^(\+?\d{1,3}[- ]?)?\d{10}$/'
+            ],
+            'role' =>[
+                'required'
             ]
         ], [
             'name.required' => 'Không để trống name của người dùng',
@@ -577,7 +578,7 @@ class participantsController extends Controller
             ], Response::HTTP_CONFLICT);
         }
         if($canUpdate == true){
-            $user->update($request->only(['name','email','password','phone','role']));
+            $user->update($request->all());
         }
         return response()->json([
             'metadata' => $user,
