@@ -262,7 +262,6 @@ class participantsController extends Controller
 //     *         @OA\JsonContent(
 //     *              @OA\Property(property="name", type="string", example="Phuc La"),
 //     *                     @OA\Property(property="email", type="string", example="phuclaf@gmail.com"),
-//     *                     @OA\Property(property="password", type="string", example="123456"),
 //     *                     @OA\Property(property="phone", type="string", example="0983118272"),
 //     *                     @OA\Property(property="role", type="integer", example=1),
 //     *         )
@@ -312,10 +311,6 @@ class participantsController extends Controller
                 'email' => [
                     'required'
                 ],
-                'password' => [
-                    'required',
-                    'min:6'
-                ],
                 'phone' => [
                     'required',
                     'regex:/^(\+?\d{1,3}[- ]?)?\d{10}$/'
@@ -327,7 +322,6 @@ class participantsController extends Controller
             ], [
                 'name.required' => 'Không để trống name của người dùng',
                 'email.required' => 'Không để trống email của người dùng',
-                'password.required' => 'Password không dược để trống',
                 'phone.required'=> 'Số điện thoại không được để trống',
                 'phone.regex'=> 'Số điện thoại không đúng định dạng',
                 'role.required' => 'Role không được để trống',
