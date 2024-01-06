@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\atendance;
+use App\Models\event;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -235,6 +236,15 @@ class atendanceController extends Controller
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
+            $event = event::find($request->event_id);
+            if($event->status == 0){
+                return response([
+                    "status" => "error",
+                    "message" => "Sự kiện này đã kết thúc không thể tham gia",
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
            atendance::create([
                'user_id' => Auth::user()->id,
                'event_id' => $request->event_id
@@ -376,6 +386,15 @@ class atendanceController extends Controller
                 return response([
                     "status" => "error",
                     "message" => "Người dùng đã tồn tại trong sự kiện này",
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            $event = event::find($request->event_id);
+            if($event->status == 0){
+                return response([
+                    "status" => "error",
+                    "message" => "Sự kiện này đã kết thúc không thể tham gia",
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
@@ -589,7 +608,18 @@ class atendanceController extends Controller
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
+
+            $event = event::find($request->event_id);
+            if($event->status == 0){
+                return response([
+                    "status" => "error",
+                    "message" => "Sự kiện này đã kết thúc không thể cập nhật",
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
             $atendance = atendance::findOrFail($id);
+
             $data = $request->only(['event_id', 'user_id']);
             $data['updated_at'] = Carbon::now();
             $atendance->update($data);

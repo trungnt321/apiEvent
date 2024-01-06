@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\event;
 use App\Models\feedback;
 use Illuminate\Http\Request;
 use App\Http\Resources\feedbackResource;
@@ -195,6 +196,15 @@ class feedbackController extends Controller
                 return response([
                     "status" => "error",
                     "message" => $validator->errors()->all(),
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            $event = event::find($request->event_id);
+            if($event->status == 0){
+                return response([
+                    "status" => "error",
+                    "message" => "Sự kiện này đã kết thúc không thể thêm feedback",
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
@@ -414,10 +424,21 @@ class feedbackController extends Controller
                 'event_id.exists' => 'Sự kiện không tồn tại',
             ]);
 
+
+
             if ($validator->fails()) {
                 return response([
                     "status" => "error",
                     "message" => $validator->errors()->all(),
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            $event = event::find($request->event_id);
+            if($event->status == 0){
+                return response([
+                    "status" => "error",
+                    "message" => "Sự kiện này đã kết thúc không thể thêm cập nhật",
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }

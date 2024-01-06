@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\event;
 use App\Models\resource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -177,6 +178,15 @@ class resourceController extends Controller
                 return response([
                     "status" => "error",
                     "message" => $validate->errors()->all(),
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            $event = event::find($request->event_id);
+            if($event->status == 0){
+                return response([
+                    "status" => "error",
+                    "message" => "Sự kiện này đã kết thúc không thể thêm cập nhật",
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
@@ -491,7 +501,14 @@ class resourceController extends Controller
                     'statusCode' => Response::HTTP_NOT_FOUND
                 ], Response::HTTP_NOT_FOUND);
             }
-
+            $event = event::find($request->event_id);
+            if($event->status == 0){
+                return response([
+                    "status" => "error",
+                    "message" => "Sự kiện này đã kết thúc không thể thêm cập nhật",
+                    'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
 
             if(auth()->user()->role != 0){
                 //Xóa ảnh
