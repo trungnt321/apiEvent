@@ -48,7 +48,7 @@ Route::middleware('auth:api')->prefix('attendances')->group(function() {
     Route::delete('/{id}',[atendanceController::class,'destroy']);
 });
 //Route::apiResource('feedback',feedbackController::class)->middleware('auth:api');
-Route::middleware('auth:api')->prefix('feedback')->group(function() {
+Route::prefix('feedback')->group(function() {
     Route::get('/{id_event}',[feedbackController::class,'index']);
     Route::get('/show/{id}',[feedbackController::class,'show']);
     Route::post('/',[feedbackController::class,'store']);
