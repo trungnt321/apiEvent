@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Carbon\Carbon;
 
 class feedbackController extends Controller
 {
@@ -201,10 +202,11 @@ class feedbackController extends Controller
             }
 
             $event = event::find($request->event_id);
-            if($event->status == 0){
+            $before24Hours = Carbon::now()->subHours(24);
+            if($event->end_time < $before24Hours){
                 return response([
                     "status" => "error",
-                    "message" => "Sự kiện này đã kết thúc không thể thêm feedback",
+                    "message" => "Sự kiện này đã kết thúc hơn 1 ngay không thể thêm feedback",
                     'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
